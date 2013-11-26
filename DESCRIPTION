@@ -1,0 +1,8 @@
+Package: categoryComparePaperRev
+Type: Package
+Title: work for categoryCompare paper revisions
+Version: 0.0.1
+Author: Robert M Flight <rflight79@gmail.com>
+Maintainer: Robert M Flight <rflight79@gmail.com>
+Description: In response to reviewer comments on our originally submitted publication, a series of revisions are required.\nMany of them involve a large amount of code, including a re-analysis of the data in the publication. This package supplies the code\n that was necessary for the revisions, outside of modifications to the categoryCompare package itself.
+License: CC0
