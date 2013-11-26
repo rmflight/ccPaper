@@ -8,3 +8,26 @@
   
 To demonstrate the utility of the general `categoryCompare` approach, we will construct an artificial data set based on the Gene Ontology. We will attempt to demonstrate that differences in the **set** or **list** based comparisons are also dependent on the number of items annotated to a particular term.
 
+## GO Terms
+
+```{r nGO}
+nGO <- 20
+```
+
+We will make use of three sets of `r nGO` GO terms from *H. sapiens*. For each set, we want differing numbers of genes annotated to them.
+
+### Num Annotations Dist
+
+Let's first look at the distribution of number of genes annotated to the GO terms in **biological process**
+
+```{r goAnnotations}
+library(org.Hs.eg.db)
+library(GO.db)
+hsGO <- as.list(org.Hs.egGO2ALLEGS)
+
+goOntology <- Ontology(names(hsGO))
+goBP <- names(goOntology)[goOntology == "BP"]
+hsGO <- hsGO[goBP]
+hsGO <- lapply(hsGO, unique)
+```
+
