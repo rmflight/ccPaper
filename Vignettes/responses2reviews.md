@@ -1,3 +1,8 @@
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{reviews}
+-->
+
 # Introduction Problems
 
 **Rev 3**:
