@@ -1,0 +1,10 @@
+<!--
+  %\VignetteEngine{knitr}
+  %\VignetteIndexEntry{hypothetical example}
+  %\VignetteDepends{categoryComparePaperRev}
+-->
+  
+# Hypothetical Example
+  
+To demonstrate the utility of the general `categoryCompare` approach, we will construct an artificial data set based on the Gene Ontology. We will attempt to demonstrate that differences in the **set** or **list** based comparisons are also dependent on the number of items annotated to a particular term.
+
