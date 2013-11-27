@@ -76,3 +76,4 @@ How do we select these two sets of genes?
 
 What we expect from this is that in both datasets, the GO terms with lower numbers of genes annotated will have large fractions of their annotations present, while GO terms with more and more genes will have lower fractions, and there will be less overlap between the two datasets.
 
+These expectations should be checked.
