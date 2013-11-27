@@ -38,3 +38,26 @@ hsGO_count <- data.frame(count=hsGO_count)
 ggplot(hsGO_count, aes(x=count)) + geom_bar(binwidth=10) + xlim(0, 2000) + ylim(0, 500)
 ```
 
+### Set up groups
+
+```{r defineMin}
+minGO <- 10
+```
+
+Let us define a minimum number of genes that need to be annotated to a GO term (`r minGO`), and then divide the GO terms into groups that we can subsequently take random samples from.
+
+```{r defineGroupLimits}
+grpLow <- c(10, 100)
+grpMed <- c(250, 500)
+grpHi <- c(500, 1500)
+```
+
+```{r sampleGroups}
+set.seed(271113) # for reproducibility
+nGO <- 20
+
+GO_low <- limitedRandomSample(hsGO_count, grpLow, nGO)
+GO_med <- limitedRandomSample(hsGO_count, grpMed, nGO)
+GO_hi <- limitedRandomSample(hsGO_count, grpHi, nGO)
+```
+
