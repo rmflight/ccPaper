@@ -80,11 +80,27 @@ What we expect from this is that in both datasets, the GO terms with lower numbe
 
 These expectations should be checked.
 
+In addition to the genes that are annotated to the GO terms of interest, we will also add in genes that have no relation to the GO terms under consideration, these would be considered **noise** genes.
+
 ```{r generateSamples}
 useGO <- c(GO_low, GO_med, GO_hi)
-sample1 <- sampleTerms(useGO, hsGO, 2000, 4)
-sample2 <- sampleTerms(useGO, hsGO, 2000, 4)
+nGene <- 1000
+sample1 <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
+sample2 <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
 ```
+
+```{r noiseGenes}
+nNoise <- 500
+gene2HsGO <- reverseSplit(hsGO)
+not_useGO <- sapply(gene2HsGO, function(x){
+  sum(x %in% useGO) == 0
+})
+noiseGenes <- names(not_useGO)[not_useGO]
+noiseGenes <- sample(noiseGenes, nNoise)
+sample1 <- c(sample1, noiseGenes)
+sample2 <- c(sample2, noiseGenes)
+```
+
 
 ```{r checkAssumptions}
 # check assumptions
