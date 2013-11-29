@@ -30,6 +30,7 @@ goOntology <- Ontology(names(hsGO))
 goBP <- names(goOntology)[goOntology == "BP"]
 hsGO <- hsGO[goBP]
 hsGO <- lapply(hsGO, unique)
+universeGenes <- unique(unlist(hsGO))
 ```
 
 ```{r goCountDist}
@@ -118,4 +119,27 @@ overlapFrac <- data.frame(count=rep(overlapDist[,1], 3),
 overlapFrac
 ggplot(overlapFrac, aes(x=count, y=frac, color=id)) + geom_point()
 ```
+
+## Do the comparisons
+
+### categoryCompare method
+
+
+#### Enrichment
+
+```{r ccInit}
+s1GO <- new("GOHyperGParamsCC", geneIds=sample1, universeGeneIds=universeGenes, ontology="BP", fdr=0, annotation="org.Hs.eg.db")
+s1_enrich <- hyperGTestCC(s1GO)
+
+s2GO <- new("GOHyperGParamsCC", geneIds=sample2, universeGeneIds=universeGenes, ontology="BP", fdr=0, annotation="org.Hs.eg.db")
+s2_enrich <- hyperGTestCC(s2GO)
+```
+
+#### Basic Results
+
+```{r compRes}
+s1_goP <- pvalues(s1_enrich)[useGO]
+s2_goP <- pvalues(s2_enrich)[useGO]
+```
+
 
