@@ -85,8 +85,8 @@ In addition to the genes that are annotated to the GO terms of interest, we will
 ```{r generateSamples}
 useGO <- c(GO_low, GO_med, GO_hi)
 nGene <- 1000
-sample1 <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
-sample2 <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
+sample1_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
+sample2_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
 ```
 
 ```{r noiseGenes}
@@ -97,8 +97,17 @@ not_useGO <- sapply(gene2HsGO, function(x){
 })
 noiseGenes <- names(not_useGO)[not_useGO]
 noiseGenes <- sample(noiseGenes, nNoise)
-sample1 <- c(sample1, noiseGenes)
-sample2 <- c(sample2, noiseGenes)
+
+# check that we did this right, the fraction should not change after adding noise genes
+useGO_frac <- sapply(hsGO[useGO], function(x){
+  length(intersect(x, sample1_org)) / length(x)
+})
+sample1 <- c(sample1_org, noiseGenes)
+
+useGO_fracNoise <- sapply(hsGO[useGO], function(x){
+  length(intersect(x, sample1)) / length(x)
+})
+sample2 <- c(sample2_org, noiseGenes)
 ```
 
 
