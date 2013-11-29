@@ -23,6 +23,7 @@ Let's first look at the distribution of number of genes annotated to the GO term
 ```{r goAnnotations}
 library(org.Hs.eg.db)
 library(GO.db)
+library(ccPaperRev)
 hsGO <- as.list(org.Hs.egGO2ALLEGS)
 
 goOntology <- Ontology(names(hsGO))
@@ -77,3 +78,44 @@ How do we select these two sets of genes?
 What we expect from this is that in both datasets, the GO terms with lower numbers of genes annotated will have large fractions of their annotations present, while GO terms with more and more genes will have lower fractions, and there will be less overlap between the two datasets.
 
 These expectations should be checked.
+
+```{r generateSamples}
+useGO <- c(GO_low, GO_med, GO_hi)
+sample1 <- sampleTerms(useGO, hsGO, 2000, 4)
+sample2 <- sampleTerms(useGO, hsGO, 2000, 4)
+```
+
+```{r checkAssumptions}
+# check assumptions
+useGO_counts <- sapply(hsGO[useGO], length)
+useGO_frac <- sapply(hsGO[useGO], function(x){
+  length(intersect(x, sample1)) / length(x)
+})
+checkGO <- data.frame(counts=useGO_counts, frac=useGO_frac, sample="1")
+useGO_frac2 <- sapply(hsGO[useGO], function(x){
+  length(intersect(x, sample2)) / length(x)
+})
+checkGO <- rbind(checkGO, data.frame(counts=useGO_counts, frac=useGO_frac2, sample="2"))
+ggplot(checkGO, aes(x=counts, y=frac, color=sample)) + geom_point()
+```
+
+From the plot above, it appears that we meet expectations. In addition, we manage to share only `r length(intersect(sample1, sample2))` genes between the two samples. 
+
+What about the degree of overlap between the two samples as a function of size or fraction?
+
+```{r overlapDist}
+overlapDist <- sapply(useGO, function(x){
+  baseAnn <- hsGO[[x]]
+  t1 <- intersect(baseAnn, sample1)
+  t2 <- intersect(baseAnn, sample2)
+  c(length(baseAnn), length(t1), length(t2), length(intersect(t1,t2)))
+})
+overlapDist <- t(overlapDist)
+overlapFrac <- c(overlapDist[,2] / overlapDist[,1], overlapDist[,3]/overlapDist[,1], overlapDist[,4]/overlapDist[,1])
+overlapFrac <- data.frame(count=rep(overlapDist[,1], 3), 
+                          frac=overlapFrac, 
+                          id=c(rep("s1", 60), rep("s2", 60), rep("s1.s2", 60)))
+overlapFrac
+ggplot(overlapFrac, aes(x=count, y=frac, color=id)) + geom_point()
+```
+
