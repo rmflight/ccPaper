@@ -1,0 +1,264 @@
+<!--
+  %\VignetteEngine{knitr}
+  %\VignetteIndexEntry{hypothetical example}
+  %\VignetteDepends{categoryComparePaperRev, ggplot2}
+-->
+  
+# Hypothetical Example
+  
+To demonstrate the utility of the general `categoryCompare` approach, we will construct an artificial data set based on the Gene Ontology. We will attempt to demonstrate that differences in the **set** or **list** based comparisons are also dependent on the number of items annotated to a particular term.
+
+## GO Terms
+
+```{r nGO}
+nGO <- 20
+```
+
+We will make use of three sets of `r nGO` GO terms from *H. sapiens*. For each set, we want differing numbers of genes annotated to them.
+
+### Num Annotations Dist
+
+Let's first look at the distribution of number of genes annotated to the GO terms in **biological process**
+
+```{r goAnnotations}
+library(org.Hs.eg.db)
+library(GO.db)
+library(ccPaperRev)
+hsGO <- as.list(org.Hs.egGO2ALLEGS)
+
+goOntology <- Ontology(names(hsGO))
+goBP <- names(goOntology)[goOntology == "BP"]
+hsGO <- hsGO[goBP]
+hsGO <- lapply(hsGO, unique)
+universeGenes <- unique(unlist(hsGO))
+```
+
+```{r goCountDist}
+library(ggplot2)
+hsGO_count <- sapply(hsGO, length)
+hsGO_count <- data.frame(count=hsGO_count)
+ggplot(hsGO_count, aes(x=count)) + geom_bar(binwidth=10) + xlim(0, 2000) + ylim(0, 500)
+```
+
+### Set up groups
+
+```{r defineMin}
+minGO <- 10
+```
+
+Let us define a minimum number of genes that need to be annotated to a GO term (`r minGO`), and then divide the GO terms into groups that we can subsequently take random samples from.
+
+```{r defineGroupLimits}
+grpLow <- c(10, 100)
+grpMed <- c(250, 500)
+grpHi <- c(500, 1500)
+```
+
+```{r sampleGroups}
+set.seed(271113) # for reproducibility
+nGO <- 20
+
+GO_low <- limitedRandomSample(hsGO_count, grpLow, nGO)
+GO_med <- limitedRandomSample(hsGO_count, grpMed, nGO)
+GO_hi <- limitedRandomSample(hsGO_count, grpHi, nGO)
+```
+
+### Get Genes
+
+Now, for all of these we need to generate **two** samples of genes from them to comprise our **differentially expressed** (DE) sets from the genome, representing two different expression experiments.
+
+How do we select these two sets of genes?
+
+* define the maximum number of diff genes for the set
+* Randomly sort the GO terms
+* For each GO term in turn (i.e. iterating over the GO terms):
+  * take a random fraction of genes for that GO term (sampling from an exponentially decaying distribution of possibilites), adding the requisite number of genes
+  * If all the genes for a GO term get taken, remove that GO term from future consideration
+* Continue iterating through until the total number of genes is reached
+
+What we expect from this is that in both datasets, the GO terms with lower numbers of genes annotated will have large fractions of their annotations present, while GO terms with more and more genes will have lower fractions, and there will be less overlap between the two datasets.
+
+These expectations should be checked.
+
+
+
+```{r generateSamples}
+useGO <- c(GO_low, GO_med, GO_hi)
+goList <- list(low=GO_low, med=GO_med, hi=GO_hi)
+nGene <- 1000
+sample1_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
+sample2_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
+```
+
+In addition to the genes that are annotated to the GO terms of interest, we will also add in genes that have no relation to the GO terms under consideration, these would be considered **noise** genes.
+
+```{r noiseGenes}
+nNoise <- 500
+gene2HsGO <- reverseSplit(hsGO)
+not_useGO <- sapply(gene2HsGO, function(x){
+  sum(x %in% useGO) == 0
+})
+noiseGenes <- names(not_useGO)[not_useGO]
+noiseGenes <- sample(noiseGenes, nNoise)
+
+# check that we did this right, the fraction should not change after adding noise genes
+useGO_frac <- sapply(hsGO[useGO], function(x){
+  length(intersect(x, sample1_org)) / length(x)
+})
+sample1 <- c(sample1_org, noiseGenes)
+
+useGO_fracNoise <- sapply(hsGO[useGO], function(x){
+  length(intersect(x, sample1)) / length(x)
+})
+sample2 <- c(sample2_org, noiseGenes)
+plot(useGO_frac, useGO_fracNoise)
+```
+
+
+```{r checkAssumptions}
+# check assumptions
+useGO_counts <- sapply(hsGO[useGO], length)
+useGO_frac <- sapply(hsGO[useGO], function(x){
+  length(intersect(x, sample1)) / length(x)
+})
+checkGO <- data.frame(counts=useGO_counts, frac=useGO_frac, sample="1")
+useGO_frac2 <- sapply(hsGO[useGO], function(x){
+  length(intersect(x, sample2)) / length(x)
+})
+checkGO <- rbind(checkGO, data.frame(counts=useGO_counts, frac=useGO_frac2, sample="2"))
+ggplot(checkGO, aes(x=counts, y=frac, color=sample)) + geom_point()
+```
+
+From the plot above, it appears that we meet expectations. In addition, we manage to share only `r length(intersect(sample1, sample2))` genes between the two samples. 
+
+What about the degree of overlap between the two samples as a function of size or fraction?
+
+```{r overlapDist}
+overlapDist <- sapply(useGO, function(x){
+  baseAnn <- hsGO[[x]]
+  t1 <- intersect(baseAnn, sample1)
+  t2 <- intersect(baseAnn, sample2)
+  c(length(baseAnn), length(t1), length(t2), length(intersect(t1,t2)))
+})
+overlapDist <- t(overlapDist)
+overlapFrac <- c(overlapDist[,2] / overlapDist[,1], overlapDist[,3]/overlapDist[,1], overlapDist[,4]/overlapDist[,1])
+overlapFrac <- data.frame(count=rep(overlapDist[,1], 3), 
+                          frac=overlapFrac, 
+                          id=c(rep("s1", 60), rep("s2", 60), rep("s1.s2", 60)))
+overlapFrac
+ggplot(overlapFrac, aes(x=count, y=frac, color=id)) + geom_point()
+```
+
+## Do the comparisons
+
+### categoryCompare method
+
+
+#### Enrichment
+
+```{r ccInit}
+s1GO <- new("GOHyperGParamsCC", geneIds=sample1, universeGeneIds=universeGenes, ontology="BP", fdr=0, annotation="org.Hs.eg.db")
+s1_enrich <- hyperGTestCC(s1GO)
+
+s2GO <- new("GOHyperGParamsCC", geneIds=sample2, universeGeneIds=universeGenes, ontology="BP", fdr=0, annotation="org.Hs.eg.db")
+s2_enrich <- hyperGTestCC(s2GO)
+```
+
+#### Basic Results
+
+```{r pvalueCut}
+pval <- 0.05
+minP <- -1 * log10(pval)
+```
+
+
+For the two-sample comparison, we take the minimum p-value of the two sets of results, and then compare with `r -1*log10(pval)`, anything above that is considered significant. We are using **log**'s because they are easier to visualize.
+
+```{r compRes}
+s1_goP <- -1 * log10((s1_enrich@pvalues)[useGO])
+s2_goP <- -1 * log10((s2_enrich@pvalues)[useGO])
+
+s_minP <- apply(cbind(s1_goP, s2_goP), 1, min)
+sum(s_minP >= minP)
+```
+
+
+### Intersection Method
+
+```{r intersectMethod}
+comGO <- new("GOHyperGParamsCC", geneIds=intersect(sample1, sample2), universeGeneIds=universeGenes, ontology="BP", fdr=0, annotation="org.Hs.eg.db")
+com_enrich <- hyperGTestCC(comGO)
+com_goP <- -1 * log10((com_enrich@pvalues)[useGO])
+```
+
+
+### Compare Methods
+
+To compare the methods, we will start with the `r length(useGO)` terms in our low, med and hi groups, and compare which ones and how many show up. 
+
+```{r numericComparison}
+sum(s_minP >= minP)
+sum(com_goP >= minP)
+
+invisible(lapply(goList, function(x){
+  print(sum(s_minP[x] >= minP))
+  print(sum(com_goP[x] >= minP))
+}))
+```
+
+
+We will also plot a histogram to make this more apparent.
+
+```{r plotHistogram}
+s_count <- sapply(goList, function(x){
+  sum(s_minP[x] >= minP)
+})
+com_count <- sapply(goList, function(x){
+  sum(com_goP[x] >= minP)
+})
+
+countData <- data.frame(count=c(s_count, com_count), grp=rep(names(goList), 2), type=rep(c("s", "com"), each=3))
+countData$grp <- factor(countData$grp, levels=c("low", "med", "hi"), ordered=TRUE)
+ggplot(countData, aes(x=grp, y=count, fill=type)) + geom_bar(stat="identity", position="dodge") + ylim(0, 20)
+```
+
+The histogram suggests that there may be a relationship between the difference in p-values and the proportion of genes annotated to a GO term. Let's check.
+
+As we are using logged p-values, we will simply take the difference of p-values and plot them. We expect to see higher p-values (i.e. positive differences) for the inter-group comparison *vs* the intersection of genes.
+
+```{r plotPDiffs}
+pDiff <- data.frame(pdiff = s_minP - com_goP,
+                    annFrac = useGO_frac,
+                    grp = rep(names(goList), each=20))
+pDiff$grp <- factor(pDiff$grp, levels=c("low", "med", "hi"), ordered=T)
+
+ggplot(pDiff, aes(x=annFrac, y=pdiff)) + geom_point()
+```
+
+Doesn't appear to be anything discernible for the fraction alone. What if it is split up across the groups?
+
+```{r plotPDiffsGroup}
+ggplot(pDiff, aes(x=annFrac, y=pdiff)) + geom_point() + facet_grid(. ~ grp, scales="free_x")
+```
+
+Hmm, well, which ones were actually significant in different cases? 
+
+* Sig. using both methods
+* Sig in category comparison only
+* Sig in gene intersection only
+
+```{r plotPDiffsMethod}
+pDiff$sigGroup <- "none"
+sigBoth <- names(s_minP)[(s_minP >= 1.3) & (com_goP >= 1.3)]
+pDiff[sigBoth, "sigGroup"] <- "both"
+sigS <- names(s_minP)[(s_minP >= 1.3) & (com_goP < 1.3)]
+pDiff[sigS, "sigGroup"] <- "s"
+
+ggplot(pDiff, aes(x=annFrac, y=pdiff, color=sigGroup)) + geom_point() + facet_grid(. ~ grp, scales="free_x")
+```
+
+Now we can see that:
+
+1. There is nothing from combining gene lists that is significant while combining enrichment results is not.
+2. In general, there is a much better p-value from the combined enrichment than from combined gene lists.
+
