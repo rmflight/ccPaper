@@ -163,9 +163,20 @@ s2_enrich <- hyperGTestCC(s2GO)
 
 #### Basic Results
 
+```{r pvalueCut}
+pval <- 0.05
+minP <- -1 * log10(pval)
+```
+
+
+For the two-sample comparison, we take the minimum p-value of the two sets of results, and then compare with `r -1*log10(pval)`, anything above that is considered significant. We are using **log**'s because they are easier to visualize.
+
 ```{r compRes}
 s1_goP <- -1 * log10((s1_enrich@pvalues)[useGO])
 s2_goP <- -1 * log10((s2_enrich@pvalues)[useGO])
+
+s_minP <- apply(cbind(s1_goP, s2_goP), 1, min)
+sum(s_minP >= minP)
 ```
 
 
