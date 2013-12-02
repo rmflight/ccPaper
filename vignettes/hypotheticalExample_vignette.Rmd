@@ -108,6 +108,7 @@ useGO_fracNoise <- sapply(hsGO[useGO], function(x){
   length(intersect(x, sample1)) / length(x)
 })
 sample2 <- c(sample2_org, noiseGenes)
+plot(useGO_frac, useGO_fracNoise)
 ```
 
 
@@ -163,8 +164,8 @@ s2_enrich <- hyperGTestCC(s2GO)
 #### Basic Results
 
 ```{r compRes}
-s1_goP <- -1 * log10(pvalues(s1_enrich)[useGO])
-s2_goP <- -1 * log10(pvalues(s2_enrich)[useGO])
+s1_goP <- -1 * log10((s1_enrich@pvalues)[useGO])
+s2_goP <- -1 * log10((s2_enrich@pvalues)[useGO])
 ```
 
 
@@ -173,7 +174,7 @@ s2_goP <- -1 * log10(pvalues(s2_enrich)[useGO])
 ```{r intersectMethod}
 comGO <- new("GOHyperGParamsCC", geneIds=intersect(sample1, sample2), universeGeneIds=universeGenes, ontology="BP", fdr=0, annotation="org.Hs.eg.db")
 com_enrich <- hyperGTestCC(comGO)
-com_goP <- -1 * log10(pvalues(com_enrich)[useGO])
+com_goP <- -1 * log10((com_enrich@pvalues)[useGO])
 ```
 
 
