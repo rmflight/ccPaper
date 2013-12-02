@@ -72,7 +72,7 @@ How do we select these two sets of genes?
 * define the maximum number of diff genes for the set
 * Randomly sort the GO terms
 * For each GO term in turn (i.e. iterating over the GO terms):
-  * take a random fraction of genes for that GO term (sampling from a log-normal distribution of possibilites), adding the requisite number of genes
+  * take a random fraction of genes for that GO term (sampling from an exponentially decaying distribution of possibilites), adding the requisite number of genes
   * If all the genes for a GO term get taken, remove that GO term from future consideration
 * Continue iterating through until the total number of genes is reached
 
@@ -80,7 +80,7 @@ What we expect from this is that in both datasets, the GO terms with lower numbe
 
 These expectations should be checked.
 
-In addition to the genes that are annotated to the GO terms of interest, we will also add in genes that have no relation to the GO terms under consideration, these would be considered **noise** genes.
+
 
 ```{r generateSamples}
 useGO <- c(GO_low, GO_med, GO_hi)
@@ -89,6 +89,8 @@ nGene <- 1000
 sample1_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
 sample2_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
 ```
+
+In addition to the genes that are annotated to the GO terms of interest, we will also add in genes that have no relation to the GO terms under consideration, these would be considered **noise** genes.
 
 ```{r noiseGenes}
 nNoise <- 500
