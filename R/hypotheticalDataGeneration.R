@@ -79,3 +79,61 @@ sampleTerms <- function(terms, term2gene, nGenes=2000, expRate=4){
   }
   return(sampleGenes)
 }
+
+#' calculate fraction of genes annotated to GO terms
+#' 
+#' For the supplied list of GO 2 gene annotations, and lists of genes, calculate the what fraction of a GO term is in the gene list.
+#' 
+#' @details returns a \code{data.frame} with the total count, and fraction for each of the gene lists supplied, suitable for plotting in \code{ggplot2}.
+#' @param go2gene list of GO terms and genes they annotate
+#' @param geneList list of character vectors of genes
+#' @export
+#' @return data.frame
+calcFraction <- function(go2gene, geneList){
+  nGO <- length(go2gene)
+  
+  goSizes <- sapply(go2gene, length)
+  goNames <- names(go2gene)
+  
+  nList <- length(geneList)
+  
+  goFrac <- lapply(geneList, function(inGenes){
+    sapply(go2gene, function(inGO){
+      length(intersect(inGenes, inGO)) / length(inGO)
+    })
+  })
+  goFrac <- stack(goFrac)
+  names(goFrac) <- c("frac", "genelist")
+  goFrac$goid <- rep(goNames, nList)
+  goFrac$size <- rep(goSizes, nList)
+  return(goFrac)
+}
+
+#' hyperGOMultiEnrichment
+#' 
+#' hypergeometric (Fisher's Exact Test) enrichment calculations for multiple lists of genes, with common background, as well as the intersection of the gene lists.
+#' 
+#' @param geneList \code{list} where each entry is a gene list
+#' @param universe \code{character} vector of the background (assumed to be common across all)
+#' @param ontology which GO ontology to use (default is "BP")
+#' @param annotation what is the source of annotation (default is "org.Hs.eg.db")
+#' @importClassesFrom categoryComparePaperRev GOHyperGParamsCC
+#' @importFrom categoryComparePaperRev hyperGTestCC
+#' @return \code{list}, see Details
+#' @details the object returned will have an object for each sample list, as well as the one generated from the intersection
+#' @export
+hyperGOMultiEnrichment <- function(geneList, universe, ontology="BP", annotation="org.Hs.eg.db"){
+  tmpIntersect <- geneList[[1]]
+  
+  nList <- length(geneList)
+  for (iList in 1:nList){
+    tmpIntersect <- intersect(tmpIntersect, geneList[[iList]])
+  }
+  
+  geneList$intersect <- tmpIntersect
+  
+  outMulti <- lapply(geneList, function(inList){
+    inHyper <- new("GOHyperGParamsCC", geneIds=inList, universeGeneIds=universe, ontology=ontology, fdr=0, annotation=annotation)
+    outHyper <- hyperGTestCC(inHyper)
+  })
+}
