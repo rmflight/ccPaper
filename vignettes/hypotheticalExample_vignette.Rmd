@@ -191,9 +191,20 @@ com_goP <- -1 * log10((com_enrich@pvalues)[useGO])
 
 ### Compare Methods
 
-To compare the methods, we will start with the `r length(useGO)` terms in our low, med and hi groups, and plot the p-values to see how they differe.
+To compare the methods, we will start with the `r length(useGO)` terms in our low, med and hi groups, and compare which ones and how many show up. 
 
-```{r compMethods}
+```{r numericComparison}
+sum(s_minP >= minP)
+sum(com_goP >= minP)
+
+invisible(lapply(list(low=GO_low, med=GO_med, hi=GO_hi), function(x){
+  print(sum(s_minP[x] >= minP))
+  print(sum(com_goP[x] >= minP))
+}))
+```
+
+
+```{r plotComparison}
 plotP <- data.frame(pVal=c(s1_goP, s2_goP, com_goP), 
                     class=rep(c("s1", "s2", "s1.s2"), each=60))
 plotP$nGene <- rep(useGO_counts, 3)
