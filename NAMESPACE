@@ -1,1 +1,3 @@
 export(limitedRandomSample)
+export(sampleTerms)
+importFrom(Biobase,reverseSplit)
