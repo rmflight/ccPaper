@@ -84,6 +84,7 @@ In addition to the genes that are annotated to the GO terms of interest, we will
 
 ```{r generateSamples}
 useGO <- c(GO_low, GO_med, GO_hi)
+goList <- list(low=GO_low, med=GO_med, hi=GO_hi)
 nGene <- 1000
 sample1_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
 sample2_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
@@ -197,16 +198,24 @@ To compare the methods, we will start with the `r length(useGO)` terms in our lo
 sum(s_minP >= minP)
 sum(com_goP >= minP)
 
-invisible(lapply(list(low=GO_low, med=GO_med, hi=GO_hi), function(x){
+invisible(lapply(goList, function(x){
   print(sum(s_minP[x] >= minP))
   print(sum(com_goP[x] >= minP))
 }))
 ```
 
 
-```{r plotComparison}
-plotP <- data.frame(pVal=c(s1_goP, s2_goP, com_goP), 
-                    class=rep(c("s1", "s2", "s1.s2"), each=60))
-plotP$nGene <- rep(useGO_counts, 3)
-ggplot(plotP, aes(x=nGene, y=pVal, color=class)) + geom_point()
+We will also plot a histogram to make this more apparent.
+
+```{r plotHistogram}
+s_count <- sapply(goList, function(x){
+  sum(s_minP[x] >= minP)
+})
+com_count <- sapply(goList, function(x){
+  sum(com_goP[x] >= minP)
+})
+
+countData <- data.frame(count=c(s_count, com_count), grp=rep(names(goList), 2), type=rep(c("s", "com"), each=3))
+countData$grp <- factor(countData$grp, levels=c("low", "med", "hi"), ordered=TRUE)
+ggplot(countData, aes(x=grp, y=count, fill=type)) + geom_bar(stat="identity", position="dodge") + ylim(0, 20)
 ```
