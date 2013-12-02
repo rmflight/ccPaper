@@ -8,6 +8,12 @@
   
 To demonstrate the utility of the general `categoryCompare` approach, we will construct an artificial data set based on the Gene Ontology. We will attempt to demonstrate that differences in the **set** or **list** based comparisons are also dependent on the number of items annotated to a particular term.
 
+## Definitions
+
+**Set** based: calculations performed independently on each *set* of features, and then the results are combined.
+
+**List** based: calculations performed on the intersected *list* of two sets of features.
+
 ## GO Terms
 
 ```{r nGO}
@@ -89,6 +95,24 @@ nGene <- 1000
 sample1_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
 sample2_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
 ```
+
+### Checking our expectations about the fractions of GO terms.
+
+```{r checkFractions}
+goFractions <- calcFraction(hsGO[useGO], list(sample1=sample1_org, sample2=sample2_org))
+ggplot(goFractions, aes(x=size, y=frac, color=genelist)) + geom_point()
+```
+
+### Do calculations
+
+For each `geneList`, we will do the GO enrichment calculations, and then get the results. We also do the intersection of all the `geneList`'s, and do the calculations again.
+
+```{r runCalcs}
+samples_noNoise <- list(sample1 = sample1_org, sample2 = sample2_org)
+go_noNoise <- hyperGOMultiEnrichment(samples_noNoise, universe=universeGenes)
+```
+
+
 
 In addition to the genes that are annotated to the GO terms of interest, we will also add in genes that have no relation to the GO terms under consideration, these would be considered **noise** genes.
 
