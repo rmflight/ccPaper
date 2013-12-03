@@ -291,3 +291,6 @@ Now we can see that:
 1. There is nothing from combining gene lists that is significant while combining enrichment results is not.
 2. In general, there is a much better p-value from the combined enrichment than from combined gene lists.
 
+## Expectations
+
+Based on the above results, what I expect we will see if we do a programmatic search over the space is that there is a dependence on both the fraction of DE genes that are noisy, and the fraction of noisy genes that are shared (which really amounts to the same thing, but is a subtle point). 
