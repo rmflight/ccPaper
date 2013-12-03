@@ -137,3 +137,23 @@ hyperGOMultiEnrichment <- function(geneList, universe, ontology="BP", annotation
     outHyper <- hyperGTestCC(inHyper)
   })
 }
+
+#' get p-values from multiple enrichments
+#' 
+#' @param geneListNames the names to combine and take the minimum
+#' @param hyperEnrichList the set of hypergeometric enrichment results
+#' @param useTerms
+#' @export
+#' @return \code{data.frame}, see details
+#' @details the \code{data.frame} returned has the p-values for each GO term from both the set based and list based results. The set-based value is the minimum value of all the set enrichments for that GO term, log transformed.
+pvaluesMultiEnrich <- function(geneListNames, useTerms, hyperEnrichList){
+  allValues <- lapply(hyperEnrichList, function(inEnrich){
+    -1 * log10(inEnrich@pvalues[useTerms])
+  })
+  
+  setValues <- do.call(cbind, allValues[geneListNames])
+  setValues <- apply(setValues, 1, min)
+  
+  outValues <- data.frame(set = setValues, list = allValues$intersect)
+  return(outValues)
+}
