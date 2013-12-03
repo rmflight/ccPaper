@@ -116,7 +116,12 @@ Now get the p-values out (`-1 * log10(pvalue)`). For each of our test GO terms, 
 
 ```{r noNoisePvalues}
 noNoise_pvalues <- pvaluesMultiEnrich(c("sample1", "sample2"), useGO, go_noNoise)
+
+noNoise_pvalues <- pvalueDiffSig(noNoise_pvalues, pCutoff=0.05, log=TRUE)
 ```
+
+Finally, lets add in our values of the fraction, total genes, and the class (**low**, **med**, **hi**) so we can do some fancy plotting stuff with it.
+
 
 
 In addition to the genes that are annotated to the GO terms of interest, we will also add in genes that have no relation to the GO terms under consideration, these would be considered **noise** genes.
