@@ -112,6 +112,11 @@ samples_noNoise <- list(sample1 = sample1_org, sample2 = sample2_org)
 go_noNoise <- hyperGOMultiEnrichment(samples_noNoise, universe=universeGenes)
 ```
 
+Now get the p-values out (`-1 * log10(pvalue)`). For each of our test GO terms, we take the minimum p-value from the results of the **set** calculations, and also the values from the **list** calculations.
+
+```{r noNoisePvalues}
+noNoise_pvalues <- pvaluesMultiEnrich(c("sample1", "sample2"), useGO, go_noNoise)
+```
 
 
 In addition to the genes that are annotated to the GO terms of interest, we will also add in genes that have no relation to the GO terms under consideration, these would be considered **noise** genes.
