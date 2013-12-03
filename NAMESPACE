@@ -1,6 +1,8 @@
 export(calcFraction)
 export(hyperGOMultiEnrichment)
 export(limitedRandomSample)
+export(pvalueDiffSig)
+export(pvaluesMultiEnrich)
 export(sampleTerms)
 importClassesFrom(categoryComparePaperRev,GOHyperGParamsCC)
 importFrom(Biobase,reverseSplit)

@@ -167,4 +167,25 @@ pvaluesMultiEnrich <- function(geneListNames, useTerms, hyperEnrichList, log=TRU
 #' 
 #' @param pvalueData the \code{data.frame} of values
 #' @param pCutoff the p-value cutoff to use for significance
-#' @param log
+#' @param log the values are logged, and p-value should be too
+#' @return \code{data.frame}
+#' @export
+pvalueDiffSig <- function(pvalueData, pCutoff=0.05, log=TRUE){
+  if (log){
+    pCutoff <- -1 * log10(pCutoff)
+  }
+  
+  pvalueData$diff <- pvalueData$set - pvalueData$list
+  pvalueData$sigState <- "none"
+  
+  sigSets <- list(both = (pvalueData$set >= pCutoff) & (pvalueData$list >= pCutoff),
+                  set = (pvalueData$set >= pCutoff) & (pvalueData$list < pCutoff),
+                  list = (pvalueData$set < pCutoff) & (pvalueData$list >= pCutoff))
+  
+  invisible(lapply(names(sigSets), function(inSig){
+    if (sum(sigSets[[inSig]]) > 0){
+      pvalueData$sigState[sigSets[[inSig]]] <<- inSig
+    }
+  }))
+  return(pvalueData)
+}
