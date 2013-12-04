@@ -143,12 +143,20 @@ We can see that it appears in general that **set** has better p-values than **li
 How many of the GO terms have better p-values in **set** compared to **list**?
 
 ```{r noNoiseBetterPVals}
-
+tapply(noNoise_pvalues$diff, noNoise_pvalues$sizeClass, function(x){sum(x > 0)})
 ```
 
+What is the average difference among each group?
 
+```{r noNoiseBetterMean}
+tapply(noNoise_pvalues$diff, noNoise_pvalues$sizeClass, mean)
+```
 
-In addition to the genes that are annotated to the GO terms of interest, we will also add in genes that have no relation to the GO terms under consideration, these would be considered **noise** genes.
+So ideally, the mean of the full set of differences, combined with how many pass in each case, should adequately quantify how well each of the methods is doing. 
+
+## Noise
+
+In addition to the genes that are annotated to the GO terms of interest, we will also add in genes that have no relation to the GO terms under consideration, these would be considered **noise** genes. To make the model simple, we will have the **same** genes as noise in **both** samples.
 
 ```{r noiseGenes}
 nNoise <- 500
