@@ -208,3 +208,9 @@ Although using gene lists that were perfect (i.e. no noise) everything in the **
 ## Expectations
 
 Based on the above results, what I expect we will see if we do a programmatic search over the space is that there is a dependence on both the fraction of DE genes that are noisy, and the fraction of noisy genes that are shared (which really amounts to the same thing, but is a subtle point). 
+
+# To Do:
+
+* Check expectations of the gene to GO distribution from a couple of real human data sets
+* Run both the **noNoise** and **noise** 100 times with different sets of GO terms and make sure that this holds.
+* Vary the fraction of noise genes, and also vary the fraction that is common, and find a way to quantify the effect.
