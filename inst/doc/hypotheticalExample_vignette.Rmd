@@ -8,6 +8,12 @@
   
 To demonstrate the utility of the general `categoryCompare` approach, we will construct an artificial data set based on the Gene Ontology. We will attempt to demonstrate that differences in the **set** or **list** based comparisons are also dependent on the number of items annotated to a particular term.
 
+## Definitions
+
+**Set** based: calculations performed independently on each *set* of features, and then the results are combined.
+
+**List** based: calculations performed on the intersected *list* of two sets of features.
+
 ## GO Terms
 
 ```{r nGO}
@@ -90,7 +96,67 @@ sample1_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
 sample2_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
 ```
 
-In addition to the genes that are annotated to the GO terms of interest, we will also add in genes that have no relation to the GO terms under consideration, these would be considered **noise** genes.
+### Checking our expectations about the fractions of GO terms.
+
+```{r checkFractions}
+goFractions <- calcFraction(hsGO[useGO], list(sample1=sample1_org, sample2=sample2_org))
+ggplot(goFractions, aes(x=size, y=frac, color=genelist)) + geom_point()
+```
+
+### Do calculations
+
+For each `geneList`, we will do the GO enrichment calculations, and then get the results. We also do the intersection of all the `geneList`'s, and do the calculations again.
+
+```{r runCalcs}
+samples_noNoise <- list(sample1 = sample1_org, sample2 = sample2_org)
+go_noNoise <- hyperGOMultiEnrichment(samples_noNoise, universe=universeGenes)
+```
+
+Now get the p-values out (`-1 * log10(pvalue)`). For each of our test GO terms, we take the minimum p-value from the results of the **set** calculations, and also the values from the **list** calculations.
+
+```{r noNoisePvalues}
+noNoise_pvalues <- pvaluesMultiEnrich(c("sample1", "sample2"), useGO, go_noNoise)
+
+noNoise_pvalues <- pvalueDiffSig(noNoise_pvalues, pCutoff=0.05, log=TRUE)
+```
+
+Finally, lets add in our values of the fraction, total genes, and the class (**low**, **med**, **hi**) so we can do some fancy plotting stuff with it.
+
+```{r noNoiseAddInfo}
+sizeClass <- rep(c("low", "med", "hi"), each=20)
+names(sizeClass) <- useGO
+noNoise_pvalues$sizeClass <- sizeClass
+noNoise_pvalues$size <- goFractions[1:60,4]
+noNoise_pvalues$frac <- goFractions$frac[1:60]
+```
+
+Now we will plot the difference in log-p-values (where we have **set** - **list**), so that positive values imply that **set** had lower p-values than **list**, based on the *fraction* of genes annotated.
+
+```{r noNoisePlotStuff}
+noNoise_pvalues$sizeClass <- factor(noNoise_pvalues$sizeClass, levels=c("low", "med", "hi"), ordered=TRUE)
+ggplot(noNoise_pvalues, aes(x=frac, y=diff, color=sigState)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x")
+ggplot(noNoise_pvalues, aes(x=sizeClass, y=diff)) + geom_boxplot() + geom_point()
+```
+
+We can see that it appears in general that **set** has better p-values than **list**, especially in the *med* and *hi* groups. Also, both methods get pretty much the same GO terms as significant. 
+
+How many of the GO terms have better p-values in **set** compared to **list**?
+
+```{r noNoiseBetterPVals}
+tapply(noNoise_pvalues$diff, noNoise_pvalues$sizeClass, function(x){sum(x > 0)})
+```
+
+What is the average difference among each group?
+
+```{r noNoiseBetterMean}
+tapply(noNoise_pvalues$diff, noNoise_pvalues$sizeClass, mean)
+```
+
+So ideally, the mean of the full set of differences, combined with how many pass in each case, should adequately quantify how well each of the methods is doing. 
+
+## Noise
+
+In addition to the genes that are annotated to the GO terms of interest, we will also add in genes that have no relation to the GO terms under consideration, these would be considered **noise** genes. To make the model simple, we will have the **same** genes as noise in **both** samples.
 
 ```{r noiseGenes}
 nNoise <- 500
@@ -102,163 +168,49 @@ noiseGenes <- names(not_useGO)[not_useGO]
 noiseGenes <- sample(noiseGenes, nNoise)
 
 # check that we did this right, the fraction should not change after adding noise genes
-useGO_frac <- sapply(hsGO[useGO], function(x){
-  length(intersect(x, sample1_org)) / length(x)
-})
 sample1 <- c(sample1_org, noiseGenes)
-
-useGO_fracNoise <- sapply(hsGO[useGO], function(x){
-  length(intersect(x, sample1)) / length(x)
-})
 sample2 <- c(sample2_org, noiseGenes)
-plot(useGO_frac, useGO_fracNoise)
+
+samplesNoise <- list(sample1=sample1, sample2=sample2)
+
+goFracNoise <- calcFraction(hsGO[useGO], samplesNoise)
+plot(goFracNoise$frac, goFractions$frac)
 ```
 
 
-```{r checkAssumptions}
-# check assumptions
-useGO_counts <- sapply(hsGO[useGO], length)
-useGO_frac <- sapply(hsGO[useGO], function(x){
-  length(intersect(x, sample1)) / length(x)
-})
-checkGO <- data.frame(counts=useGO_counts, frac=useGO_frac, sample="1")
-useGO_frac2 <- sapply(hsGO[useGO], function(x){
-  length(intersect(x, sample2)) / length(x)
-})
-checkGO <- rbind(checkGO, data.frame(counts=useGO_counts, frac=useGO_frac2, sample="2"))
-ggplot(checkGO, aes(x=counts, y=frac, color=sample)) + geom_point()
+```{r noisyEnrichment}
+go_noise <- hyperGOMultiEnrichment(samplesNoise, universeGenes)
 ```
 
-From the plot above, it appears that we meet expectations. In addition, we manage to share only `r length(intersect(sample1, sample2))` genes between the two samples. 
+```{r noisePvalues}
+noise_pvalues <- pvaluesMultiEnrich(c("sample1", "sample2"), useGO, go_noise)
 
-What about the degree of overlap between the two samples as a function of size or fraction?
+noise_pvalues <- pvalueDiffSig(noise_pvalues, pCutoff=0.05, log=TRUE)
 
-```{r overlapDist}
-overlapDist <- sapply(useGO, function(x){
-  baseAnn <- hsGO[[x]]
-  t1 <- intersect(baseAnn, sample1)
-  t2 <- intersect(baseAnn, sample2)
-  c(length(baseAnn), length(t1), length(t2), length(intersect(t1,t2)))
-})
-overlapDist <- t(overlapDist)
-overlapFrac <- c(overlapDist[,2] / overlapDist[,1], overlapDist[,3]/overlapDist[,1], overlapDist[,4]/overlapDist[,1])
-overlapFrac <- data.frame(count=rep(overlapDist[,1], 3), 
-                          frac=overlapFrac, 
-                          id=c(rep("s1", 60), rep("s2", 60), rep("s1.s2", 60)))
-overlapFrac
-ggplot(overlapFrac, aes(x=count, y=frac, color=id)) + geom_point()
+noise_pvalues$sizeClass <- sizeClass
+noise_pvalues$size <- goFracNoise[1:60,4]
+noise_pvalues$frac <- goFracNoise$frac[1:60]
 ```
 
-## Do the comparisons
-
-### categoryCompare method
-
-
-#### Enrichment
-
-```{r ccInit}
-s1GO <- new("GOHyperGParamsCC", geneIds=sample1, universeGeneIds=universeGenes, ontology="BP", fdr=0, annotation="org.Hs.eg.db")
-s1_enrich <- hyperGTestCC(s1GO)
-
-s2GO <- new("GOHyperGParamsCC", geneIds=sample2, universeGeneIds=universeGenes, ontology="BP", fdr=0, annotation="org.Hs.eg.db")
-s2_enrich <- hyperGTestCC(s2GO)
+```{r plotSummarizeNoise}
+noise_pvalues$sizeClass <- factor(noise_pvalues$sizeClass, c("low", "med", "hi"), ordered=TRUE)
+ggplot(noise_pvalues, aes(x=frac, y=diff, color=sigState)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x")
 ```
 
-#### Basic Results
-
-```{r pvalueCut}
-pval <- 0.05
-minP <- -1 * log10(pval)
+```{r summarizeCountsNoise}
+tapply(noise_pvalues$diff, noise_pvalues$sizeClass, function(x){sum(x > 0)})
+tapply(noise_pvalues$diff, noise_pvalues$sizeClass, mean)
 ```
 
-
-For the two-sample comparison, we take the minimum p-value of the two sets of results, and then compare with `r -1*log10(pval)`, anything above that is considered significant. We are using **log**'s because they are easier to visualize.
-
-```{r compRes}
-s1_goP <- -1 * log10((s1_enrich@pvalues)[useGO])
-s2_goP <- -1 * log10((s2_enrich@pvalues)[useGO])
-
-s_minP <- apply(cbind(s1_goP, s2_goP), 1, min)
-sum(s_minP >= minP)
-```
+Although using gene lists that were perfect (i.e. no noise) everything in the **list** method was pretty much still significant, on average **sets** gave much better p-values. However, as we add noise to the system in the form of genes that are not annotated to our test GO terms, more terms are significant only in the **sets** method (i.e. show up in **both** sets). 
 
 
-### Intersection Method
+## Expectations
 
-```{r intersectMethod}
-comGO <- new("GOHyperGParamsCC", geneIds=intersect(sample1, sample2), universeGeneIds=universeGenes, ontology="BP", fdr=0, annotation="org.Hs.eg.db")
-com_enrich <- hyperGTestCC(comGO)
-com_goP <- -1 * log10((com_enrich@pvalues)[useGO])
-```
+Based on the above results, what I expect we will see if we do a programmatic search over the space is that there is a dependence on both the fraction of DE genes that are noisy, and the fraction of noisy genes that are shared (which really amounts to the same thing, but is a subtle point). 
 
+# To Do:
 
-### Compare Methods
-
-To compare the methods, we will start with the `r length(useGO)` terms in our low, med and hi groups, and compare which ones and how many show up. 
-
-```{r numericComparison}
-sum(s_minP >= minP)
-sum(com_goP >= minP)
-
-invisible(lapply(goList, function(x){
-  print(sum(s_minP[x] >= minP))
-  print(sum(com_goP[x] >= minP))
-}))
-```
-
-
-We will also plot a histogram to make this more apparent.
-
-```{r plotHistogram}
-s_count <- sapply(goList, function(x){
-  sum(s_minP[x] >= minP)
-})
-com_count <- sapply(goList, function(x){
-  sum(com_goP[x] >= minP)
-})
-
-countData <- data.frame(count=c(s_count, com_count), grp=rep(names(goList), 2), type=rep(c("s", "com"), each=3))
-countData$grp <- factor(countData$grp, levels=c("low", "med", "hi"), ordered=TRUE)
-ggplot(countData, aes(x=grp, y=count, fill=type)) + geom_bar(stat="identity", position="dodge") + ylim(0, 20)
-```
-
-The histogram suggests that there may be a relationship between the difference in p-values and the proportion of genes annotated to a GO term. Let's check.
-
-As we are using logged p-values, we will simply take the difference of p-values and plot them. We expect to see higher p-values (i.e. positive differences) for the inter-group comparison *vs* the intersection of genes.
-
-```{r plotPDiffs}
-pDiff <- data.frame(pdiff = s_minP - com_goP,
-                    annFrac = useGO_frac,
-                    grp = rep(names(goList), each=20))
-pDiff$grp <- factor(pDiff$grp, levels=c("low", "med", "hi"), ordered=T)
-
-ggplot(pDiff, aes(x=annFrac, y=pdiff)) + geom_point()
-```
-
-Doesn't appear to be anything discernible for the fraction alone. What if it is split up across the groups?
-
-```{r plotPDiffsGroup}
-ggplot(pDiff, aes(x=annFrac, y=pdiff)) + geom_point() + facet_grid(. ~ grp, scales="free_x")
-```
-
-Hmm, well, which ones were actually significant in different cases? 
-
-* Sig. using both methods
-* Sig in category comparison only
-* Sig in gene intersection only
-
-```{r plotPDiffsMethod}
-pDiff$sigGroup <- "none"
-sigBoth <- names(s_minP)[(s_minP >= 1.3) & (com_goP >= 1.3)]
-pDiff[sigBoth, "sigGroup"] <- "both"
-sigS <- names(s_minP)[(s_minP >= 1.3) & (com_goP < 1.3)]
-pDiff[sigS, "sigGroup"] <- "s"
-
-ggplot(pDiff, aes(x=annFrac, y=pdiff, color=sigGroup)) + geom_point() + facet_grid(. ~ grp, scales="free_x")
-```
-
-Now we can see that:
-
-1. There is nothing from combining gene lists that is significant while combining enrichment results is not.
-2. In general, there is a much better p-value from the combined enrichment than from combined gene lists.
-
+* Check expectations of the gene to GO distribution from a couple of real human data sets
+* Run both the **noNoise** and **noise** 100 times with different sets of GO terms and make sure that this holds.
+* Vary the fraction of noise genes, and also vary the fraction that is common, and find a way to quantify the effect.
