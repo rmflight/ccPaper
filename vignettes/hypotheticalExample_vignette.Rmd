@@ -166,17 +166,23 @@ goFractions <- calcFraction(hsGO[useGO], list(sample1=sample1_org, sample2=sampl
 ggplot(goFractions, aes(x=size, y=frac, color=genelist)) + geom_point()
 ```
 
-Lets actually compare this to the original distribution of fractions *vs* sizes
+Lets actually compare this to the distribution of fractions *vs* sizes from the experimental data sets. Because those used **all** the GO terms, we will redo them with **all** GO terms as well, not just those from our sample.
 
 ```{r compareFracs}
+sampleGOFracs <- calcFraction(hsGO, list(sample1=sample1_org, sample2=sample2_org))
 ALL_sizeFrac$genelist <- "all"
-ALL_tmp <- rbind(ALL_sizeFrac, lung_sizeFrac, goFractions[,c("frac", "genelist", "size")])
-ggplot(ALL_tmp, aes(x=size, y=frac, color=genelist)) + geom_point() + xlim(0, 1500)
+ALL_tmp <- rbind(ALL_sizeFrac, lung_sizeFrac, sampleGOFracs[,c("frac", "genelist", "size")])
 ggplot(ALL_tmp, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + facet_grid(genelist ~ .)
 ```
 
 
-### Verifying that
+```{r cleanupData}
+keepItems <- c("goFractions", "sample1_org", "sample2_org", "hsGO", "useGO", "GO_hi", "GO_low", "GO_med", "grpHi", "grpLow", "grpMed", "minGO", "nGO", "nGene")
+allItems <- ls()
+delItems <- allItems[!(allItems %in% keepItems)]
+rm(list=delItems)
+```
+
 
 ### Do calculations
 
