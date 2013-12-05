@@ -1,7 +1,7 @@
 <!--
   %\VignetteEngine{knitr}
   %\VignetteIndexEntry{hypothetical example}
-  %\VignetteDepends{categoryComparePaperRev, ggplot2, estrogen, ALL}
+  %\VignetteDepends{categoryComparePaperRev, ggplot2, ALL, GEOquery}
 -->
   
 # Hypothetical Example
@@ -98,6 +98,27 @@ library(hgu95av2.db)
 ALLgo <- as.list(hgu95av2GO2ALLPROBES)
 ALL_sizeFrac <- trimGOFrac(ALLgo, deALL)
 ggplot(ALL_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500)
+```
+
+
+#### Lung Cancer
+
+The lung cancer data is a paired sample design from GEO.
+
+```{r deLung}
+lung <- getGEO(filename="otherData/GSE18842_series_matrix.txt")
+sampleStat <- strsplit2(pData(lung)$title, " ")
+
+notNP <- grep("^NP", sampleStat[,2], invert=T)
+lung <- lung[, notNP]
+sampleStat <- sampleStat[notNP,]
+sampleID <- factor(sampleStat[,2])
+cancerID <- factor(sampleStat[,1])
+
+lungDesign <- model.matrix(~sampleID+cancerID)
+fitLung <- lmFit(lung, lungDesign)
+fitLung <- eBayes(fitLung)
+deLung <- topTable(fitLung, coef="cancerIDTumor", number=Inf, adjust.method="BY", p.value=0.00001)
 ```
 
 
