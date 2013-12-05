@@ -189,3 +189,31 @@ pvalueDiffSig <- function(pvalueData, pCutoff=0.05, log=TRUE){
   }))
   return(pvalueData)
 }
+
+#' trim go2gene and get fractions
+#' 
+#' for the cases of examining the "real" data, we need to take a GO 2 gene mapping, get the gene 2 GO mapping and find just those GO terms that actually have genes in the DE list, and finally calculate the fractions.
+#' 
+#' @param go2gene list of GO 2 gene mappings
+#' @param deList the differentially expressed gene list as a \code{character} vector
+#' @importFrom Biobase reverseSplit
+#' @return \code{data.frame} of fractions and counts
+#' @export
+trimGOFrac <- function(go2gene, deList){
+  stopifnot(is.list(go2gene))
+  stopifnot(is.character(deList))
+  
+  go2gene <- lapply(go2gene, unique)
+  
+  gene2go <- reverseSplit(go2gene)
+  gene2go <- gene2go[deList]
+  keepGO <- unique(unlist(gene2go, use.names=F))
+  
+  go2gene <- go2gene[keepGO]
+  
+  goSize <- sapply(go2gene, length)
+  goFrac <- sapply(go2gene, function(x){
+    length(intersect(x, deList)) / length(x)
+  })
+  return(data.frame(size=goSize, frac=goFrac))
+}
