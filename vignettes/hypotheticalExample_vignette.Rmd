@@ -88,11 +88,17 @@ fitALL <- lmFit(ALL, designALL)
 contMatrixALL <- makeContrasts(BvT=B-T, levels=designALL)
 fitALL2 <- contrasts.fit(fitALL, contMatrixALL)
 fitALL2 <- eBayes(fitALL2)
-deALL <- topTable(fitALL2, adjust="BH", p.value=0.05, number=Inf)
+deALL <- rownames(topTable(fitALL2, adjust="BH", p.value=0.05, number=Inf))
 ```
 
 Now for all the GO terms that map to the probes in the `ALL` differentially expressed genes, how does the proportion of differentially expressed genes change as a function of the number of genes annotated to the GO term?
 
+```{r goDistALL}
+library(hgu95av2.db)
+ALLgo <- as.list(hgu95av2GO2ALLPROBES)
+ALL_sizeFrac <- trimGOFrac(ALLgo, deALL)
+ggplot(ALL_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500)
+```
 
 
 ### Get Genes
@@ -128,6 +134,15 @@ sample2_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
 goFractions <- calcFraction(hsGO[useGO], list(sample1=sample1_org, sample2=sample2_org))
 ggplot(goFractions, aes(x=size, y=frac, color=genelist)) + geom_point()
 ```
+
+Lets actually compare this to the original distribution of fractions *vs* sizes
+
+```{r compareFracs}
+ALL_sizeFrac$genelist <- "all"
+ALL_tmp <- rbind(ALL_sizeFrac, goFractions[,c("frac", "genelist", "size")])
+ggplot(ALL_tmp, aes(x=size, y=frac, color=genelist)) + geom_point() + xlim(0, 1500)
+```
+
 
 ### Verifying that
 
