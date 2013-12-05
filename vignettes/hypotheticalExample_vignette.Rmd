@@ -112,14 +112,24 @@ sampleStat <- strsplit2(pData(lung)$title, " ")
 notNP <- grep("^NP", sampleStat[,2], invert=T)
 lung <- lung[, notNP]
 sampleStat <- sampleStat[notNP,]
+
 sampleID <- factor(sampleStat[,2])
 cancerID <- factor(sampleStat[,1])
 
 lungDesign <- model.matrix(~sampleID+cancerID)
 fitLung <- lmFit(lung, lungDesign)
 fitLung <- eBayes(fitLung)
-deLung <- topTable(fitLung, coef="cancerIDTumor", number=Inf, adjust.method="BY", p.value=0.00001)
+deLung <- rownames(topTable(fitLung, coef="cancerIDTumor", number=2000, adjust.method="BY", p.value=0.00001))
 ```
+
+```{r goDistLung}
+library(hgu133plus2.db)
+lung2go <- as.list(hgu133plus2GO2ALLPROBES)
+lung_sizeFrac <- trimGOFrac(lung2go, deLung)
+lung_sizeFrac$genelist <- "lung"
+ggplot(lung_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500)
+```
+
 
 
 ### Get Genes
@@ -160,8 +170,9 @@ Lets actually compare this to the original distribution of fractions *vs* sizes
 
 ```{r compareFracs}
 ALL_sizeFrac$genelist <- "all"
-ALL_tmp <- rbind(ALL_sizeFrac, goFractions[,c("frac", "genelist", "size")])
+ALL_tmp <- rbind(ALL_sizeFrac, lung_sizeFrac, goFractions[,c("frac", "genelist", "size")])
 ggplot(ALL_tmp, aes(x=size, y=frac, color=genelist)) + geom_point() + xlim(0, 1500)
+ggplot(ALL_tmp, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + facet_grid(genelist ~ .)
 ```
 
 
