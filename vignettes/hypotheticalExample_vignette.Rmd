@@ -1,7 +1,7 @@
 <!--
   %\VignetteEngine{knitr}
   %\VignetteIndexEntry{hypothetical example}
-  %\VignetteDepends{categoryComparePaperRev, ggplot2, ALL, GEOquery}
+  %\VignetteDepends{categoryComparePaperRev, ggplot2, ALL, GEOquery, GO.db, hgu95av.db, hgu133plus2.db, limma}
 -->
   
 # Hypothetical Example
