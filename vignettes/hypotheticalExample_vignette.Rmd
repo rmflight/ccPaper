@@ -1,7 +1,7 @@
 <!--
   %\VignetteEngine{knitr}
   %\VignetteIndexEntry{hypothetical example}
-  %\VignetteDepends{categoryComparePaperRev, ggplot2}
+  %\VignetteDepends{categoryComparePaperRev, ggplot2, estrogen, ALL}
 -->
   
 # Hypothetical Example
@@ -69,6 +69,32 @@ GO_med <- limitedRandomSample(hsGO_count, grpMed, nGO)
 GO_hi <- limitedRandomSample(hsGO_count, grpHi, nGO)
 ```
 
+### Examine Gene-GO Distribution for Real Data
+
+Before we go and generate our samples, we should actually process some real experimental data and examine the fraction of annotated genes in the experiment compared to the total number of genes annotated. We will use the [`ALL`][http://master.bioconductor.org/packages/release/data/experiment/html/ALL.html] data set from `Bioconductor` and a [paired lung cancer dataset][http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE18842] available from GEO.
+
+#### ALL
+
+The `ALL` data set has two classes of tumor, **B** and **T**-cell lymphoblastoma. We will do a simple differential expression between the two cell types.
+
+```{r deALL}
+library(ALL)
+data(ALL)
+
+grpALL <- factor(strtrim(pData(ALL)$BT, 1))
+designALL <- model.matrix(~0+grpALL)
+colnames(designALL) <- c("B", "T")
+fitALL <- lmFit(ALL, designALL)
+contMatrixALL <- makeContrasts(BvT=B-T, levels=designALL)
+fitALL2 <- contrasts.fit(fitALL, contMatrixALL)
+fitALL2 <- eBayes(fitALL2)
+deALL <- topTable(fitALL2, adjust="BH", p.value=0.05, number=Inf)
+```
+
+Now for all the GO terms that map to the probes in the `ALL` differentially expressed genes, how does the proportion of differentially expressed genes change as a function of the number of genes annotated to the GO term?
+
+
+
 ### Get Genes
 
 Now, for all of these we need to generate **two** samples of genes from them to comprise our **differentially expressed** (DE) sets from the genome, representing two different expression experiments.
@@ -102,6 +128,8 @@ sample2_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
 goFractions <- calcFraction(hsGO[useGO], list(sample1=sample1_org, sample2=sample2_org))
 ggplot(goFractions, aes(x=size, y=frac, color=genelist)) + geom_point()
 ```
+
+### Verifying that
 
 ### Do calculations
 
