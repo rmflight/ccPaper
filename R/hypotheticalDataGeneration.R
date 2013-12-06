@@ -217,3 +217,10 @@ trimGOFrac <- function(go2gene, deList){
   })
   return(data.frame(size=goSize, frac=goFrac))
 }
+
+#' @name lung.RData
+#' @title lung.RData
+#' @docType data
+#' @source ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE18nnn/GSE18842/matrix/GSE18842_series_matrix.txt.gz
+#' @details Downloaded, created an \code{ExpressionSet} object using \code{getGEO} on Dec 6, 2013.
+NULL
