@@ -158,6 +158,9 @@ pvaluesMultiEnrich <- function(geneListNames, useTerms, hyperEnrichList, log=TRU
   
   setValues <- do.call(cbind, allValues[geneListNames])
   setValues <- apply(setValues, 1, min)
+  setValues[is.na(setValues)] <- 0
+  
+  allValues$intersect[is.na(allValues$intersect)] <- 0
   
   outValues <- data.frame(set = setValues, list = allValues$intersect)
   return(outValues)
@@ -217,6 +220,7 @@ trimGOFrac <- function(go2gene, deList){
   })
   return(data.frame(size=goSize, frac=goFrac))
 }
+
 
 #' @name lung.RData
 #' @title lung.RData
