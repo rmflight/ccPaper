@@ -156,11 +156,16 @@ pvaluesMultiEnrich <- function(geneListNames, useTerms, hyperEnrichList, log=TRU
     tmpVal
   })
   
+  naVal <- 1
+  if (log){
+    naVal <- 0
+  }
+  
   setValues <- do.call(cbind, allValues[geneListNames])
   setValues <- apply(setValues, 1, min)
-  setValues[is.na(setValues)] <- 0
+  setValues[is.na(setValues)] <- naVal
   
-  allValues$intersect[is.na(allValues$intersect)] <- 0
+  allValues$intersect[is.na(allValues$intersect)] <- naVal
   
   outValues <- data.frame(set = setValues, list = allValues$intersect)
   return(outValues)
