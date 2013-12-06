@@ -286,6 +286,15 @@ tapply(noise_pvalues$diff, noise_pvalues$sizeClass, mean)
 
 Although using gene lists that were perfect (i.e. no noise) everything in the **list** method was pretty much still significant, on average **sets** gave much better p-values. However, as we add noise to the system in the form of genes that are not annotated to our test GO terms, more terms are significant only in the **sets** method (i.e. show up in **both** sets). 
 
+## Check Consistency
+
+To make sure that the results are consistent, we will do several iterations of the above calculations.
+
+* Generate 100 different sets of GO samples, and run calculations again.
+* For 10 subsets of these, generate 100 different pairs of sample genes, and run calculations.
+
+This should be done for both the **noNoise** and **noise** examples.
+
 
 ## Expectations
 
