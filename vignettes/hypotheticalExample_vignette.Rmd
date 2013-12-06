@@ -1,7 +1,7 @@
 <!--
   %\VignetteEngine{knitr}
   %\VignetteIndexEntry{hypothetical example}
-  %\VignetteDepends{categoryComparePaperRev, ggplot2, ALL, GEOquery, GO.db, hgu95av.db, hgu133plus2.db, limma}
+  %\VignetteDepends{categoryComparePaperRev, ggplot2, ALL, GO.db, hgu95av.db, hgu133plus2.db, limma}
 -->
   
 # Hypothetical Example
@@ -71,7 +71,7 @@ GO_hi <- limitedRandomSample(hsGO_count, grpHi, nGO)
 
 ### Examine Gene-GO Distribution for Real Data
 
-Before we go and generate our samples, we should actually process some real experimental data and examine the fraction of annotated genes in the experiment compared to the total number of genes annotated. We will use the [`ALL`][http://master.bioconductor.org/packages/release/data/experiment/html/ALL.html] data set from `Bioconductor` and a [paired lung cancer dataset][http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE18842] available from GEO.
+Before we go and generate our samples, we should actually process some real experimental data and examine the fraction of annotated genes in the experiment compared to the total number of genes annotated. We will use the [`ALL`][http://master.bioconductor.org/packages/release/data/experiment/html/ALL.html] data set from `Bioconductor` and a [paired lung cancer dataset][http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE18842] available from GEO (available as part of this package).
 
 #### ALL
 
@@ -79,6 +79,7 @@ The `ALL` data set has two classes of tumor, **B** and **T**-cell lymphoblastoma
 
 ```{r deALL}
 library(ALL)
+library(limma)
 data(ALL)
 
 grpALL <- factor(strtrim(pData(ALL)$BT, 1))
@@ -106,7 +107,7 @@ ggplot(ALL_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500)
 The lung cancer data is a paired sample design from GEO.
 
 ```{r deLung}
-lung <- getGEO(filename="otherData/GSE18842_series_matrix.txt")
+data(lung)
 sampleStat <- strsplit2(pData(lung)$title, " ")
 
 notNP <- grep("^NP", sampleStat[,2], invert=T)
