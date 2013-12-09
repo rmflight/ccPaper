@@ -271,8 +271,8 @@ noise_pvalues <- pvaluesMultiEnrich(c("sample1", "sample2"), useGO, go_noise)
 noise_pvalues <- pvalueDiffSig(noise_pvalues, pCutoff=0.05, log=TRUE)
 
 noise_pvalues$sizeClass <- sizeClass
-noise_pvalues$size <- goFracNoise[1:60,4]
-noise_pvalues$frac <- goFracNoise$frac[1:60]
+noise_pvalues$size <- goFracNoise[1:length(sizeClass),4]
+noise_pvalues$frac <- goFracNoise$frac[1:length(sizeClass)]
 ```
 
 ```{r plotSummarizeNoise}
@@ -312,7 +312,7 @@ save(useGO, testSamples, universeGenes, file="inst/data/100GeneSamples.RData")
 
 ```{r runSamples}
 # load("inst/data/100GeneSamples.RData")
-testRes <- lapply(seq(1, length(testSamples)), function(x){
+testRes <- lapply(seq(1, 10), function(x){
   print(x)
   sRes <- hyperGOMultiEnrichment(testSamples[[x]], universe=universeGenes)
 
