@@ -62,11 +62,12 @@ grpHi <- c(500, 1500)
 
 ```{r sampleGroups}
 set.seed(271113) # for reproducibility
-nGO <- 20
+nGO <- c(50, 30, 20)
+names(nGO) <- c("low", "med", "hi")
 
-GO_low <- limitedRandomSample(hsGO_count, grpLow, nGO)
-GO_med <- limitedRandomSample(hsGO_count, grpMed, nGO)
-GO_hi <- limitedRandomSample(hsGO_count, grpHi, nGO)
+GO_low <- limitedRandomSample(hsGO_count, grpLow, nGO["low"])
+GO_med <- limitedRandomSample(hsGO_count, grpMed, nGO["med"])
+GO_hi <- limitedRandomSample(hsGO_count, grpHi, nGO["hi"])
 ```
 
 ### Examine Gene-GO Distribution for Real Data
@@ -205,11 +206,11 @@ noNoise_pvalues <- pvalueDiffSig(noNoise_pvalues, pCutoff=0.05, log=TRUE)
 Finally, lets add in our values of the fraction, total genes, and the class (**low**, **med**, **hi**) so we can do some fancy plotting stuff with it.
 
 ```{r noNoiseAddInfo}
-sizeClass <- rep(c("low", "med", "hi"), each=20)
+sizeClass <- c(rep("low", nGO["low"]), rep("med", nGO["med"]), rep("hi", nGO["hi"]))
 names(sizeClass) <- useGO
 noNoise_pvalues$sizeClass <- sizeClass
-noNoise_pvalues$size <- goFractions[1:60,4]
-noNoise_pvalues$frac <- goFractions$frac[1:60]
+noNoise_pvalues$size <- goFractions[1:length(sizeClass),4]
+noNoise_pvalues$frac <- goFractions$frac[1:length(sizeClass)]
 ```
 
 Now we will plot the difference in log-p-values (where we have **set** - **list**), so that positive values imply that **set** had lower p-values than **list**, based on the *fraction* of genes annotated.
@@ -294,6 +295,36 @@ To make sure that the results are consistent, we will do several iterations of t
 * For 10 subsets of these, generate 100 different pairs of sample genes, and run calculations.
 
 This should be done for both the **noNoise** and **noise** examples.
+
+### Gene Sample Level Consistency
+
+```{r geneSamples}
+nTimes <- 100
+nGene <- 1000
+
+testSamples <- lapply(seq(1, nTimes), function(x){
+  list(s1 = sampleTerms(useGO, hsGO, 1000, 4)[1:nGene],
+       s2 = sampleTerms(useGO, hsGO, 1000, 4)[1:nGene])
+})
+
+save(useGO, testSamples, universeGenes, file="inst/data/100GeneSamples.RData")
+```
+
+```{r runSamples}
+# load("inst/data/100GeneSamples.RData")
+testRes <- lapply(seq(1, length(testSamples)), function(x){
+  print(x)
+  sRes <- hyperGOMultiEnrichment(testSamples[[x]], universe=universeGenes)
+
+  sP <- pvaluesMultiEnrich(c("s1", "s2"), useGO, sRes)
+  sP <- pvalueDiffSig(sP, pCutoff=0.05, log=TRUE)
+  sP$class <- sizeClass
+  sP$iteration <- x
+  return(sP)
+})
+save(testRes, file="inst/data/100GeneResults.RData")
+```
+
 
 
 ## Expectations
