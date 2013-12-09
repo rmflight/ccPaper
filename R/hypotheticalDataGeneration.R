@@ -153,6 +153,7 @@ pvaluesMultiEnrich <- function(geneListNames, useTerms, hyperEnrichList, log=TRU
     if (log){
       tmpVal <- -1 * log10(tmpVal)
     }
+    names(tmpVal) <- useTerms
     tmpVal
   })
   
