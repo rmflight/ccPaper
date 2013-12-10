@@ -307,21 +307,27 @@ testSamples <- lapply(seq(1, nTimes), function(x){
        s2 = sampleTerms(useGO, hsGO, 1000, 4)[1:nGene])
 })
 
-save(useGO, testSamples, universeGenes, file="inst/data/100GeneSamples.RData")
+save(useGO, testSamples, universeGenes, sizeClass, file="inst/data/100GeneSamples.RData")
 ```
 
 ```{r runSamples}
+library(snowfall)
 # load("inst/data/100GeneSamples.RData")
-testRes <- lapply(seq(1, 10), function(x){
-  print(x)
-  sRes <- hyperGOMultiEnrichment(testSamples[[x]], universe=universeGenes)
+testFun <- function(x){
+  sRes <- hyperGOMultiEnrichment(x, universe=universeGenes)
 
   sP <- pvaluesMultiEnrich(c("s1", "s2"), useGO, sRes)
   sP <- pvalueDiffSig(sP, pCutoff=0.05, log=TRUE)
   sP$class <- sizeClass
-  sP$iteration <- x
   return(sP)
-})
+}
+sfInit(parallel=TRUE, cpus=10)
+sfExport("sizeClass", "universeGenes", "useGO")
+sfLibrary(ccPaperRev)
+sfLibrary(GO.db)
+sfLibrary(org.Hs.eg.db)
+testRes <- sfLapply(testSamples, testFun)
+sfStop()
 save(testRes, file="inst/data/100GeneResults.RData")
 ```
 
