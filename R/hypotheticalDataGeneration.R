@@ -164,7 +164,13 @@ pvaluesMultiEnrich <- function(geneListNames, useTerms, hyperEnrichList, log=TRU
   })
   
   setValues <- do.call(cbind, allValues[geneListNames])
-  setValues <- apply(setValues, 1, min, na.rm=TRUE)
+  
+  if (log){
+    setValues <- apply(setValues, 1, min, na.rm=TRUE)
+  } else {
+    setValues <- apply(setValues, 1, max, na.rm=TRUE)
+  }
+  
   setValues[is.na(setValues)] <- naVal
   
   allValues$intersect[is.na(allValues$intersect)] <- naVal
