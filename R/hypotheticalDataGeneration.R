@@ -164,7 +164,7 @@ pvaluesMultiEnrich <- function(geneListNames, useTerms, hyperEnrichList, log=TRU
   })
   
   setValues <- do.call(cbind, allValues[geneListNames])
-  setValues <- apply(setValues, 1, min)
+  setValues <- apply(setValues, 1, min, na.rm=TRUE)
   setValues[is.na(setValues)] <- naVal
   
   allValues$intersect[is.na(allValues$intersect)] <- naVal
@@ -176,6 +176,7 @@ pvaluesMultiEnrich <- function(geneListNames, useTerms, hyperEnrichList, log=TRU
     measuredGO <- names(inEnrich@pvalues)
     hasGO <- useTerms %in% measuredGO
     names(hasGO) <- useTerms
+    hasGO
   })
   
   initPresent <- logical(length(useTerms))
