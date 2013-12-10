@@ -249,6 +249,28 @@ trimGOFrac <- function(go2gene, deList){
   return(data.frame(size=goSize, frac=goFrac))
 }
 
+#' calculate statistics for all the same GO terms across multiple samples
+#' 
+#' For the case where we have calculated p-values and differences for random samples of genes, we need to calculate the mean and standard deviation for each GO term.
+#' 
+#' @param inList the list of results to work with
+#' @details expects each entry in \code{inList} to have a data.frame named \code{values}, and takes the column "diff" and does the statistics on it.
+#' @return data.frame
+#' @export
+sameGOStats <- function(inList){
+  getDiff <- function(inVar){
+    return(inVar$values$diff)
+  }
+  
+  allVals <- lapply(inList, getDiff)
+  allVals <- do.call(cbind, allVals)
+  meanVals <- apply(allVals, 1, mean, na.rm=T)
+  sdVals <- apply(allVals, 1, sd, na.rm=T)
+  minCI <- meanVals - 1.96 * (sdVals / sqrt(ncol(allVals)))
+  maxCI <- meanVals + 1.96 * (sdVals / sqrt(ncol(allVals)))
+  outVals <- data.frame(mean = meanVals, min = minCI, max = maxCI)
+}
+
 
 #' @name lung.RData
 #' @title lung.RData
