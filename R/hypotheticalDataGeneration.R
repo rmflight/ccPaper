@@ -269,6 +269,7 @@ sameGOStats <- function(inList){
   minCI <- meanVals - 1.96 * (sdVals / sqrt(ncol(allVals)))
   maxCI <- meanVals + 1.96 * (sdVals / sqrt(ncol(allVals)))
   outVals <- data.frame(mean = meanVals, min = minCI, max = maxCI)
+  return(outVals)
 }
 
 
