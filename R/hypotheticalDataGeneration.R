@@ -148,6 +148,12 @@ hyperGOMultiEnrichment <- function(geneList, universe, ontology="BP", annotation
 #' @return \code{data.frame}, see details
 #' @details the \code{data.frame} returned has the p-values for each GO term from both the set based and list based results. The set-based value is the minimum value of all the set enrichments for that GO term, log transformed.
 pvaluesMultiEnrich <- function(geneListNames, useTerms, hyperEnrichList, log=TRUE){
+  naVal <- 1
+  if (log){
+    naVal <- 0
+  }
+  
+  # get the p-values
   allValues <- lapply(hyperEnrichList, function(inEnrich){
     tmpVal <- inEnrich@pvalues[useTerms]
     if (log){
@@ -157,11 +163,6 @@ pvaluesMultiEnrich <- function(geneListNames, useTerms, hyperEnrichList, log=TRU
     tmpVal
   })
   
-  naVal <- 1
-  if (log){
-    naVal <- 0
-  }
-  
   setValues <- do.call(cbind, allValues[geneListNames])
   setValues <- apply(setValues, 1, min)
   setValues[is.na(setValues)] <- naVal
@@ -169,7 +170,21 @@ pvaluesMultiEnrich <- function(geneListNames, useTerms, hyperEnrichList, log=TRU
   allValues$intersect[is.na(allValues$intersect)] <- naVal
   
   outValues <- data.frame(set = setValues, list = allValues$intersect)
-  return(outValues)
+  
+  # get whether it was even measured
+  presentValues <- lapply(hyperEnrichList, function(inEnrich){
+    measuredGO <- names(inEnrich@pvalues)
+    hasGO <- useTerms %in% measuredGO
+    names(hasGO) <- useTerms
+  })
+  
+  initPresent <- logical(length(useTerms))
+  setPresent <- do.call(cbind, presentValues[geneListNames])
+  setPresent <- apply(setPresent, 1, function(x){sum(x) > 0})
+  
+  outPresent <- data.frame(set = setPresent, list = presentValues$intersect)
+  
+  return(list(values = outValues, present = outPresent))
 }
 
 #' calculate difference and significance
