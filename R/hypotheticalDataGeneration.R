@@ -272,6 +272,19 @@ sameGOStats <- function(inList){
   return(outVals)
 }
 
+#' possible noise genes to sample from
+#' 
+#' @param go2gene list of GO term to gene mapping
+#' @param goSample character list of GO terms already sampled
+#' @export
+#' @return noise genes to sample from
+possibleNoise <- function(go2gene, goSample){
+  allGO <- names(go2gene)
+  notSample <- allGO[!(allGO %in% goSample)]
+  remGO <- go2gene[notSample]
+  posGenes <- unique(unlist(remGO, use.names=FALSE))
+  return(posGenes)
+}
 
 #' @name lung.RData
 #' @title lung.RData
