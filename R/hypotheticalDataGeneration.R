@@ -279,10 +279,9 @@ sameGOStats <- function(inList){
 #' @export
 #' @return noise genes to sample from
 possibleNoise <- function(go2gene, goSample){
-  allGO <- names(go2gene)
-  notSample <- allGO[!(allGO %in% goSample)]
-  remGO <- go2gene[notSample]
-  posGenes <- unique(unlist(remGO, use.names=FALSE))
+  allGenes <- unique(unlist(go2gene))
+  sampleGenes <- unique(unlist(go2gene[goSample]))
+  posGenes <- allGenes[!(allGenes %in% sampleGenes)]
   return(posGenes)
 }
 
