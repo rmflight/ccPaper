@@ -309,13 +309,33 @@ goSample <- function(go2gene, nGO, goLimits, nSample=2, nGene=1000, nNoise=0, sh
   
   goFrac <- goSampleAnn / goSize
   
+  outGOData <- data.frame(id = goSamples, class = goClass, size = goSize, frac = goFrac)
+  
+  noiseSample <- vector("list", nSample)
+  
   # and now the noise genes
   if (nNoise != 0){
     noiseGenes <- possibleNoise(go2gene, goSamples)
     
-    if (sharedNoiseFrac)
+    nShare <- round(sharedNoiseFrac * nNoise)
+    nInd <- nNoise - nShare
+    
+    shareNoise <- sample(noiseGenes, nShare)
+    noiseGenes <- setdiff(noiseGenes, shareNoise)
+    
+    
+    for (iSample in seq(1, nSample)){
+      noiseSample[[iSample]] <- c(shareNoise, sample(noiseGenes, nInd))
+      noiseGenes <- setdiff(noiseGenes, noiseSample[[iSample]])
+    }
+    
   }
   
+  sampleNames <- paste("s", seq(1, nSample), sep="")
+  names(outSamples) <- sampleNames
+  names(noiseSample) <- sampleNames
+  
+  return(list(goData = outGOData, geneSample = outSamples, noiseSample = noiseSample))
 }
 
 
