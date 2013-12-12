@@ -272,6 +272,53 @@ sameGOStats <- function(inList){
   return(outVals)
 }
 
+#' generate GO sample with genes
+#' 
+#' To test reproducibility of GO term sampling, we need to be able to sample GO terms and the genes annotated to them, and possibly noise genes as well.
+#' 
+#' @param go2gene \code{list} of go terms with associated genes
+#' @param nGO the number of go terms. see \emph{Details} for having different numbers of terms
+#' @param goLimits ranges of gene counts to restrict sampling. If multiple use a list
+#' @param nSample how many samples of genes do we want
+#' @param nGene the number of genes to sample that are annotated to the GO terms
+#' @param nNoise the number of noise genes
+#' @param sharedNoiseFrac how much of the noisy genes should be shared
+#' @export
+#' @return list
+#' @details \code{nGO} and \code{goLimits} should be the same length
+goSample <- function(go2gene, nGO, goLimits, nSample=2, nGene=1000, nNoise=0, sharedNoiseFrac=1){
+  stopifnot(names(nGO) == names(goLimits))
+  goCount <- data.frame(count=sapply(go2gene, length))
+  
+  goSamples <- unlist(lapply(names(nGO), function(inName){
+    limitedRandomSample(goCount, goLimits[[inName]], nGO[inName])
+  }))
+  
+  goClass <- unlist(lapply(names(nGO), function(inName){rep(inName, nGO[inName])}))
+  goSize <- goCount[goSamples, 'count']
+  
+  outSamples <- lapply(seq(1, nSample), function(iSample){
+    sampleTerms(goSamples, go2gene, nGene)[1:nGene]
+  })
+  
+  goSampleAnn <- sapply(goSamples, function(inGO){
+    min(sapply(outSamples, function(inSample){
+      length(intersect(go2gene[[inGO]], inSample))
+    }))
+  })
+  
+  goFrac <- goSampleAnn / goSize
+  
+  # and now the noise genes
+  if (nNoise != 0){
+    noiseGenes <- possibleNoise(go2gene, goSamples)
+    
+    if (sharedNoiseFrac)
+  }
+  
+}
+
+
 #' possible noise genes to sample from
 #' 
 #' @param go2gene list of GO term to gene mapping
