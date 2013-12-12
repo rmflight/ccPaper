@@ -1,6 +1,8 @@
 export(calcFraction)
+export(goSample)
 export(hyperGOMultiEnrichment)
 export(limitedRandomSample)
+export(possibleNoise)
 export(pvalueDiffSig)
 export(pvaluesMultiEnrich)
 export(sameGOStats)
