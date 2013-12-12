@@ -386,6 +386,10 @@ ggplot(testStats_noise, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() 
 ```
 
 
+## GO Samples
+
+OK, the error bars are not too bad. How about sampling multiple sets of GO terms. This is slightly complicated by the fact that we will not get exactly the same values for the fraction, so we will bin the GO terms by the fraction of annotated genes first, and then calculate the statistics.
+
 
 
 
