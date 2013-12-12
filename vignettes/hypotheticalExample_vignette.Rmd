@@ -400,14 +400,37 @@ sfInit(parallel=TRUE, cpus=10)
 sfLibrary(ccPaperRev)
 sfExport("hsGO", "nGO", "goLimits")
 
-testGOSample <- sfLapply(seq(1, nSample), function(x){
+testGOSample <- lapply(seq(1, 3), function(x){
   t1 <- goSample(hsGO, nGO, goLimits, nSample=2, nGene=1000, nNoise=500)
   return(t1)
 })
 
 sfStop()
 save(testGOSample, file="inst/data/100GOSamples.RData")
+```
 
+
+Running those samples:
+
+```{r runGOSamples}
+runGOSamples <- function(x){
+  cleanSample <- x$geneSample
+  cleanRes <- hyperGOMultiEnrichment(cleanSample, universe=universeGenes)
+  
+  cleanP <- pvaluesMultiEnrich(names(cleanSample), x$goData$id, cleanRes)
+  cleanP_dif <- pvalueDiffSig(cleanP$values, pCutoff=0.05, log=TRUE)
+  cleanP_dif <- cbind(cleanP_dif, x$goData)
+  
+  noiseSample <- lapply(names(cleanSample), function(inSample){
+    c(x$geneSample[[inSample]], x$noiseSample[[inSample]])
+  })
+  names(noiseSample) <- names(cleanSample)
+  noiseRes <- hyperGOMultiEnrichment(noiseSample, universe=universeGenes)
+  noiseP <- pvaluesMultiEnrich(names(cleanSample), x$goData$id, noiseRes)
+  noiseP_dif <- pvalueDiffSig(noiseP$values, pCutoff=0.05, log=TRUE)
+  noiseP_dif <- cbind(noiseP_dif, x$goData)
+  return(list(clean = cleanP_dif, noise = noiseP_dif))
+}
 ```
 
 

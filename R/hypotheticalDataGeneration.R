@@ -309,7 +309,7 @@ goSample <- function(go2gene, nGO, goLimits, nSample=2, nGene=1000, nNoise=0, sh
   
   goFrac <- goSampleAnn / goSize
   
-  outGOData <- data.frame(id = goSamples, class = goClass, size = goSize, frac = goFrac)
+  outGOData <- data.frame(id = as.character(goSamples), class = goClass, size = goSize, frac = goFrac)
   
   noiseSample <- vector("list", nSample)
   
