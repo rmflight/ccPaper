@@ -386,6 +386,25 @@ ggplot(testStats_noise, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() 
 ```
 
 
+### GO Samples
+
+Generate gene samples for many different sets of GO terms, using the same criteria as above.
+
+```{r genSamples}
+goLimits <- list(low = c(10, 100), med = c(250, 500), hi = c(500, 1500))
+
+nSample <- 100
+
+sfInit(parallel=TRUE, cpus=10)
+sfLibrary(ccPaperRev)
+
+testGOSample <- sflapply(seq(1, nSample), {
+  goSample(hsGO, nGO, goLimits, nSample=2, nGene=1000, nNoise=500)
+})
+
+sfStop()
+save(testGOSample, file="inst/data/100GOSamples.RData")
+```
 
 
 
