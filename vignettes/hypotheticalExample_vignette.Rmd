@@ -397,13 +397,16 @@ nSample <- 100
 
 sfInit(parallel=TRUE, cpus=10)
 sfLibrary(ccPaperRev)
+sfExport("hsGO", "nGO", "goLimits")
 
-testGOSample <- sflapply(seq(1, nSample), {
-  goSample(hsGO, nGO, goLimits, nSample=2, nGene=1000, nNoise=500)
+testGOSample <- sfLapply(seq(1, nSample), function(x){
+  t1 <- goSample(hsGO, nGO, goLimits, nSample=2, nGene=1000, nNoise=500)
+  return(t1)
 })
 
 sfStop()
 save(testGOSample, file="inst/data/100GOSamples.RData")
+
 ```
 
 
