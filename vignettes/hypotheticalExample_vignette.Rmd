@@ -400,17 +400,13 @@ sfInit(parallel=TRUE, cpus=10)
 sfLibrary(ccPaperRev)
 sfExport("hsGO", "nGO", "goLimits")
 
-testGOSample <- lapply(seq(1, 3), function(x){
+testGOSample <- sfLapply(seq(1, nSample), function(x){
   t1 <- goSample(hsGO, nGO, goLimits, nSample=2, nGene=1000, nNoise=500)
   return(t1)
 })
 
 sfStop()
 save(testGOSample, file="inst/data/100GOSamples.RData")
-```
-
-```{r runGOSamples}
-
 ```
 
 Running those samples:
@@ -434,7 +430,57 @@ runGOSamples <- function(x){
   noiseP_dif <- cbind(noiseP_dif, x$goData)
   return(list(clean = cleanP_dif, noise = noiseP_dif))
 }
+
+library(snowfall)
+sfInit(parallel=TRUE, cpus=10)
+sfLibrary(ccPaperRev)
+sfLibrary(org.Hs.eg.db)
+sfLibrary(GO.db)
+sfExport("universeGenes")
+
+testGORes <- sfLapply(testGOSample, runGOSamples)
+sfStop()
+save(testGORes, file="inst/data/100GOResults.RData")
 ```
+
+```{r lookDiffs}
+load("inst/data/100GOResults.RData")
+
+grab_noNoise <- function(x){
+  x$clean[,c("diff", "class", "frac")]
+}
+
+go_noNoise <- lapply(testGORes, grab_noNoise)
+go_noNoise <- do.call(rbind, go_noNoise)
+go_noNoise$class <- factor(go_noNoise$class, levels=c("low", "med", "hi"), ordered=TRUE)
+ggplot(go_noNoise, aes(x = frac, y = diff)) + geom_point() + facet_grid(. ~ class, scales="free_x")
+
+grab_noise <- function(x){
+  x$noise[, c("diff", "class", "frac")]
+}
+go_noise <- lapply(testGORes, grab_noise)
+go_noise <- do.call(rbind, go_noise)
+go_noise$class <- factor(go_noise$class, levels=c("low", "med", "hi"), ordered=TRUE)
+ggplot(go_noise, aes(x = frac, y = diff)) + geom_point() + facet_grid(. ~ class, scales="free_x")
+
+grab_noiseDiff <- function(x){
+  outRes <- x$clean[, c("diff", "class", "frac")]
+  outRes$diff <- x$noise$diff - x$clean$diff
+  outRes
+}
+go_diff <- lapply(testGORes, grab_noiseDiff)
+go_diff <- do.call(rbind, go_diff)
+go_diff$class <- factor(go_diff$class, levels=c("low", "med", "hi"), ordered=TRUE)
+ggplot(go_diff, aes(x = frac, y = diff)) + geom_point() + facet_grid(. ~ class, scales="free_x")
+```
+
+What if we aggregate things into bins first, based on their class and fraction?
+
+```{r}
+
+```
+
+
 
 
 
