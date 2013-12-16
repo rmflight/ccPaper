@@ -476,8 +476,11 @@ ggplot(go_diff, aes(x = frac, y = diff)) + geom_point() + facet_grid(. ~ class, 
 
 What if we aggregate things into bins first, based on their class and fraction?
 
-```{r}
+```{r aggregate}
+go_diff$frac10 <- round(go_diff$frac * 10) / 10
+ggplot(go_diff, aes(x = frac10, y = diff, fill = class)) + geom_violin(alpha=0.5) 
 
+go_noNoise$frac10 <- round(go_diff$frac)
 ```
 
 
