@@ -472,13 +472,27 @@ go_diff <- lapply(testGORes, grab_noiseDiff)
 go_diff <- do.call(rbind, go_diff)
 go_diff$class <- factor(go_diff$class, levels=c("low", "med", "hi"), ordered=TRUE)
 ggplot(go_diff, aes(x = frac, y = diff)) + geom_point() + facet_grid(. ~ class, scales="free_x")
+ggplot(go_diff, aes(x = frac, y = diff, fill=class)) + geom_boxplot(position="identity", alpha=0.4)
 ```
+
+
+How about we compare the distribution of noise and no-noise using violin plots?
+
+```{r compNoiseNoNoise}
+go_noise$noise <- "noise"
+go_noNoise$noise <- "none"
+
+go_all <- rbind(go_noise, go_noNoise)
+rownames(go_all) <- NULL
+ggplot(go_all, aes(x = frac, y = diff, fill = noise)) + geom_violin(trim=TRUE, alpha=0.5, position="identity") + facet_grid(. ~ class, scales="free_x")
+```
+
 
 What if we aggregate things into bins first, based on their class and fraction?
 
 ```{r aggregate}
 go_diff$frac10 <- round(go_diff$frac * 10) / 10
-ggplot(go_diff, aes(x = frac10, y = diff, fill = class)) + geom_violin(alpha=0.5) 
+ggplot(go_diff, aes(x = frac10, y = diff, fill = class)) + geom_violin(trim=FALSE, alpha=0.5) 
 
 go_noNoise$frac10 <- round(go_diff$frac)
 ```
