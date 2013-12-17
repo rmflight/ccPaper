@@ -283,7 +283,18 @@ tapply(noise_pvalues$diff, noise_pvalues$sizeClass, mean)
 
 Although using gene lists that were perfect (i.e. no noise) everything in the **list** method was pretty much still significant, on average **sets** gave much better p-values. However, as we add noise to the system in the form of genes that are not annotated to our test GO terms, more terms are significant only in the **sets** method (i.e. show up in **both** sets). 
 
-Is there any **difference** in the difference of p-values
+### Difference of Differences
+
+Is there any **difference** in the *difference of p-values* between **noise** vs **noNoise** (comparing **set** vs **list**)?
+
+```{r diffDiffs}
+diff_pvalues <- noise_pvalues
+diff_pvalues$diff <- noise_pvalues$diff - noNoise_pvalues$diff
+ggplot(diff_pvalues, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x")
+```
+
+From this plot, it appears that not only do the **set** values return lower p-values, but return lower p-values when noise is added. 
+
 
 ## Check Consistency
 
