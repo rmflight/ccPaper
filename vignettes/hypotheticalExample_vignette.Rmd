@@ -243,11 +243,7 @@ In addition to the genes that are annotated to the GO terms of interest, we will
 
 ```{r noiseGenes}
 nNoise <- 500
-gene2HsGO <- reverseSplit(hsGO)
-not_useGO <- sapply(gene2HsGO, function(x){
-  sum(x %in% useGO) == 0
-})
-noiseGenes <- names(not_useGO)[not_useGO]
+noiseGenes <- possibleNoise(hsGO, useGO)
 noiseGenes <- sample(noiseGenes, nNoise)
 
 # check that we did this right, the fraction should not change after adding noise genes
@@ -286,6 +282,8 @@ tapply(noise_pvalues$diff, noise_pvalues$sizeClass, mean)
 ```
 
 Although using gene lists that were perfect (i.e. no noise) everything in the **list** method was pretty much still significant, on average **sets** gave much better p-values. However, as we add noise to the system in the form of genes that are not annotated to our test GO terms, more terms are significant only in the **sets** method (i.e. show up in **both** sets). 
+
+Is there any **difference** in the difference of p-values
 
 ## Check Consistency
 
