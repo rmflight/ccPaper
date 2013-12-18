@@ -314,7 +314,8 @@ nGene <- 1000
 
 testSamples <- lapply(seq(1, nTimes), function(x){
   list(s1 = sampleTerms(useGO, hsGO, 1000, 4)[1:nGene],
-       s2 = sampleTerms(useGO, hsGO, 1000, 4)[1:nGene])
+       s2 = sampleTerms(useGO, hsGO, 1000, 4)[1:nGene],
+       noise = sample(noiseGenes, nNoise))
 })
 
 save(useGO, testSamples, universeGenes, sizeClass, file="inst/data/100GeneSamples.RData")
@@ -324,12 +325,19 @@ save(useGO, testSamples, universeGenes, sizeClass, file="inst/data/100GeneSample
 library(snowfall)
 # load("inst/data/100GeneSamples.RData")
 testFun <- function(x){
-  sRes <- hyperGOMultiEnrichment(x, universe=universeGenes)
+  nnList <- x[c("s1", "s2")]
+  nnRes <- hyperGOMultiEnrichment(nnList, universe=universeGenes)
+  nn_res <- pvaluesMultiEnrich(c("s1", "s2"), useGO, nnRes)
+  nnP <- pvalueDiffSig(nn_res$values, pCutoff=0.05, log=TRUE)
+  nnP$class <- sizeClass
+  
+  noiList <- list(s1 = c(x$s1, x$noise), s2 = c(x$s2, x$noise))
+  noiRes <- hyperGOMultiEnrichment(noiList, universe=universeGenes)
+  noi_res <- pvaluesMultiEnrich(c("s1", "s2"), useGO, noiRes)
+  noiP <- pvalueDiffSig(noi_res$values, pCutoff=0.05, log=TRUE)
+  noiP$class <- sizeClass
 
-  sP_res <- pvaluesMultiEnrich(c("s1", "s2"), useGO, sRes)
-  sP <- pvalueDiffSig(sP_res$values, pCutoff=0.05, log=TRUE)
-  sP$class <- sizeClass
-  return(list(results = sP_res, values = sP))
+  return(list(clean = nnP, noise = noiP))
 }
 sfInit(parallel=TRUE, cpus=10)
 sfExport("sizeClass", "universeGenes", "useGO")
