@@ -349,40 +349,6 @@ sfStop()
 save(testRes, file="inst/data/100GeneResults.RData")
 ```
 
-```{r noiseSamples, eval=FALSE}
-nTimes <- 100
-nGenes <- 1000
-
-nNoise <- 500
-gene2HsGO <- reverseSplit(hsGO)
-not_useGO <- sapply(gene2HsGO, function(x){
-  sum(x %in% useGO) == 0
-})
-possibleNoise <- names(not_useGO)[not_useGO]
-
-noiseSamples <- lapply(seq(1, nTimes), function(x){
-  noiseGenes <- sample(possibleNoise, nNoise)
-  s1 <- c(sampleTerms(useGO, hsGO, 1000, 4)[1:nGene], noiseGenes)
-  s2 <- c(sampleTerms(useGO, hsGO, 1000, 4)[1:nGene], noiseGenes)
-  return(list(s1 = s1, s2 = s2))
-})
-
-save(useGO, noiseSamples, universeGenes, sizeClass, file="inst/data/100NoiseSamples.RData")
-```
-
-```{r noiseResults, eval=FALSE}
-sfInit(parallel=TRUE, cpus=10)
-sfExport("sizeClass", "universeGenes", "useGO")
-sfLibrary(ccPaperRev)
-sfLibrary(GO.db)
-sfLibrary(org.Hs.eg.db)
-noiseRes <- sfLapply(noiseSamples, testFun)
-sfStop()
-save(noiseRes, file="inst/data/100NoiseResults.RData")
-```
-
-
-
 ### Errors from 100 Samples of the initial set of GO terms
 
 For each of the GO terms, we want to calculate the mean, standard deviation, and then a 95% confidence interval to represent graphically.
