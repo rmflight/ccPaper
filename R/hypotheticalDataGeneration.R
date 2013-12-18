@@ -254,12 +254,12 @@ trimGOFrac <- function(go2gene, deList){
 #' For the case where we have calculated p-values and differences for random samples of genes, we need to calculate the mean and standard deviation for each GO term.
 #' 
 #' @param inList the list of results to work with
-#' @details expects each entry in \code{inList} to have a data.frame named \code{values}, and takes the column "diff" and does the statistics on it.
+#' @details expects each entry in \code{inList} to be a data.frame, and takes the column "diff" and does the statistics on it.
 #' @return data.frame
 #' @export
 sameGOStats <- function(inList){
   getDiff <- function(inVar){
-    return(inVar$values$diff)
+    return(inVar$diff)
   }
   
   allVals <- lapply(inList, getDiff)

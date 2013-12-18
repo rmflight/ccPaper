@@ -354,11 +354,12 @@ save(testRes, file="inst/data/100GeneResults.RData")
 For each of the GO terms, we want to calculate the mean, standard deviation, and then a 95% confidence interval to represent graphically.
 
 ```{r noNoiseStats}
-testStats_noNoise <- sameGOStats(testRes)
-testStats_noNoise$class <- sizeClass
-testStats_noNoise$frac <- goFracNoise$frac[1:length(sizeClass)]
-testStats_noNoise$class <- factor(testStats_noNoise$class, levels=c("low", "med", "hi"), ordered=TRUE)
-ggplot(testStats_noNoise, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x")
+cleanRes <- lapply(testRes, function(x){x$clean})
+testStats_clean <- sameGOStats(cleanRes)
+testStats_clean$class <- sizeClass
+testStats_clean$frac <- goFractions$frac[1:length(sizeClass)]
+testStats_clean$class <- factor(testStats_clean$class, levels=c("low", "med", "hi"), ordered=TRUE)
+ggplot(testStats_clean, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x")
 ```
 
 ```{r noiseStats}
