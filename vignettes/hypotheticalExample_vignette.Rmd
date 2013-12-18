@@ -291,9 +291,10 @@ Is there any **difference** in the *difference of p-values* between **noise** vs
 diff_pvalues <- noise_pvalues
 diff_pvalues$diff <- noise_pvalues$diff - noNoise_pvalues$diff
 ggplot(diff_pvalues, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x")
+tapply(diff_pvalues$diff, diff_pvalues$sizeClass, mean)
 ```
 
-From this plot, it appears that not only do the **set** values return lower p-values, but return lower p-values when noise is added. 
+From this plot, it appears that not only do the **set** values return lower p-values, but return lower p-values when noise is added overall.
 
 
 ## Check Consistency
