@@ -352,7 +352,8 @@ save(testRes, file="inst/data/100GeneResults.RData")
 For each of the GO terms, we want to calculate the mean, standard deviation, and then a 95% confidence interval to represent graphically.
 
 ```{r noNoiseStats}
-load("inst/data/100GeneResults.RData")
+useDir <- "/mlab/data/rmflight/Documents/projects/work/categoryComparePaperRev"
+load(file.path(useDir, "inst/data/100GeneResults.RData"))
 cleanRes <- lapply(testRes, function(x){x$clean})
 testStats_clean <- sameGOStats(cleanRes)
 testStats_clean$class <- sizeClass
@@ -445,7 +446,7 @@ save(testGORes, file="inst/data/100GOResults.RData")
 ```
 
 ```{r lookDiffs}
-load("inst/data/100GOResults.RData")
+load(file.path(useDir, "inst/data/100GOResults.RData"))
 
 grab_noNoise <- function(x){
   x$clean[,c("diff", "class", "frac")]
