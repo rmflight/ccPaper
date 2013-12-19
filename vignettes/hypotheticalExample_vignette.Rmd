@@ -493,13 +493,15 @@ What if we aggregate things into bins first, based on their class and fraction?
 
 ```{r aggregate}
 go_diff$frac10 <- round(go_diff$frac * 10) / 10
-ggplot(go_diff, aes(x = frac10, y = diff, fill = class)) + geom_violin(trim=FALSE, alpha=0.5) 
+ggplot(go_diff, aes(x = factor(frac10), y = diff)) + geom_boxplot() + facet_grid(. ~ class, scales="free_x") 
 
+probPoint <- is.infinite(go_diff$diff) | is.na(go_diff$diff) | is.nan(go_diff$diff)
+go_diff <- go_diff[!probPoint, ]
+ggplot(go_diff, aes(x=frac, y=diff)) + stat_smooth() + facet_grid(. ~ class, scales="free_x")
 go_noNoise$frac10 <- round(go_diff$frac)
 ```
 
-
-
+Although the improvement of noise over clean data dips below 0 at medium fractions, it does tend to improve rather significantly as the fraction of genes annotated to a GO term increases.
 
 
 ## Expectations
@@ -508,5 +510,4 @@ Based on the above results, what I expect we will see if we do a programmatic se
 
 # To Do:
 
-* Run both the **noNoise** and **noise** 100 times with different sets of GO terms and make sure that this holds.
 * Vary the fraction of noise genes, and also vary the fraction that is common, and find a way to quantify the effect.
