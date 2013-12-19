@@ -392,7 +392,7 @@ Here we see that the noisy case also tends to generate higher differences in p-v
 OK, the error bars are not too bad. How about sampling multiple sets of GO terms??
 
 
-```{r genSamples}
+```{r genSamples, eval=FALSE}
 goLimits <- list(low = c(10, 100), med = c(250, 500), hi = c(500, 1500))
 
 nSample <- 100
@@ -412,7 +412,7 @@ save(testGOSample, file="inst/data/100GOSamples.RData")
 
 Running those samples:
 
-```{r runGOSamples}
+```{r runGOSamples, eval=FALSE}
 runGOSamples <- function(x){
   cleanSample <- x$geneSample
   cleanRes <- hyperGOMultiEnrichment(cleanSample, universe=universeGenes)
