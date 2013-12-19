@@ -272,6 +272,28 @@ sameGOStats <- function(inList){
   return(outVals)
 }
 
+
+#' calculate difference between noise and clean differences for 100 gene samples
+#' 
+#' @param inList the list of results to work with
+#' @return data.frame
+#' @export
+diffGOStats <- function(inList){
+  getDiff <- function(inVar){
+    diffDiff <- inVar$noise$diff - inVar$clean$diff
+    return(diffDiff)
+  }
+  
+  allvals <- lapply(inList, getDiff)
+  allVals <- do.call(cbind, allVals)
+  meanVals <- apply(allVals, 1, mean, na.rm=T)
+  sdVals <- apply(allVals, 1, sd, na.rm=T)
+  minCI <- meanVals - 1.96 * (sdVals / sqrt(ncol(allVals)))
+  maxCI <- meanVals + 1.96 * (sdVals / sqrt(ncol(allVals)))
+  outVals <- data.frame(mean = meanVals, min = minCI, max = maxCI)
+  return(outVals)
+}
+
 #' generate GO sample with genes
 #' 
 #' To test reproducibility of GO term sampling, we need to be able to sample GO terms and the genes annotated to them, and possibly noise genes as well.
