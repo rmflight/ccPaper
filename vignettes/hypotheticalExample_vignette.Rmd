@@ -363,6 +363,7 @@ ggplot(testStats_clean, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() 
 ```
 
 ```{r noiseStats}
+noiseRes <- lapply(testRes, function(x){x$noise})
 testStats_noise <- sameGOStats(noiseRes)
 testStats_noise$class <- sizeClass
 testStats_noise$frac <- goFracNoise$frac[1:length(sizeClass)]
