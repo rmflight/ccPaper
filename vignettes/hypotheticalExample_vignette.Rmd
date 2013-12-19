@@ -499,7 +499,6 @@ ggplot(go_diff, aes(x = factor(frac10), y = diff)) + geom_boxplot() + facet_grid
 probPoint <- is.infinite(go_diff$diff) | is.na(go_diff$diff) | is.nan(go_diff$diff)
 go_diff <- go_diff[!probPoint, ]
 ggplot(go_diff, aes(x=frac, y=diff)) + stat_smooth() + facet_grid(. ~ class, scales="free_x")
-go_noNoise$frac10 <- round(go_diff$frac)
 ```
 
 Although the improvement of noise over clean data dips below 0 at medium fractions, it does tend to improve rather significantly as the fraction of genes annotated to a GO term increases.
