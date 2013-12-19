@@ -284,7 +284,7 @@ diffGOStats <- function(inList){
     return(diffDiff)
   }
   
-  allvals <- lapply(inList, getDiff)
+  allVals <- lapply(inList, getDiff)
   allVals <- do.call(cbind, allVals)
   meanVals <- apply(allVals, 1, mean, na.rm=T)
   sdVals <- apply(allVals, 1, sd, na.rm=T)
