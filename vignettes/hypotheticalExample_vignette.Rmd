@@ -301,10 +301,8 @@ From this plot, it appears that not only do the **set** values return lower p-va
 
 To make sure that the results are consistent, we will do several iterations of the above calculations.
 
-* Generate 100 different sets of GO samples, and run calculations again.
-* For 10 subsets of these, generate 100 different pairs of sample genes, and run calculations.
-
-This should be done for both the **noNoise** and **noise** examples.
+* For this set of GO terms, do the above calculations 100 times
+* Generate 100 different sets of GO terms, and run calculations again.
 
 ### Gene Sample Level Consistency
 
@@ -354,6 +352,7 @@ save(testRes, file="inst/data/100GeneResults.RData")
 For each of the GO terms, we want to calculate the mean, standard deviation, and then a 95% confidence interval to represent graphically.
 
 ```{r noNoiseStats}
+load("inst/data/100GeneResults.RData")
 cleanRes <- lapply(testRes, function(x){x$clean})
 testStats_clean <- sameGOStats(cleanRes)
 testStats_clean$class <- sizeClass
@@ -371,10 +370,26 @@ testStats_noise$class <- factor(testStats_noise$class, levels=c("low", "med", "h
 ggplot(testStats_noise, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x")
 ```
 
+These show that if there is a difference in the p-values from **set** and **list**, they are real.
+
+What about differences between noise and clean?
+
+```{r 100GeneNoiseClean}
+noiseCleanDiff <- diffGOStats(testRes)
+noiseCleanDiff$class <- sizeClass
+noiseCleanDiff$frac <- goFracNoise$frac[1:length(sizeClass)]
+noiseCleanDiff$class <- factor(noiseCleanDiff$class, levels=c("low", "med", "hi"), ordered=TRUE)
+ggplot(noiseCleanDiff, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x")
+```
+
+Here we see that the noisy case also tends to generate higher differences in p-values between **set** and **list** than the clean case.
+
+**Caveats**: Currently the *fraction* of genes annotated to GO terms is assumed to be the same for each sample. This may not actually be the case, and ideally this should be repeated with independent fraction estimates for each sampling.
+
 
 ## GO Samples
 
-OK, the error bars are not too bad. How about sampling multiple sets of GO terms. This is slightly complicated by the fact that we will not get exactly the same values for the fraction, so we will bin the GO terms by the fraction of annotated genes first, and then calculate the statistics.
+OK, the error bars are not too bad. How about sampling multiple sets of GO terms??
 
 
 ```{r genSamples}
