@@ -374,6 +374,18 @@ possibleNoise <- function(go2gene, goSample){
   return(posGenes)
 }
 
+#' Different values of noise
+#' 
+#' @param noiseGenes all possible noise genes we can sample from
+#' @param sizeNoise a numeric vector of how many noise genes we want to add (\code{integer})
+#' @param fracShared a numeric vector of the fraction of shared noise genes to sweep over (\code{decimal})
+#' @return \code{list} of \code{lists}
+#' @details each entry in the list corresponds to a particular number of noise genes, and each list therein corresponds to the noise genes for each sample
+#' @export
+sweepNoiseSample <- function(noiseGenes, sizeNoise = seq(10, 1000, 10), fracShared = seq(0, 1, 0.01)){
+  
+}
+
 #' @name lung.RData
 #' @title lung.RData
 #' @docType data
