@@ -377,13 +377,51 @@ possibleNoise <- function(go2gene, goSample){
 #' Different values of noise
 #' 
 #' @param noiseGenes all possible noise genes we can sample from
+#' @param nSamples how many samples do we need?
 #' @param sizeNoise a numeric vector of how many noise genes we want to add (\code{integer})
 #' @param fracShared a numeric vector of the fraction of shared noise genes to sweep over (\code{decimal})
 #' @return \code{list} of \code{lists}
 #' @details each entry in the list corresponds to a particular number of noise genes, and each list therein corresponds to the noise genes for each sample
 #' @export
-sweepNoiseSample <- function(noiseGenes, sizeNoise = seq(10, 1000, 10), fracShared = seq(0, 1, 0.01)){
+sweepNoiseSample <- function(noiseGenes, nSamples = 2, sizeNoise = seq(0, 1000, 10), fracShared = seq(0, 1, 0.01)){
+  outSamples <- vector('list', length(sizeNoise))
   
+  sizeLoc <- 1
+  # program this in a for loop first to get it right
+  for (inSize in sizeNoise){
+    #print(inSize)
+        
+    sizeSamples <- vector('list', length(fracShared))
+    
+    fracLoc <- 1
+    
+    for (inFrac in fracShared){
+      #print(inFrac)
+      
+      sampleGenes <- vector('list', nSamples)
+      
+      tmpGenes <- noiseGenes # a gene variable we can modify as needed
+      nShared <- round(inSize * inFrac)
+      nIndependent <- inSize - nShared
+      
+      shareGenes <- sample(tmpGenes, nShared)
+      
+      tmpGenes <- tmpGenes[!(tmpGenes %in% shareGenes)]
+      
+      for (iSample in seq(1, nSamples)){
+        #print(iSample)
+        uniqGenes <- sample(tmpGenes, nIndependent)
+        sampleGenes[[iSample]] <- c(shareGenes, uniqGenes)
+        tmpGenes <- tmpGenes[!(tmpGenes %in% uniqGenes)]
+      }
+      
+      sizeSamples[[fracLoc]] <- sampleGenes
+      fracLoc <- fracLoc + 1
+    }
+    outSamples[[sizeLoc]] <- sizeSamples
+    sizeLoc <- sizeLoc + 1
+  }
+  return(outSamples)
 }
 
 #' @name lung.RData
