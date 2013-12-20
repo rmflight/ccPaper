@@ -510,6 +510,12 @@ For a given set of genes and GO terms, lets now keep adding more and more noise 
 
 As in the previous examples, we will generate the samples first, and then run the calculations on them. This is because it is easier to test sample generation and enrichment separately.
 
+```{r sweepNoise}
+noiseGenes <- possibleNoise(hsGO, useGO)
+noiseSamples <- sweepNoiseSample(noiseGenes, nSamples=2, sizeNoise=seq(0, 1000, 10), fracShared=seq(0, 1, 0.01))
+```
+
+
 ## Expectations
 
 Based on the above results, what I expect we will see if we do a programmatic search over the space is that there is a dependence on both the fraction of DE genes that are noisy, and the fraction of noisy genes that are shared (which really amounts to the same thing, but is a subtle point). 
