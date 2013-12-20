@@ -384,20 +384,8 @@ possibleNoise <- function(go2gene, goSample){
 #' @details each entry in the list corresponds to a particular number of noise genes, and each list therein corresponds to the noise genes for each sample
 #' @export
 sweepNoiseSample <- function(noiseGenes, nSamples = 2, sizeNoise = seq(0, 1000, 10), fracShared = seq(0, 1, 0.01)){
-  outSamples <- vector('list', length(sizeNoise))
-  
-  sizeLoc <- 1
-  # program this in a for loop first to get it right
-  for (inSize in sizeNoise){
-    #print(inSize)
-        
-    sizeSamples <- vector('list', length(fracShared))
-    
-    fracLoc <- 1
-    
-    for (inFrac in fracShared){
-      #print(inFrac)
-      
+  outSamples <- lapply(sizeNoise, function(inSize){
+    sizeSamples <- lapply(fracShared, function(inFrac){
       sampleGenes <- vector('list', nSamples)
       
       tmpGenes <- noiseGenes # a gene variable we can modify as needed
@@ -414,14 +402,11 @@ sweepNoiseSample <- function(noiseGenes, nSamples = 2, sizeNoise = seq(0, 1000, 
         sampleGenes[[iSample]] <- c(shareGenes, uniqGenes)
         tmpGenes <- tmpGenes[!(tmpGenes %in% uniqGenes)]
       }
-      
-      sizeSamples[[fracLoc]] <- sampleGenes
-      fracLoc <- fracLoc + 1
-    }
-    outSamples[[sizeLoc]] <- sizeSamples
-    sizeLoc <- sizeLoc + 1
-  }
+      return(sampleGenes)
+    })
+  })
   return(outSamples)
+  
 }
 
 #' @name lung.RData
