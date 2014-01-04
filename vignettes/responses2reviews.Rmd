@@ -22,6 +22,11 @@
 * 2. Page 7, line 237, Muscle Denervation: It should be mentioned here that it is mouse (not rat) data, otherwise further discussions are not clear. 
 * Fig 5 requires more detailed explanations in the figure caption. Currently it is hard to understand. 
 
+**Response**
+* 1. We apologize for the confusion here. As was noted, the current wording implies a reference to the package itself, whereas the intention was to reference the Bioconductor package. Therefore, we have moved the Bioconductor reference directly adjacent to the mention of Bioconductor itself, and included the URL to the categoryCompare package site in the Bioconductor project.
+* 2. Mouse is mentioned in the description of the data set acquisition.
+* 3. Additional information about the figure has been included, including how Table 2 relates to Figure 5, and what the legend signifies.
+
 **Rev 3**:
 * the overlap and Jaccard coefficient used in Enrichment Map and cites are also available in combined form (combined overlap coefficient), which was to work better by the authors, so it should be implemented as well
 * the authors should provide for input from any gene-set enrichment test producing a gene-set level significance score; restricting to Fisher's Exact test (aka hypergeometric) is over-simplistic, and disregards all the method development that happened in the last decade; being able to process GSEA output would be a good start
