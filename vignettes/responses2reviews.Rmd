@@ -6,14 +6,14 @@
 # Introduction Problems
 
 **Rev 3**:
-* The definition of FLE and FSE is confusing. It is a good rule to use acronyms with more than one letter difference. The terms "feature�list" and "feature�set" do not provide an intuitive idea of the difference. Set/threshold�based (e.g. Fisher's Exact) and rank�based/threshold�free (GSEA) would have been better depictions of the two categories of (annotation) gene�set enrichment tests (GSE, or GSET) or over�representation analysis (ORA). Another major distinction the author may consider is between competitive and self�contained, based on the type of null hypothesis to be rejected, although for microarray and gene expression analysis the competitive methods (or hybrid) are far more popular than self�contained (which is more suitable for rare genetic variants, or specific applications to expression data).
+* The definition of FLE and FSE is confusing. It is a good rule to use acronyms with more than one letter difference. The terms "feature-list" and "feature-set" do not provide an intuitive idea of the difference. Set/threshold-based (e.g. Fisher's Exact) and rank-based/threshold-free (GSEA) would have been better depictions of the two categories of (annotation) gene-set enrichment tests (GSE, or GSET) or over-representation analysis (ORA). Another major distinction the author may consider is between competitive and self-contained, based on the type of null hypothesis to be rejected, although for microarray and gene expression analysis the competitive methods (or hybrid) are far more popular than self-contained (which is more suitable for rare genetic variants, or specific applications to expression data).
 * FLA: another poor acronym choice, too similar to FLE; suggest feature intersection analysis..? (FIA)
 
 **Response**: This could be addressed easily enough.
 
 # Methods Problems
 
-**Rev 1**: The use of a single approach (or two similar approaches if you include the supplemental data) is not enough.  There is time course data here, some kind of time course analysis would have been nice, using maSigPro or STEM or similar.  Something like WGCNA for module analysis could also have been employed.  Also lacking is any biological follow�up on the in�silico inferences.  As mentioned in the paper, there is probably a profound tissue effect in the data, which could have been addressed by removal of tissue specific genes.
+**Rev 1**: The use of a single approach (or two similar approaches if you include the supplemental data) is not enough.  There is time course data here, some kind of time course analysis would have been nice, using maSigPro or STEM or similar.  Something like WGCNA for module analysis could also have been employed.  Also lacking is any biological follow-up on the in-silico inferences.  As mentioned in the paper, there is probably a profound tissue effect in the data, which could have been addressed by removal of tissue specific genes.
 
 **Rev 2**: 
 * 1.Page 6, line 192. Reference to Bioconductor (Gentleman et al, 2004)  is misleading here. It would be appropriate to give reference or URL to CategoryCompare here, otherwise it may seem that CategoryCompare was developed in 2004. 
@@ -22,13 +22,13 @@
 
 **Rev 3**:
 * the overlap and Jaccard coefficient used in Enrichment Map and cites are also available in combined form (combined overlap coefficient), which was to work better by the authors, so it should be implemented as well
-* the authors should provide for input from any gene�set enrichment test producing a gene�set level significance score; restricting to Fisher's Exact test (aka hypergeometric) is over�simplistic, and disregards all the method development that happened in the last decade; being able to process GSEA output would be a good start
-* the way the color scheme is used is suboptimal for visualization (the colors do not help very much distinguishing the various condition combinations in an intuitive way); the authors should make a better effort on that side; I specifically suggest trying the following methodology: pick one color for each comparison with an ssociated list of annotation gene�sets enriched (e.g. skin t7 up: yellow, skin t14 up: orange, skin t7 dw: olive green, skin 14t dw: water green, muscle up: magenta, muscle dw: blue) and then represent the significance in more than one comparison using Cytoscape pie chart node coloring (so, a node representing an annotation gene�set significantly over�represented in skin t7 up and skin t14 up would be half yellow half orange). 
+* the authors should provide for input from any gene-set enrichment test producing a gene-set level significance score; restricting to Fisher's Exact test (aka hypergeometric) is over-simplistic, and disregards all the method development that happened in the last decade; being able to process GSEA output would be a good start
+* the way the color scheme is used is suboptimal for visualization (the colors do not help very much distinguishing the various condition combinations in an intuitive way); the authors should make a better effort on that side; I specifically suggest trying the following methodology: pick one color for each comparison with an ssociated list of annotation gene-sets enriched (e.g. skin t7 up: yellow, skin t14 up: orange, skin t7 dw: olive green, skin 14t dw: water green, muscle up: magenta, muscle dw: blue) and then represent the significance in more than one comparison using Cytoscape pie chart node coloring (so, a node representing an annotation gene-set significantly over-represented in skin t7 up and skin t14 up would be half yellow half orange). 
 
 # Discussion Problems
 
 **Rev 1**: 
-* There is little tie�in of the results to the underlying biological question either independently or compared to prior art, it is not clear how much, if any, the field has been advanced by the findings.  The graph relationships between the factors as presented in figure 5 are not addressed at all.
+* There is little tie-in of the results to the underlying biological question either independently or compared to prior art, it is not clear how much, if any, the field has been advanced by the findings.  The graph relationships between the factors as presented in figure 5 are not addressed at all.
 
 * The sections on the general characteristics of skin/muscle denervation are entirely background and do not belong in the discussion. The paper can also not decide if its primary focus is the algorithm or the biology.  There is some mention in various parts of the paper including the discussion how CategoryCompare would be useful for the integration of heterogeneous datasets, yet this potentially useful application is not exemplified or demonstrated in any way.
 
@@ -52,8 +52,8 @@
 * I do not find the results particularly compelling or novel compared to other approaches.  It is clear there is alot of overlap between the FLA approach and other approaches with respect to the findings.  In addition two of the three novel annotations highlighted in table 2 are not really novel:  There is little difference between "reactive oxygen metabolism" and "response to H2O2"; and similarly little difference between "Blood vessel development" and "VEGF signalling", the latter being a primary driver of angiogenesis. 
 
 **Rev 3**:
-* GSEA (pre�ranked using the limma moderated t statistic) should be tried out for the analysis, results may get better  I am disappointed there is no clue of axonogenesis or other developmental gradients other than angiogenesis and VEGF
-* the authors should compare to the use of Enrichment Map (EM), with the following two�comparison maps: muscle up + skin 7t up, muscle up + skin 14t up, muscle down + skin 7t dw, muscle down + skin 14t dw. Yes , EM was not designed for (wildly) multi�condition studies, but in these cases comparison can still be broken down and analyzed �� the authors should strive to make a convincing point about the increased intuitiveness of their representation, and convince the reader. Note this would probably work better with GSEA NES for coloring nodes. 
+* GSEA (pre-ranked using the limma moderated t statistic) should be tried out for the analysis, results may get better  I am disappointed there is no clue of axonogenesis or other developmental gradients other than angiogenesis and VEGF
+* the authors should compare to the use of Enrichment Map (EM), with the following two-comparison maps: muscle up + skin 7t up, muscle up + skin 14t up, muscle down + skin 7t dw, muscle down + skin 14t dw. Yes , EM was not designed for (wildly) multi-condition studies, but in these cases comparison can still be broken down and analyzed -- the authors should strive to make a convincing point about the increased intuitiveness of their representation, and convince the reader. Note this would probably work better with GSEA NES for coloring nodes. 
 
 
 # Submission Petruska of data to GEO
