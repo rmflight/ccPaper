@@ -23,7 +23,7 @@
 * Fig 5 requires more detailed explanations in the figure caption. Currently it is hard to understand. 
 
 **Response**
-* 1. We apologize for the confusion here. As was noted, the current wording implies a reference to the package itself, whereas the intention was to reference the Bioconductor package. Therefore, we have moved the Bioconductor reference directly adjacent to the mention of Bioconductor itself, and included the URL to the categoryCompare package site in the Bioconductor project.
+* 1. We apologize for the confusion here. As was noted, the current wording implies a reference to the package itself, whereas the intention was to reference the Bioconductor software project. Therefore, we have moved the Bioconductor reference directly adjacent to the mention of Bioconductor itself, and included the URL to the categoryCompare package site on the Bioconductor project.
 * 2. Mouse is mentioned in the description of the data set acquisition.
 * 3. Additional information about the figure has been included, including how Table 2 relates to Figure 5, and what the legend signifies.
 
