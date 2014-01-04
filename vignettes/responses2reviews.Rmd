@@ -15,6 +15,8 @@
 
 **Rev 1**: The use of a single approach (or two similar approaches if you include the supplemental data) is not enough.  There is time course data here, some kind of time course analysis would have been nice, using maSigPro or STEM or similar.  Something like WGCNA for module analysis could also have been employed.  Also lacking is any biological follow-up on the in-silico inferences.  As mentioned in the paper, there is probably a profound tissue effect in the data, which could have been addressed by removal of tissue specific genes.
 
+**Response**: As mentioned by another reviewer, we could not decide whether we were writing a methods or biology paper. In principle, if this was a single analysis of the skin denervation time course, then *maybe* a time course method would be appropriate, although how much inference could be done with only **3** time points is questionable. The rewrite of the manuscript focuses on the **categoryCompare** method, and therefore we did not include an actual time-course specific method analysis of the skin-denervation data.
+
 **Rev 2**: 
 * 1.Page 6, line 192. Reference to Bioconductor (Gentleman et al, 2004)  is misleading here. It would be appropriate to give reference or URL to CategoryCompare here, otherwise it may seem that CategoryCompare was developed in 2004. 
 * 2. Page 7, line 237, Muscle Denervation: It should be mentioned here that it is mouse (not rat) data, otherwise further discussions are not clear. 
