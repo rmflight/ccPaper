@@ -409,6 +409,16 @@ sweepNoiseSample <- function(noiseGenes, nSamples = 2, sizeNoise = seq(0, 1000, 
   
 }
 
+#' fishers method for combining p-values
+#' 
+#' @param x set of p-values to combine
+#' @export
+#' @return combined p-values
+#' @details function from \url{http://mikelove.wordpress.com/2012/03/12/combining-p-values-fishers-method-sum-of-p-values-binomial/}
+fishersMethod <- function(x){
+  pchisq(-2 * sum(log(x)),df=2*length(x),lower=FALSE)
+} 
+
 #' @name lung.RData
 #' @title lung.RData
 #' @docType data
