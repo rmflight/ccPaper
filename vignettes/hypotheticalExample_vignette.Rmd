@@ -563,3 +563,17 @@ Based on the above results, what I expect we will see if we do a programmatic se
 # To Do:
 
 * Vary the fraction of noise genes, and also vary the fraction that is common, and find a way to quantify the effect.
+
+# GSEA
+
+Another way to do the analysis is using a Gene Set Enrichment Analysis, or GSEA. In contrast to over-representation analysis, where we count if a group is more highly represented in a group *vs* the background; GSEA tests if a **set** of genes are more highly ranked than random sets of genes. 
+
+For a hypothetical example, we are going to use the `geneSetTest` from `limma`, because it allows us to test on a set of gene statistics themselves.
+
+## Data set up
+
+The sets will be our same GO terms, and we will change the proportion of genes from each GO term that are enhanced above a base value. All genes will be assigned a value from a uniform distribution with a value of 0.5. For each GO term set, some genes will be selected (with an exponential decaying probability for more genes), and assigned p-values from a uniform distribution with a value of 0.01.
+
+For the **list** version, the p-values of genes will be combined using **Fishers** method, see the function `fishersMethod` provided in this package.
+
+
