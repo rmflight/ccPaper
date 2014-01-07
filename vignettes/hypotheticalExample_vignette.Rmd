@@ -512,7 +512,27 @@ As in the previous examples, we will generate the samples first, and then run th
 
 ```{r sweepNoise}
 noiseGenes <- possibleNoise(hsGO, useGO)
-noiseSamples <- sweepNoiseSample(noiseGenes, nSamples=2, sizeNoise=seq(0, 1000, 10), fracShared=seq(0, 1, 0.01))
+sizeNoise <- seq(0, 1000, 10)
+fracShared <- seq(0, 1, 0.01)
+noiseSamples <- sweepNoiseSample(noiseGenes, nSamples=2, sizeNoise, fracShared)
+
+nGene <- 1000
+cleanSample <- list(s1 = sampleTerms(useGO, hsGO, nGene, 4)[1:nGene],
+                    s2 = sampleTerms(useGO, hsGO, nGene, 4)[1:nGene])
+
+save(noiseSamples, cleanSample, sizeNoise, fracShared, universeGenes, file=file.path(useDir, 'inst/data/noiseSamples.RData'))
+```
+
+```{r runSweptNoise}
+load(file.path(useDir, 'inst/data/noiseSamples.RData'))
+
+runSweepNoise <- function(clean)
+library(snowfall)
+sfInit(parallel=TRUE, cpus=10)
+sfLibrary(ccPaperRev)
+sfLibrary(org.Hs.eg.db)
+sfLibrary(GO.db)
+sfExport("universeGenes")
 ```
 
 
