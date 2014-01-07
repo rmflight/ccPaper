@@ -520,19 +520,38 @@ nGene <- 1000
 cleanSample <- list(s1 = sampleTerms(useGO, hsGO, nGene, 4)[1:nGene],
                     s2 = sampleTerms(useGO, hsGO, nGene, 4)[1:nGene])
 
-save(noiseSamples, cleanSample, sizeNoise, fracShared, universeGenes, file=file.path(useDir, 'inst/data/noiseSamples.RData'))
+save(noiseSamples, cleanSample, sizeNoise, fracShared, universeGenes, useGO, sizeClass, file=file.path(useDir, 'inst/data/noiseSamples.RData'))
 ```
 
 ```{r runSweptNoise}
 load(file.path(useDir, 'inst/data/noiseSamples.RData'))
 
-runSweepNoise <- function(clean)
+useNoise <- unlist(noiseSamples, recursive=FALSEs)
+sizeNoiseAll <- rep(sizeNoise, each=length(fracShared))
+fracSharedAll <- rep(fracShared, length(sizeNoise))
+
+runSweepNoise <- function(noiseGenes){
+  inNoise <- lapply(seq(1, length(cleanSample)), function(x){
+    c(cleanSample[[x]], noiseGenes[[x]])
+  })
+  names(inNoise) <- names(cleanSample)
+  
+  noiseRes <- hyperGOMultiEnrichment(inNoise, universe=universeGenes)
+  noiseP <- pvaluesMultiEnrich(names(inNoise), useGO, noiseRes)
+  noisePComp <- pvalueDiffSig(noiseP$values, pCutoff=0.05, log=TRUE)
+  noisePComp$class <- sizeClass
+  return(noisePComp)
+}
+
 library(snowfall)
 sfInit(parallel=TRUE, cpus=10)
 sfLibrary(ccPaperRev)
 sfLibrary(org.Hs.eg.db)
 sfLibrary(GO.db)
-sfExport("universeGenes")
+sfExport("universeGenes", "useGO", "sizeClass", "cleanSample")
+noiseSweepRes <- sfLapply(useNoise[c(301, 450, 610)], runSweepNoise)
+sfStop()
+save(noiseSweepRes, file.path(useDir, "inst/data/noiseSweepRes.RData"))
 ```
 
 
