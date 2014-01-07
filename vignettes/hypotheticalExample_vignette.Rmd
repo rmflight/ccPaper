@@ -524,9 +524,10 @@ save(noiseSamples, cleanSample, sizeNoise, fracShared, universeGenes, useGO, siz
 ```
 
 ```{r runSweptNoise}
+useDir <- '/mlab/data/rmflight/Documents/projects/work/categoryComparePaperRev/'
 load(file.path(useDir, 'inst/data/noiseSamples.RData'))
 
-useNoise <- unlist(noiseSamples, recursive=FALSEs)
+useNoise <- unlist(noiseSamples, recursive=FALSE)
 sizeNoiseAll <- rep(sizeNoise, each=length(fracShared))
 fracSharedAll <- rep(fracShared, length(sizeNoise))
 
@@ -549,7 +550,7 @@ sfLibrary(ccPaperRev)
 sfLibrary(org.Hs.eg.db)
 sfLibrary(GO.db)
 sfExport("universeGenes", "useGO", "sizeClass", "cleanSample")
-noiseSweepRes <- sfLapply(useNoise[c(301, 450, 610)], runSweepNoise)
+noiseSweepRes <- sfLapply(useNoise, runSweepNoise)
 sfStop()
 save(noiseSweepRes, file.path(useDir, "inst/data/noiseSweepRes.RData"))
 ```
