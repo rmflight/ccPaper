@@ -419,6 +419,12 @@ fishersMethod <- function(x){
   pchisq(-2 * sum(log(x)),df=2*length(x),lower=FALSE)
 } 
 
+#' change set of p-values for GSEA
+#' 
+#' Given a list of sample genes, the full list of named p-values, and a mean and sd
+#' 
+#' @param sampleList 
+
 #' @name lung.RData
 #' @title lung.RData
 #' @docType data

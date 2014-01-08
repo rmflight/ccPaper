@@ -576,4 +576,15 @@ The sets will be our same GO terms, and we will change the proportion of genes f
 
 For the **list** version, the p-values of genes will be combined using **Fishers** method, see the function `fishersMethod` provided in this package.
 
+## Generate Data
+
+```{r gseaSamples}
+allGenes <- unique(unlist(hsGO, use.names=FALSE))
+gseaPVals <- runif(length(allGenes), min=0.18, max=0.22)
+names(gseaPVals) <- allGenes
+
+gseaSamples <- list(s1 = sampleTerms(useGO, hsGO, 1000, 4),
+                    s2 = sampleTerms(useGO, hsGO, 1000, 4))
+gseaSampleVals <- list(s1 = )
+```
 
