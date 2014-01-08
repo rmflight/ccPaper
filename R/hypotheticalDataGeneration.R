@@ -423,7 +423,21 @@ fishersMethod <- function(x){
 #' 
 #' Given a list of sample genes, the full list of named p-values, and a mean and sd
 #' 
-#' @param sampleList 
+#' @param sampleList the sample genes we will use
+#' @param initPValues initial p-values for all the genes (named vector)
+#' @param distPValues a distribution of p-values to take samples from for the sample genes
+#' @return list where for each sample the appropriate entries have modified p-values
+#' @export
+samplePValueGenGSEA <- function(sampleList, initPValues, distPValues){
+  outValues <- lapply(sampleList, function(inList){
+    toMod <- which(names(initPValues) %in% inList)
+    nMod <- length(inList)
+    usePValues <- initPValues
+    usePValues[toMod] <- sample(distPValues, nMod)
+    return(usePValues)
+  })
+  return(outValues)
+}
 
 #' @name lung.RData
 #' @title lung.RData
