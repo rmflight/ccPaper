@@ -439,6 +439,49 @@ samplePValueGenGSEA <- function(sampleList, initPValues, distPValues){
   return(outValues)
 }
 
+#' run multiple geneSetTest's
+#' 
+#' @param statistics named vector of statistics
+#' @param genesets list of the gene sets to test
+#' @param alternative the alternative hypothesis to test
+#' @param ranks.only use the ranks of the entries only 
+#' @seealso geneSetTest
+#' @importFrom limma geneSetTest
+#' @export
+#' @return set of p-values for the genesets
+multiGeneSetTest <- function(statistics, genesets, alternative="down", ranks.only=FALSE){
+  genesetStatistics <- sapply(genesets, function(inSet){
+    index <- which(names(statistics) %in% inSet)
+    geneSetTest(index, statistics, alternative=alternative, ranks.only=ranks.only)
+  })
+  return(genesetStatistics)
+}
+
+#' run geneSetTest for multiple samples
+#' 
+#' For a list of samples and list of gene sets, do testing of the gene sets for each sample, as well
+#' as a meta-sample where there p-values for the samples are combined using Fisher's method
+#' 
+#' @param samplePValues list of p-values for each sample
+#' @param genesets list of gene sets to test
+#' @param alternative the alternative hypothesis to test
+#' @param ranks.only use the ranks only
+#' @seealso geneSetTest
+#' @return list with the gene set p-values for each sample, as well as the combined
+#' @export
+multiSampleGeneSetTest <- function(samplePValues, genesets, alternative="mixed", ranks.only=FALSE, transform2Log=TRUE){
+  pvalMatrix <- do.call(cbind, samplePValues)
+  combPValues <- apply(pvalMatrix, 1, fishersMethod)
+  samplePValues$comb <- combPValues
+  if (transform2Log){
+    samplePValues <- lapply(samplePValues, function(inVal){
+      -1 * log(inVal)
+    })
+  }
+  sampleSetValues <- lapply(samplePValues, multiGeneSetTest, genesets, alternative, ranks.only)
+  return(sampleSetValues)
+}
+
 #' @name lung.RData
 #' @title lung.RData
 #' @docType data

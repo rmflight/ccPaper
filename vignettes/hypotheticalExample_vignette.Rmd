@@ -587,5 +587,7 @@ names(gseaPVals) <- allGenes
 gseaSamples <- list(s1 = sampleTerms(useGO, hsGO, 1000, 4),
                     s2 = sampleTerms(useGO, hsGO, 1000, 4))
 gseaSampleVals <- samplePValueGenGSEA(gseaSamples, gseaPVals, samplePValRange)
+
+gseaSetResults <- multiSampleGeneSetTest(gseaSampleVals, hsGO[useGO], alternative="mixed")
 ```
 
