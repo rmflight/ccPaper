@@ -581,10 +581,11 @@ For the **list** version, the p-values of genes will be combined using **Fishers
 ```{r gseaSamples}
 allGenes <- unique(unlist(hsGO, use.names=FALSE))
 gseaPVals <- runif(length(allGenes), min=0.18, max=0.22)
+samplePValRange <- runif(10000, min=0.005, max=0.015)
 names(gseaPVals) <- allGenes
 
 gseaSamples <- list(s1 = sampleTerms(useGO, hsGO, 1000, 4),
                     s2 = sampleTerms(useGO, hsGO, 1000, 4))
-gseaSampleVals <- list(s1 = )
+gseaSampleVals <- samplePValueGenGSEA(gseaSamples, gseaPVals, samplePValRange)
 ```
 
