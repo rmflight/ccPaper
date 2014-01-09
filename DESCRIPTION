@@ -9,7 +9,8 @@ Depends:
 Suggests:
     knitr,
     GEOquery,
-    ALL
+    ALL,
+    RCytoscapes
 Description: In response to reviewer comments on our originally submitted
     publication, a series of revisions are required.\nMany of them involve a
     large amount of code, including a re-analysis of the data in the
