@@ -1,0 +1,28 @@
+<!--
+  %\VignetteEngine{knitr}
+  %\VignetteIndexEntry{pie nodes in Cytoscape}
+  %\VignetteDepends{RCytoscape}
+-->
+
+# RCy Pie Nodes
+
+If we want to create pie nodes in `RCy` using custom graphics, what do we need to do, and how hard will it be?
+
+```{r exampleGraph, eval=FALSE}
+library(RCytoscape)
+g <- new ('graphNEL', edgemode='directed')
+g <- graph::addNode ('A', g)
+g <- graph::addNode ('B', g)
+g <- graph::addNode ('C', g)
+cw <- new.CytoscapeWindow ('vignette', graph=g)
+displayGraph(cw)
+layoutNetwork(cw, layout.name="grid")
+redraw(cw)
+```
+
+OK, so we have now a little example graph to play with. How about we create some pie graphs and save them as png objects?
+
+```{r pieGraphs}
+pieData <- list(a = list())
+```
+
