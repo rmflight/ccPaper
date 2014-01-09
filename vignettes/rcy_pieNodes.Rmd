@@ -47,3 +47,27 @@ plotPie(pieData[["C"]])
 
 Sweet, little pie graphs. Next up, saving the graphics and letting Cytoscape know about them.
 
+```{r savePie}
+saveDir <- "/mlab/data/rmflight/Documents/projects/work/categoryComparePaperRev/vignettes/"
+
+outFiles <- sapply(names(pieData), function(pieName){
+  pieFile <- paste("pieFile_", pieName, ".png", sep="")
+  outFile <- file.path(saveDir, pieFile)
+  png(outFile, bg="transparent")
+  plotPie(pieData[[pieName]])
+  dev.off()
+  return(outFile)
+})
+names(outFiles) <- NULL
+outFiles <- paste("file://localhost", outFiles, sep="")
+```
+
+Now to try and associate them with the nodes in Cytoscape
+
+```{r showInCy}
+setNodeImageDirect(cw, names(pieData), outFiles)
+setDefaultNodeColor(cw, 'transparent')
+setNodeOpacityDirect(cw, names(pieData), 0)
+redraw(cw)
+```
+
