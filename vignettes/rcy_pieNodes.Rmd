@@ -71,3 +71,31 @@ setNodeOpacityDirect(cw, names(pieData), 0)
 redraw(cw)
 ```
 
+Finally, to use it in `categoryCompare`, I think we would always want the same number of **slices** for each node image, but use the saturated vs desaturated color to indicate significant vs not-significant, so the eye does not get fooled, and individuals can quickly scan to see which ones are which.
+
+```{r desaturation}
+library(colorspace)
+desaturatePercentage <- function(col, percentage=0.5){
+  # this code is taken from the desaturate function in colorspace
+  if (is.character(col) && (all(substr(col, 1L, 1L) == "#") & 
+    all(nchar(col) %in% c(7L, 9L)))) {
+    alpha <- substr(col, 8L, 9L)
+    col <- substr(col, 1L, 7L)
+    col <- hex2RGB(col)
+    }
+  else {
+    col <- col2rgb(col, alpha = TRUE)
+    alpha <- format(as.hexmode(col[4L, ]), width = 2L, upper.case = TRUE)
+    alpha[alpha == "FF"] <- ""
+    col <- RGB(t(col[1L:3L, ])/255)
+  }
+  col <- as(col, "polarLUV")
+  col@coords[, 2L] <- col@coords[, 2L] * percentage
+  col <- hex(col)
+  return(col)
+}
+
+twoColors <- c("red", desaturatePercentage("red", 0.25))
+pie(c(0.5, 0.5), col=twoColors)
+```
+
