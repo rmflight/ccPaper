@@ -23,6 +23,27 @@ redraw(cw)
 OK, so we have now a little example graph to play with. How about we create some pie graphs and save them as png objects?
 
 ```{r pieGraphs}
-pieData <- list(a = list())
+pieData <- list(
+  A = list(
+    area = c(0.5, 0.5),
+    color = c("blue", "green")),
+  B = list(
+    area = c(0.2, 0.8),
+    color = c("red", "yellow")),
+  C = list(
+    area = c(0.6, 0.4),
+    color = c("green", "purple"))
+  )
+
+plotPie <- function(inData){
+  names(inData$area) <- ""
+  pie(inData$area, col=inData$color, clockwise=TRUE)
+}
+
+plotPie(pieData[["A"]])
+plotPie(pieData[["B"]])
+plotPie(pieData[["C"]])
 ```
+
+Sweet, little pie graphs. Next up, saving the graphics and letting Cytoscape know about them.
 
