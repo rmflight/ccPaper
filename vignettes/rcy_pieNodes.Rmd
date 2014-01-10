@@ -64,7 +64,7 @@ outFiles <- paste("file://localhost", outFiles, sep="")
 
 Now to try and associate them with the nodes in Cytoscape
 
-```{r showInCy}
+```{r showInCy, eval=FALSE}
 setNodeImageDirect(cw, names(pieData), outFiles)
 setDefaultNodeColor(cw, 'transparent')
 setNodeOpacityDirect(cw, names(pieData), 0)
