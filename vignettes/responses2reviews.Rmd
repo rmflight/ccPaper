@@ -36,6 +36,13 @@
 * the authors should provide for input from any gene-set enrichment test producing a gene-set level significance score; restricting to Fisher's Exact test (aka hypergeometric) is over-simplistic, and disregards all the method development that happened in the last decade; being able to process GSEA output would be a good start
 * the way the color scheme is used is suboptimal for visualization (the colors do not help very much distinguishing the various condition combinations in an intuitive way); the authors should make a better effort on that side; I specifically suggest trying the following methodology: pick one color for each comparison with an ssociated list of annotation gene-sets enriched (e.g. skin t7 up: yellow, skin t14 up: orange, skin t7 dw: olive green, skin 14t dw: water green, muscle up: magenta, muscle dw: blue) and then represent the significance in more than one comparison using Cytoscape pie chart node coloring (so, a node representing an annotation gene-set significantly over-represented in skin t7 up and skin t14 up would be half yellow half orange). 
 
+**Responses**:
+
+* regarding coefficients, I was basing these implementations off the original Erichment Map (EM) paper (Merico D, Isserlin R, Stueker O, Emili A, Bader GD (2010) Enrichment Map: A Network-Based Method for Gene-Set Enrichment Visualization and Interpretation. PLoS ONE 5(11): e13984. doi:10.1371/journal.pone.0013984). I can find the mention of the combined coefficient on the EM user guide page, but there is no mention of it actually being found to be better.
+
+One publications Supporting Materials (http://www.nature.com/nature/journal/v466/n7304/extref/nature09146-s1.pdf) mentions that "We find that the arithmetic average of these two behaves better, and that is what we use here and refer to as the weighted overlap", however no real evidence is provided, beyond the author's subjective experience. I am willing to find a way to include the combined coefficient, and allow the user to use it, but without more evidence from the authors of EM, I would not be inclined to make it the default.
+
+
 # Discussion Problems
 
 **Rev 1**: 
