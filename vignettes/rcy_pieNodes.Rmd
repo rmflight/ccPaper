@@ -99,3 +99,21 @@ twoColors <- c("red", desaturatePercentage("red", 0.25))
 pie(c(0.5, 0.5), col=twoColors)
 ```
 
+```{r genMultiplePies}
+library(categoryComparePaperRev)
+
+ccOpts <- new("ccOptions", listNames=c("T10_UP", "T10_DN", "T48_UP", "T48_DN", "T1_X", "T1_Y"), colorType="pie")
+
+nTerm <- 1000
+
+pieMatrix <- do.call(cbind, lapply(listNames(ccOpts), function(inName){
+    baseCol <- rep(ccOpts@unsaturatedColor[inName], nTerm)
+    baseCol[sample(nTerm, 500)] <- compareColors(ccOpts)[inName]
+    baseCol
+  }))
+
+pieArea <- rep(1 / length(listNames(ccOpts)), length(listNames(ccOpts)))
+names(pieArea) <- ""
+
+```
+
