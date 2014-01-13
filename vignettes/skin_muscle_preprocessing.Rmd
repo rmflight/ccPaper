@@ -1,0 +1,51 @@
+# Muscle Skin Data processing
+
+How do we process the data for muscle and skin to something we can start running through `categoryCompare`?
+
+```{r loadLibraries}
+options(stringsAsFactors=TRUE)
+library(affy)
+```
+
+## Skin
+
+Get the raw data in (this should actually be on GEO, but doesn't seem to be there yet)
+
+```{r skinRaw, eval=FALSE}
+currLoc <- getwd()
+dataLoc <- "/mlab/data/rmflight/Documents/projects/work/Petruska/drg_sc_skin_denervation/Skin/"
+setwd(dataLoc)
+
+attFile <- "Sample information file.txt"
+dataAttributes <- read.table(attFile, sep="\t", header=T)
+dataAttributes$timePoint <- 0
+dataAttributes$timePoint[(dataAttributes$Time == "7 day")] <- 7
+dataAttributes$timePoint[(dataAttributes$Time == "14 day")] <- 14
+
+celData <- ReadAffy(phenoData=dataAttributes)
+skinData <- rma(celData)
+setwd(currLoc)
+.sessionInfo <- sessionInfo()
+.timeDate <- Sys.time()
+save(skinData, .sessionInfo, .timeDate, file="inst/data/skin_rma_data.RData")
+```
+
+## Muscle
+
+```{r muscleRaw, eval=FALSE}
+library(GEOquery)
+muscleData <- getGEO(GEO="GSE4411")[[1]]
+
+controlSamples <- grep("Control", pData(muscleData)$title)
+muscleData <- muscleData[,controlSamples]
+
+tmpP <- pData(muscleData)
+tmpP$innervation <- "innervated"
+denLoc <- grep("Denervated", tmpP$title)
+tmpP$innervation[denLoc] <- "denervated"
+pData(muscleData) <- tmpP
+.sessionInfo <- sessionInfo()
+.timeDate <- Sys.time()
+save(muscleData, .sessionInfo, .timeDate, file="inst/data/muscle_data.RData")
+```
+
