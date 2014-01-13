@@ -24,6 +24,7 @@ dataAttributes$timePoint[(dataAttributes$Time == "14 day")] <- 14
 
 celData <- ReadAffy(phenoData=dataAttributes)
 skinData <- rma(celData)
+
 setwd(currLoc)
 .sessionInfo <- sessionInfo()
 .timeDate <- Sys.time()
@@ -49,3 +50,10 @@ pData(muscleData) <- tmpP
 save(muscleData, .sessionInfo, .timeDate, file="inst/data/muscle_data.RData")
 ```
 
+# Gene Lists
+
+For both the skin and muscle data sets, we will calculate the p-values using `limma`. We will probably attempt to do both hypergeometric enrichment and GSEA (using )
+
+## Skin Gene Lists
+
+We are going to create gene lists for the skin 

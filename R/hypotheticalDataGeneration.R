@@ -491,7 +491,7 @@ multiSampleGeneSetTest <- function(samplePValues, genesets, alternative="mixed",
 #' @param doComps character vector of which comparisons to make
 #' @param dupStrategy how to resolve duplicates, default is to take the smallest p-value
 #' @param correction which multiple testing correction to apply to the results
-#' @return
+#' @return list of data frames
 #' @export
 #' @importFrom limma makeContrasts lmFit contrasts.fit eBayes topTable
 rankGenes <- function(exprData, sampleStatus, doComps, dupStrategy="minP", aggregateIndex, adjust.method="BH"){
