@@ -579,6 +579,8 @@ For the **list** version, the p-values of genes will be combined using **Fishers
 ## Generate Data
 
 ```{r gseaSamples}
+tALL <- topTable(fitALL2, number=Inf)
+
 allGenes <- unique(unlist(hsGO, use.names=FALSE))
 gseaPVals <- runif(length(allGenes), min=0.18, max=0.22)
 samplePValRange <- runif(10000, min=0.005, max=0.015)
