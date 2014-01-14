@@ -39,5 +39,9 @@ cucCharacter <- pData(cucData)
 
 cucFC <- rankGenes(cucExpr, cucCharacter$status, cucComps, dupStrategy="minP", aggregateIndex=geneID)
 names(cucFC) <- c("UC", "CROHNS")
+
+cucDiff <- lapply(cucFC, getDiffGenes)
+# this object can be run using base ccEnrich, or can be easily coerced
+
 ```
 

@@ -520,6 +520,41 @@ rankGenes <- function(exprData, sampleStatus, doComps, dupStrategy="minP", aggre
   return(outData)
 }
 
+#' get differentially expressed genes in a data.frame
+#' 
+#' @param rankedData data.frame of p-values and fold changes
+#' @param id the column to use as a returned id
+#' @param useP the column with the p-values
+#' @param pcutoff maximum p-value to use
+#' @param lfc column identifier for log-fold-change
+#' @param lfcCutoff should a minumum fold-change be required
+#' @param splitDir should significant results be split by up and down?
+#' @export
+#' @return list
+#' @details if \code{splitDir=TRUE} (default), then the returned list will have \code{up}, \code{dn}, and \code{universe}. If \code{splitDir=FALSE}, then it will be \code{sig} and \code{universe}.
+getDiffGenes <- function(rankedData, id="aggregateBy", useP="adj.P.Val", pcutoff=0.05, lfc="logFC", lfcCutoff=NA, splitDir=TRUE){
+  sigEntry <- rankedData[, useP] <= pcutoff
+  
+  if (!(is.na(lfcCutoff))){
+    sigEntry <- sigEntry & abs(rankedData[, lfc] >= lfcCutoff)
+  }
+  
+  if (splitDir){
+    upEntry <- rankedData[, lfc] > 0
+    upID <- rankedData[(upEntry & sigEntry), id]
+    dnEntry <- rankedData[, lfc] < 0
+    dnID <- rankedData[(dnEntry & sigEntry), id]
+    
+    outData <- list(up=upID, dn=dnID, universe=rankedData[, id])
+  } else {
+    sigID <- rankedData[sigEntry, id]
+    outData <- list(sig=sigID, universe=rankedData[, id])
+  }
+  
+  return(outData)
+  
+}
+
 #' @name lung.RData
 #' @title lung.RData
 #' @docType data
