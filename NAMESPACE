@@ -1,6 +1,7 @@
 export(calcFraction)
 export(diffGOStats)
 export(fishersMethod)
+export(getDiffGenes)
 export(goSample)
 export(hyperGOMultiEnrichment)
 export(limitedRandomSample)
