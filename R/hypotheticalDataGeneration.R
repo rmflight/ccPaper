@@ -521,7 +521,7 @@ collapseProbes <- function(exprData, collapseBy){
 #' @return list of data frames
 #' @export
 #' @importFrom limma makeContrasts lmFit contrasts.fit eBayes topTable
-rankGenes <- function(exprData, sampleStatus, doComps, dupStrategy="minP", aggregateIndex, adjust.method="BH"){
+rankGenes <- function(exprData, sampleStatus, doComps, dupStrategy="minP", doAggregation=FALSE, aggregateIndex, adjust.method="BH"){
   f <- factor(sampleStatus)
   design <- model.matrix(~0 + f)
   colnames(design) <- levels(f)
@@ -533,17 +533,20 @@ rankGenes <- function(exprData, sampleStatus, doComps, dupStrategy="minP", aggre
   
   outData <- lapply(doComps, function(inComp){
     compData <- topTable(fit2, coef=inComp, number=Inf, adjust.method=adjust.method, sort.by="none")
-    naIndex <- is.na(aggregateIndex)
-    compData$aggregateBy <- aggregateIndex
-    compData$orgID <- rownames(compData)
-    compData <- compData[!naIndex,]
-    compData <- by(compData, compData$aggregateBy, function(inData){
-      if (dupStrategy == "minP"){
-        inData[which.min(inData$P.Value),]
-      }
-      
-    })
-    compData <- do.call(rbind, compData)
+    if (doAggregation){
+      naIndex <- is.na(aggregateIndex)
+      compData$aggregateBy <- aggregateIndex
+      compData$orgID <- rownames(compData)
+      compData <- compData[!naIndex,]
+      compData <- by(compData, compData$aggregateBy, function(inData){
+        if (dupStrategy == "minP"){
+          inData[which.min(inData$P.Value),]
+        }
+        
+      })
+      compData <- do.call(rbind, compData)
+    }
+    
   })
   return(outData)
 }
