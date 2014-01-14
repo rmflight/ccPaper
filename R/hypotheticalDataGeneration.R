@@ -483,6 +483,10 @@ multiSampleGeneSetTest <- function(samplePValues, genesets, alternative="mixed",
 }
 
 
+#' multiple-multiple geneSetTests
+#' 
+#' The default \code{geneSetTest} in \code{limma} will only do a single index and a single test. This function allows one to pass in a set of indices, and do all three tests (up, down, mixed).
+
 #' collapse probes to genes
 #' 
 #' take the median value of a set of probes to the associated genes in each sample. Make sure that \code{collapseBy} is in the same order as the \code{exprData} rows, and any rows you want removed should have \code{NA}.
