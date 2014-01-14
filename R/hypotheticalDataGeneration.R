@@ -483,6 +483,33 @@ multiSampleGeneSetTest <- function(samplePValues, genesets, alternative="mixed",
 }
 
 
+#' collapse probes to genes
+#' 
+#' take the median value of a set of probes to the associated genes in each sample. Make sure that \code{collapseBy} is in the same order as the \code{exprData} rows, and any rows you want removed should have \code{NA}.
+#' 
+#' @param exprData an expressionSet
+#' @param collapseBy character vector of associated gene ids
+#' @return exprData a matrix of median intensities
+#' @export
+collapseProbes <- function(exprData, collapseBy){
+  naLoc <- is.na(collapseBy)
+  exprData <- exprData[!naLoc,]
+  collapseBy <- collapseBy[!naLoc]
+  
+  doMedian <- function(inValues){
+    if (nrow(inValues) > 1){
+      outValues <- apply(inValues, 2, median)
+    } else {
+      outValues <- inValues
+    }
+    return(outValues)
+  }
+  
+  collapseData <- by(exprData, collapseBy, doMedian)
+  collapseData <- do.call(rbind, collapseData)
+  return(collapseData)
+}
+
 #' rank genes using limma
 #'
 #' @param exprData log-expression values from an ExpressionSet
