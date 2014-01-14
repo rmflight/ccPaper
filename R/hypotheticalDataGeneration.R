@@ -508,6 +508,7 @@ rankGenes <- function(exprData, sampleStatus, doComps, dupStrategy="minP", aggre
     compData <- topTable(fit2, coef=inComp, number=Inf, adjust.method=adjust.method, sort.by="none")
     naIndex <- is.na(aggregateIndex)
     compData$aggregateBy <- aggregateIndex
+    compData$orgID <- rownames(compData)
     compData <- compData[!naIndex,]
     compData <- by(compData, compData$aggregateBy, function(inData){
       if (dupStrategy == "minP"){
