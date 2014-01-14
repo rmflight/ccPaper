@@ -546,7 +546,7 @@ rankGenes <- function(exprData, sampleStatus, doComps, dupStrategy="minP", doAgg
       })
       compData <- do.call(rbind, compData)
     }
-    
+    return(compData)
   })
   return(outData)
 }
