@@ -1,0 +1,43 @@
+# Crohn's VS Ulcerative Colitis
+
+GEO dataset **GSE36807** has crohn's, uc, and normal samples. 
+
+```{r getData, eval=FALSE}
+library(GEOquery)
+
+cucData <- getGEO(GEO="GSE36807")[[1]]
+
+tmpP <- pData(cucData)
+tmpP$status <- "control"
+
+cLoc <- grep("Crohn", tmpP$characteristics_ch1)
+tmpP$status[cLoc] <- "crohns"
+
+ucLoc <- grep("Ulcerative colitis", tmpP$characteristics_ch1)
+tmpP$status[ucLoc] <- "uc"
+pData(cucData) <- tmpP
+
+.sessionInfo <- sessionInfo()
+.timeDate <- Sys.time()
+save(cucData, .sessionInfo, .timeDate, file="inst/data/uc_crohns_rawData.RData")
+```
+
+## Differential analysis
+
+Use the `limma` package to rank probes. 
+
+```{r rankProbes}
+library(limma)
+library(hgu133plus2.db)
+load("inst/data/uc_crohns_rawData.RData")
+
+cucComps <- c("uc - control", "crohns - control")
+geneID <- unlist(mget(featureNames(cucData), hgu133plus2ENTREZID))
+
+cucExpr <- exprs(cucData)
+cucCharacter <- pData(cucData)
+
+cucFC <- rankGenes(cucExpr, cucCharacter$status, cucComps, dupStrategy="minP", aggregateIndex=geneID)
+names(cucFC) <- c("UC", "CROHNS")
+```
+
