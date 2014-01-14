@@ -35,12 +35,13 @@ cucComps <- c("uc - control", "crohns - control")
 geneID <- unlist(mget(featureNames(cucData), hgu133plus2ENTREZID))
 
 cucExpr <- exprs(cucData)
+cucCollapse <- collapseProbes(cucExpr, geneID) # collapse to single genes using median of expression
 cucCharacter <- pData(cucData)
 
-cucFC <- rankGenes(cucExpr, cucCharacter$status, cucComps, dupStrategy="minP", aggregateIndex=geneID)
+cucFC <- rankGenes(cucCollapse, cucCharacter$status, cucComps, doAggregation=FALSE, aggregateIndex=NA)
 names(cucFC) <- c("UC", "CROHNS")
 
-cucDiff <- lapply(cucFC, getDiffGenes)
+cucDiff <- lapply(cucFC, getDiffGenes, id="id")
 # this object can be run using base ccEnrich, or can be easily coerced
 ```
 
@@ -54,11 +55,29 @@ There are two ways to do GSEA using `limma`.
   
 We're going to try both and see what we get out.
 
-```{r runGSEA}
+```{r setupGeneSets}
 library(GO.db)
 hsGO <- as.list(org.Hs.egGO2ALLEGS)
 hsGO <- hsGO[(Ontology(names(hsGO)) == "BP")]
+hsGO <- lapply(hsGO, unique)
 
+useSet <- symbols2indices(hsGO, rownames(cucCollapse))
+```
+
+Run using `romer`
+
+```{r runRomer}
+exprData <- cucCollapse
+sampleStatus <- cucCharacter$status
+doComps <- cucComps
+f <- factor(sampleStatus)
+design <- model.matrix(~0 + f)
+colnames(design) <- levels(f)
+
+contrast.matrix <- makeContrasts(contrasts=doComps, levels=design)
+
+cucRomer <- multicontrastRomer(useSet, cucCollapse, design, contrast.matrix, nrot=10000)
+save(cucRomer, file="inst/data/cucRomer.RData")
 
 ```
 
