@@ -42,6 +42,16 @@ names(cucFC) <- c("UC", "CROHNS")
 
 cucDiff <- lapply(cucFC, getDiffGenes)
 # this object can be run using base ccEnrich, or can be easily coerced
+```
+
+
+## Run GSEA type analysis using limma
+
+```{r runGSEA}
+library(GO.db)
+hsGO <- as.list(org.Hs.egGO2ALLEGS)
+hsGO <- hsGO[(Ontology(names(hsGO)) == "BP")]
+
 
 ```
 
