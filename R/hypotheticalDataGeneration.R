@@ -587,6 +587,29 @@ getDiffGenes <- function(rankedData, id="aggregateBy", useP="adj.P.Val", pcutoff
   
 }
 
+
+#' multicontrast romer
+#' 
+#' given a contrast.matrix with multiple columns, do \code{romer} for those
+#' 
+#' @param index list of indices specifying how y maps to gene sets
+#' @param y numeric matrix of log-expression values
+#' @param design design matrix
+#' @param contrastMatrix the contrast.matrix, each column will be used
+#' @param nrot number of rotations
+#' @seealso romer
+#' @export
+#' @return list of results for each contrast performed
+#' @importFrom limma romer
+multicontrastRomer <- function(index, y, design, contrastMatrix, nrot=9999){
+  nContrast <- ncol(contrastMatrix)
+  
+  outData <- lapply(seq(1, nContrast), function(inCol){
+    useContrast <- contrastMatrix[, inCol]
+    romer(index, y, design, contrast=contrastMatrix[, inCol], nrot=nrot)
+  })
+}
+
 #' @name lung.RData
 #' @title lung.RData
 #' @docType data
