@@ -81,3 +81,10 @@ save(cucRomer, file="inst/data/cucRomer.RData")
 
 ```
 
+Run using `geneSetTest`
+
+```{r runGeneSetTest}
+statData <- cucFC$UC
+useStat <- "t"
+```
+
