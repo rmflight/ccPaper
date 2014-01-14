@@ -47,6 +47,13 @@ cucDiff <- lapply(cucFC, getDiffGenes)
 
 ## Run GSEA type analysis using limma
 
+There are two ways to do GSEA using `limma`. 
+
+  1 Use `romer` for competitive tests with rotations to do random samples
+  2 Use `geneSetTest` for gene-wise competitive tests, *i.e.* each set is tested against random gene samples
+  
+We're going to try both and see what we get out.
+
 ```{r runGSEA}
 library(GO.db)
 hsGO <- as.list(org.Hs.egGO2ALLEGS)
