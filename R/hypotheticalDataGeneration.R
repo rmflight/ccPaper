@@ -533,6 +533,7 @@ rankGenes <- function(exprData, sampleStatus, doComps, dupStrategy="minP", doAgg
   
   outData <- lapply(doComps, function(inComp){
     compData <- topTable(fit2, coef=inComp, number=Inf, adjust.method=adjust.method, sort.by="none")
+    compData$id <- rownames(compData)
     if (doAggregation){
       naIndex <- is.na(aggregateIndex)
       compData$aggregateBy <- aggregateIndex
