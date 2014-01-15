@@ -45,6 +45,32 @@ cucDiff <- lapply(cucFC, getDiffGenes, id="id")
 # this object can be run using base ccEnrich, or can be easily coerced
 ```
 
+## ORA
+
+Do normal over-representation analysis on the `cucDiff`, those genes differentially expressed in the Crohn's and UC samples.
+
+```{r ORA}
+cucGeneList <- list(UC_up=list(genes=cucDiff$UC$up, universe=cucDiff$UC$universe, annotation="org.Hs.eg.db"),
+                    UC_dn=list(genes=cucDiff$UC$dn, universe=cucDiff$UC$universe, annotation="org.Hs.eg.db"),
+                    CR_up=list(genes=cucDiff$CROHNS$up, universe=cucDiff$CROHNS$universe, annotation="org.Hs.eg.db"),
+                    CR_dn=list(genes=cucDiff$CROHNS$dn, universe=cucDiff$CROHNS$universe, annotation="org.Hs.eg.db"))
+cucGeneList <- new("ccGeneList", cucGeneList, ccType=c("BP", "CC", "MF", "KEGG"))
+
+library(KEGG.db)
+cucEnrich <- ccEnrich(cucGeneList)
+pvalueType(cucEnrich) <- "pval"
+pvalueCutoff(cucEnrich) <- 0.001
+
+
+cucOpts <- new("ccOptions", listNames=names(cucGeneList), compareNames=
+                c("UC_up", "UC_dn", "CR_up", "CR_dn", "UC_up,CR_up", "UC_up,CR_dn", "UC_dn,CR_up", "UC_dn,CR_dn"))
+cucCompare <- ccCompare(cucEnrich, cucOpts)
+
+cucCy <- ccOutCyt(cucCompare$BP, cucOpts)
+breakEdges(cucCy, 1)
+```
+
+
 
 ## Run GSEA type analysis using limma
 
@@ -66,8 +92,7 @@ useSet <- symbols2indices(hsGO, rownames(cucCollapse))
 
 Run using `romer`
 
-```{r runRomer}
-exprData <- cucCollapse
+```{r setupContrasts}
 sampleStatus <- cucCharacter$status
 doComps <- cucComps
 f <- factor(sampleStatus)
@@ -75,7 +100,9 @@ design <- model.matrix(~0 + f)
 colnames(design) <- levels(f)
 
 contrast.matrix <- makeContrasts(contrasts=doComps, levels=design)
+```
 
+```{r runRomer}
 cucRomer <- multicontrastRomer(useSet, cucCollapse, design, contrast.matrix, nrot=10000)
 save(cucRomer, file="inst/data/cucRomer.RData")
 
@@ -84,10 +111,13 @@ save(cucRomer, file="inst/data/cucRomer.RData")
 Run using `geneSetTest`
 
 ```{r runGeneSetTest}
-statistics <- cucFC$UC$t
-index <- useSet[1:10]
+t1 <- Sys.time()
+cucGeneSetTest <- lapply(cucFC, function(x){
+  mmGeneSetTest(useSet, x$t)
+})
 
-UC_geneSets <- mmGeneSetTest(index, statistics)
-CR_geneSets <- mmGeneSetTest(index, cucFC$CROHNS$t)
+t2 <- Sys.time()
+difftime(t2, t1)
+save(cucGeneSetTest, t1, t2, file="inst/data/cucGeneSetTest.RData")
 ```
 
