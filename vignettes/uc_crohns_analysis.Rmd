@@ -84,7 +84,10 @@ save(cucRomer, file="inst/data/cucRomer.RData")
 Run using `geneSetTest`
 
 ```{r runGeneSetTest}
-statData <- cucFC$UC
-useStat <- "t"
+statistics <- cucFC$UC$t
+index <- useSet[1:10]
+
+UC_geneSets <- mmGeneSetTest(index, statistics)
+CR_geneSets <- mmGeneSetTest(index, cucFC$CROHNS$t)
 ```
 
