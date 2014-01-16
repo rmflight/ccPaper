@@ -419,24 +419,39 @@ fishersMethod <- function(x){
   pchisq(-2 * sum(log(x)),df=2*length(x),lower=FALSE)
 } 
 
-#' change set of p-values for GSEA
+#' change set of t-values for GSEA
 #' 
-#' Given a list of sample genes, the full list of named p-values, and a mean and sd
+#' Given a list of sample genes, the gene universe, and a set of t-values
 #' 
 #' @param sampleList the sample genes we will use
-#' @param initPValues initial p-values for all the genes (named vector)
-#' @param distPValues a distribution of p-values to take samples from for the sample genes
-#' @return list where for each sample the appropriate entries have modified p-values
+#' @param universeGenes all the genes to use
+#' @param tValues a distribution of t-values
+#' @return list of new t-values that should put genes from sampleList at the top
 #' @export
-samplePValueGenGSEA <- function(sampleList, initPValues, distPValues){
-  outValues <- lapply(sampleList, function(inList){
-    toMod <- which(names(initPValues) %in% inList)
-    nMod <- length(inList)
-    usePValues <- initPValues
-    usePValues[toMod] <- sample(distPValues, nMod)
-    return(usePValues)
+sampletValueGenGSEA <- function(sampleList, universeGenes, tValues){
+  tValues <- sort(tValues)
+  nUniverse <- length(universeGenes)
+  outT <- numeric(nUniverse)
+  names(outT) <- universeGenes
+  newTSample <- lapply(sampleList, function(inList){
+    outTSample <- outT
+    nGene <- length(inList)
+    
+    inList <- sample(inList, nGene)
+    useT <- sample(tValues[1:nGene], nGene)
+    
+    outTSample[inList] <- useT
+    
+    otherT <- sample(tValues[seq(nGene+1, nUniverse)], nUniverse-nGene)
+    otherGenes <- universeGenes[!(universeGenes %in% inList)]
+    outTSample[otherGenes] <- otherT
+    return(outTSample)
   })
-  return(outValues)
+  
+  combSample <- do.call(cbind, newTSample)
+  combSample <- rowMeans(combSample)
+  newTSample$comb <- combSample
+  return(newTSample)
 }
 
 #' run multiple geneSetTest's
