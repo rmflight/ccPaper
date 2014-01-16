@@ -597,6 +597,10 @@ Check that we did what we thought. If done right, all of the **sample** genes sh
 tmpDat <- data.frame(x=gseaTValues[[1]], type="all", stringsAsFactors=FALSE)
 tmpDat$type[(universeGenes %in% gseaSamples[[1]])] <- "sample"
 ggplot(tmpDat, aes(x=x, color=type)) + geom_histogram(binwidth=0.1, position="identity")
+
+tmpComb <- data.frame(x=gseaTValues[["comb"]], type="all", stringsAsFactors=FALSE)
+tmpComb$type[(universeGenes %in% gseaSamples[[1]])] <- "sample"
+ggplot(tmpComb, aes(x=x, color=type)) + geom_histogram(binwidth=0.1, position="identity")
 ```
 
 Now lets actually do some calculations.
@@ -606,5 +610,11 @@ go2index <- symbols2indices(hsGO[useGO], universeGenes)
 gseaSetResults <- lapply(gseaTValues, function(x){
   mmGeneSetTest(go2index, x)
 })
+```
+
+And figure out what is doing better.
+
+```{r gseaBetter}
+cleanDiff <- gseaDiffs(gseaSetResults)
 ```
 
