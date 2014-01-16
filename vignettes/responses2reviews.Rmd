@@ -19,7 +19,7 @@
 
 **Rev 1**: The use of a single approach (or two similar approaches if you include the supplemental data) is not enough.  There is time course data here, some kind of time course analysis would have been nice, using maSigPro or STEM or similar.  Something like WGCNA for module analysis could also have been employed.  Also lacking is any biological follow-up on the in-silico inferences.  As mentioned in the paper, there is probably a profound tissue effect in the data, which could have been addressed by removal of tissue specific genes.
 
-**Response**: As mentioned by another reviewer, we could not decide whether we were writing a methods or biology paper. In principle, if this was a single analysis of the skin denervation time course, then *maybe* a time course method would be appropriate. The rewrite of the manuscript focuses on the **categoryCompare** method, and therefore we did not include an actual time-course specific method analysis of the skin-denervation data.
+**Response**: As mentioned by yourself, we could not decide whether we were writing a methods or biology paper. In principle, if this was a single analysis of the skin denervation time course, then *maybe* a time course method would be appropriate. The rewrite of the manuscript (in progress) focuses on the **categoryCompare** method, and therefore we did not include an actual time-course specific method analysis of the skin-denervation data. In addition, as the goal was the comparison between tissues, and there is no equivalent dataset for muscle (that we have been able to find), such an analysis would have likely been criticized for not matching the muscle dataset.
 
 **Rev 2**: 
 * 1.Page 6, line 192. Reference to Bioconductor (Gentleman et al, 2004)  is misleading here. It would be appropriate to give reference or URL to CategoryCompare here, otherwise it may seem that CategoryCompare was developed in 2004. 
@@ -38,9 +38,11 @@
 
 **Responses**:
 
-* regarding coefficients, I was basing these implementations off the original Erichment Map (EM) paper (Merico D, Isserlin R, Stueker O, Emili A, Bader GD (2010) Enrichment Map: A Network-Based Method for Gene-Set Enrichment Visualization and Interpretation. PLoS ONE 5(11): e13984. doi:10.1371/journal.pone.0013984). I can find the mention of the combined coefficient on the EM user guide page, but there is no mention of it actually being found to be better.
+* regarding similarity/overlap coefficients, these implementations came from the original Erichment Map (EM) paper (Merico D, Isserlin R, Stueker O, Emili A, Bader GD (2010) Enrichment Map: A Network-Based Method for Gene-Set Enrichment Visualization and Interpretation. PLoS ONE 5(11): e13984. doi:10.1371/journal.pone.0013984). The combined coefficient is mentioned on the EM user guide page, but there is no mention of it actually being found to be better.
 
-One publications Supporting Materials (http://www.nature.com/nature/journal/v466/n7304/extref/nature09146-s1.pdf) mentions that "We find that the arithmetic average of these two behaves better, and that is what we use here and refer to as the weighted overlap", however no real evidence is provided, beyond the author's subjective experience. I am willing to find a way to include the combined coefficient, and allow the user to use it, but without more evidence from the authors of EM, I would not be inclined to make it the default.
+One publications Supporting Materials (http://www.nature.com/nature/journal/v466/n7304/extref/nature09146-s1.pdf) mentions that "We find that the arithmetic average of these two behaves better, and that is what we use here and refer to as the weighted overlap", however no evidence of the improvement is provided outside of this statement. Therefore, the combined coefficient has been included, but without more evidence from the authors of EM, I am not inclined to make it the default.
+
+The combined coefficient has been implemented, see https://github.com/rmflight/categoryCompare/commit/7d00dcbcfb4c1fdae3401e45e5c4dccbe3637822 for the actual commit adding the function, and commits https://github.com/rmflight/categoryCompare/commit/7930b0925d31fa2d7691ce3d182a2ae7a89c174d https://github.com/rmflight/categoryCompare/commit/4bf13e21ed174dc73c4d360f92fb5aa75d40d72c for where the slot is added to the classes so it can be used. 
 
 
 # Discussion Problems

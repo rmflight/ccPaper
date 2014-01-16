@@ -35,23 +35,89 @@ cucComps <- c("uc - control", "crohns - control")
 geneID <- unlist(mget(featureNames(cucData), hgu133plus2ENTREZID))
 
 cucExpr <- exprs(cucData)
+cucCollapse <- collapseProbes(cucExpr, geneID) # collapse to single genes using median of expression
 cucCharacter <- pData(cucData)
 
-cucFC <- rankGenes(cucExpr, cucCharacter$status, cucComps, dupStrategy="minP", aggregateIndex=geneID)
+cucFC <- rankGenes(cucCollapse, cucCharacter$status, cucComps, doAggregation=FALSE, aggregateIndex=NA)
 names(cucFC) <- c("UC", "CROHNS")
 
-cucDiff <- lapply(cucFC, getDiffGenes)
+cucDiff <- lapply(cucFC, getDiffGenes, id="id")
 # this object can be run using base ccEnrich, or can be easily coerced
 ```
+
+## ORA
+
+Do normal over-representation analysis on the `cucDiff`, those genes differentially expressed in the Crohn's and UC samples.
+
+```{r ORA}
+cucGeneList <- list(UC_up=list(genes=cucDiff$UC$up, universe=cucDiff$UC$universe, annotation="org.Hs.eg.db"),
+                    UC_dn=list(genes=cucDiff$UC$dn, universe=cucDiff$UC$universe, annotation="org.Hs.eg.db"),
+                    CR_up=list(genes=cucDiff$CROHNS$up, universe=cucDiff$CROHNS$universe, annotation="org.Hs.eg.db"),
+                    CR_dn=list(genes=cucDiff$CROHNS$dn, universe=cucDiff$CROHNS$universe, annotation="org.Hs.eg.db"))
+cucGeneList <- new("ccGeneList", cucGeneList, ccType=c("BP", "CC", "MF", "KEGG"))
+
+library(KEGG.db)
+cucEnrich <- ccEnrich(cucGeneList)
+pvalueType(cucEnrich) <- "pval"
+pvalueCutoff(cucEnrich) <- 0.001
+
+
+cucOpts <- new("ccOptions", listNames=names(cucGeneList), compareNames=
+                c("UC_up", "UC_dn", "CR_up", "CR_dn", "UC_up,CR_up", "UC_up,CR_dn", "UC_dn,CR_up", "UC_dn,CR_dn"))
+cucCompare <- ccCompare(cucEnrich, cucOpts)
+
+cucCy <- ccOutCyt(cucCompare$BP, cucOpts)
+breakEdges(cucCy, 1)
+```
+
 
 
 ## Run GSEA type analysis using limma
 
-```{r runGSEA}
+There are two ways to do GSEA using `limma`. 
+
+  1 Use `romer` for competitive tests with rotations to do random samples
+  2 Use `geneSetTest` for gene-wise competitive tests, *i.e.* each set is tested against random gene samples
+  
+We're going to try both and see what we get out.
+
+```{r setupGeneSets}
 library(GO.db)
 hsGO <- as.list(org.Hs.egGO2ALLEGS)
 hsGO <- hsGO[(Ontology(names(hsGO)) == "BP")]
+hsGO <- lapply(hsGO, unique)
 
+useSet <- symbols2indices(hsGO, rownames(cucCollapse))
+```
 
+Run using `romer`
+
+```{r setupContrasts}
+sampleStatus <- cucCharacter$status
+doComps <- cucComps
+f <- factor(sampleStatus)
+design <- model.matrix(~0 + f)
+colnames(design) <- levels(f)
+
+contrast.matrix <- makeContrasts(contrasts=doComps, levels=design)
+```
+
+```{r runRomer}
+cucRomer <- multicontrastRomer(useSet, cucCollapse, design, contrast.matrix, nrot=10000)
+save(cucRomer, file="inst/data/cucRomer.RData")
+
+```
+
+Run using `geneSetTest`
+
+```{r runGeneSetTest}
+t1 <- Sys.time()
+cucGeneSetTest <- lapply(cucFC, function(x){
+  mmGeneSetTest(useSet, x$t)
+})
+
+t2 <- Sys.time()
+difftime(t2, t1)
+save(cucGeneSetTest, t1, t2, file="inst/data/cucGeneSetTest.RData")
 ```
 
