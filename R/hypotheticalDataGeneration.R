@@ -571,6 +571,27 @@ getDiffGenes <- function(rankedData, id="aggregateBy", useP="adj.P.Val", pcutoff
   
 }
 
+
+#' results and diffs following genesettest
+#' 
+#' @param gseaRes a list of results from doing geneSetTests
+#' @param contrast which alternative hypothesis to extract (for fake data only one should be valid)
+#' @param orgLists the names of the original samples to extract, will be compared with "comb"
+#' @export
+#' @return data.frame of -1*log of p-values, and difference
+gseaDiffs <- function(gseaRes, contrast="down", orgLists=c("s1", "s2")){
+  orgRes <- do.call(cbind, lapply(gseaRes[orgLists], function(x){-1*log(x[,contrast])}))
+  
+  useNames <- rownames(orgRes)
+  
+  orgRes <- rowMin(orgRes)
+  
+  outRes <- data.frame(org=orgRes, comb=-1*log(gseaRes$comb[,contrast]))
+  outRes$diff <- outRes$org - outRes$comb
+  return(outRes)
+}
+
+
 #' @name lung.RData
 #' @title lung.RData
 #' @docType data
