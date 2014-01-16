@@ -18,3 +18,5 @@ Description: In response to reviewer comments on our originally submitted
     revisions, outside of modifications to the categoryCompare package itself.
 License: CC0
 VignetteBuilder: knitr
+Collate:
+    'hypotheticalDataGeneration.R'
