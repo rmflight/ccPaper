@@ -73,6 +73,7 @@ GO_hi <- limitedRandomSample(hsGO_count, grpHi, nGO["hi"])
 
 useGO <- c(GO_low, GO_med, GO_hi)
 useGOSizeClass <- c(rep("low", nGO["low"]), rep("med", nGO["med"]), rep("hi", nGO["hi"]))
+names(useGOSizeClass) <- useGO
 ```
 
 ### Examine Gene-GO Distribution for Real Data
@@ -156,22 +157,18 @@ What we expect from this is that in both datasets, the GO terms with lower numbe
 
 These expectations should be checked.
 
-
-
 ```{r generateSamples}
-useGO <- c(GO_low, GO_med, GO_hi)
 goList <- list(low=GO_low, med=GO_med, hi=GO_hi)
 nGene <- 1000
 sample1_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
 sample2_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
-```
 
-### Checking our expectations about the fractions of GO terms.
-
-```{r checkFractions}
+#check our expectations
 goFractions <- calcFraction(hsGO[useGO], list(sample1=sample1_org, sample2=sample2_org))
 ggplot(goFractions, aes(x=size, y=frac, color=genelist)) + geom_point()
 ```
+
+### Ccompare to experimental
 
 Lets actually compare this to the distribution of fractions *vs* sizes from the experimental data sets. Because those used **all** the GO terms, we will redo them with **all** GO terms as well, not just those from our sample.
 
@@ -184,7 +181,7 @@ ggplot(ALL_tmp, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + facet_grid
 
 
 ```{r cleanupData}
-keepItems <- c("goFractions", "sample1_org", "sample2_org", "hsGO", "useGO", "GO_hi", "GO_low", "GO_med", "grpHi", "grpLow", "grpMed", "minGO", "nGO", "nGene", "universeGenes")
+keepItems <- c("goFractions", "sample1_org", "sample2_org", "hsGO", "useGO", "useGOSizeClass", "GO_hi", "GO_low", "GO_med", "grpHi", "grpLow", "grpMed", "minGO", "nGO", "nGene", "universeGenes")
 allItems <- ls()
 delItems <- allItems[!(allItems %in% keepItems)]
 rm(list=delItems)
@@ -211,11 +208,9 @@ noNoise_pvalues <- pvalueDiffSig(noNoise_results$values, pCutoff=0.05, log=TRUE)
 Finally, lets add in our values of the fraction, total genes, and the class (**low**, **med**, **hi**) so we can do some fancy plotting stuff with it.
 
 ```{r noNoiseAddInfo}
-sizeClass <- c(rep("low", nGO["low"]), rep("med", nGO["med"]), rep("hi", nGO["hi"]))
-names(sizeClass) <- useGO
-noNoise_pvalues$sizeClass <- sizeClass
-noNoise_pvalues$size <- goFractions[1:length(sizeClass),4]
-noNoise_pvalues$frac <- goFractions$frac[1:length(sizeClass)]
+noNoise_pvalues$sizeClass <- useGOSizeClass
+noNoise_pvalues$size <- goFractions[1:length(useGOSizeClass),4]
+noNoise_pvalues$frac <- goFractions$frac[1:length(useGOSizeClass)]
 ```
 
 Now we will plot the difference in log-p-values (where we have **set** - **list**), so that positive values imply that **set** had lower p-values than **list**, based on the *fraction* of genes annotated.
@@ -271,9 +266,9 @@ noise_results <- pvaluesMultiEnrich(c("sample1", "sample2"), useGO, go_noise)
 
 noise_pvalues <- pvalueDiffSig(noise_results$values, pCutoff=0.05, log=TRUE)
 
-noise_pvalues$sizeClass <- sizeClass
-noise_pvalues$size <- goFracNoise[1:length(sizeClass),4]
-noise_pvalues$frac <- goFracNoise$frac[1:length(sizeClass)]
+noise_pvalues$sizeClass <- useGOSizeClass
+noise_pvalues$size <- goFracNoise[1:length(useGOSizeClass),4]
+noise_pvalues$frac <- goFracNoise$frac[1:length(useGOSizeClass)]
 ```
 
 ```{r plotSummarizeNoise}
@@ -321,7 +316,7 @@ testSamples <- lapply(seq(1, nTimes), function(x){
        noise = sample(noiseGenes, nNoise))
 })
 
-save(useGO, testSamples, universeGenes, sizeClass, file="inst/data/100GeneSamples.RData")
+save(useGO, testSamples, universeGenes, useGOSizeClass, file="inst/data/100GeneSamples.RData")
 ```
 
 ```{r runSamples, eval=FALSE}
@@ -332,18 +327,18 @@ testFun <- function(x){
   nnRes <- hyperGOMultiEnrichment(nnList, universe=universeGenes)
   nn_res <- pvaluesMultiEnrich(c("s1", "s2"), useGO, nnRes)
   nnP <- pvalueDiffSig(nn_res$values, pCutoff=0.05, log=TRUE)
-  nnP$class <- sizeClass
+  nnP$class <- useGOSizeClass
   
   noiList <- list(s1 = c(x$s1, x$noise), s2 = c(x$s2, x$noise))
   noiRes <- hyperGOMultiEnrichment(noiList, universe=universeGenes)
   noi_res <- pvaluesMultiEnrich(c("s1", "s2"), useGO, noiRes)
   noiP <- pvalueDiffSig(noi_res$values, pCutoff=0.05, log=TRUE)
-  noiP$class <- sizeClass
+  noiP$class <- useGOSizeClass
 
   return(list(clean = nnP, noise = noiP))
 }
 sfInit(parallel=TRUE, cpus=10)
-sfExport("sizeClass", "universeGenes", "useGO")
+sfExport("useGOSizeClass", "universeGenes", "useGO")
 sfLibrary(ccPaperRev)
 sfLibrary(GO.db)
 sfLibrary(org.Hs.eg.db)
@@ -361,8 +356,8 @@ useDir <- "/mlab/data/rmflight/Documents/projects/work/categoryComparePaperRev"
 load(file.path(useDir, "inst/data/100GeneResults.RData"))
 cleanRes <- lapply(testRes, function(x){x$clean})
 testStats_clean <- sameGOStats(cleanRes)
-testStats_clean$class <- sizeClass
-testStats_clean$frac <- goFractions$frac[1:length(sizeClass)]
+testStats_clean$class <- useGOSizeClass
+testStats_clean$frac <- goFractions$frac[1:length(useGOSizeClass)]
 testStats_clean$class <- factor(testStats_clean$class, levels=c("low", "med", "hi"), ordered=TRUE)
 ggplot(testStats_clean, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x")
 ```
@@ -370,8 +365,8 @@ ggplot(testStats_clean, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() 
 ```{r noiseStats}
 noiseRes <- lapply(testRes, function(x){x$noise})
 testStats_noise <- sameGOStats(noiseRes)
-testStats_noise$class <- sizeClass
-testStats_noise$frac <- goFracNoise$frac[1:length(sizeClass)]
+testStats_noise$class <- useGOSizeClass
+testStats_noise$frac <- goFracNoise$frac[1:length(useGOSizeClass)]
 testStats_noise$class <- factor(testStats_noise$class, levels=c("low", "med", "hi"), ordered=TRUE)
 ggplot(testStats_noise, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x")
 ```
@@ -382,8 +377,8 @@ What about differences between noise and clean?
 
 ```{r 100GeneNoiseClean}
 noiseCleanDiff <- diffGOStats(testRes)
-noiseCleanDiff$class <- sizeClass
-noiseCleanDiff$frac <- goFracNoise$frac[1:length(sizeClass)]
+noiseCleanDiff$class <- useGOSizeClass
+noiseCleanDiff$frac <- goFracNoise$frac[1:length(useGOSizeClass)]
 noiseCleanDiff$class <- factor(noiseCleanDiff$class, levels=c("low", "med", "hi"), ordered=TRUE)
 ggplot(noiseCleanDiff, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x")
 ```
@@ -525,7 +520,7 @@ nGene <- 1000
 cleanSample <- list(s1 = sampleTerms(useGO, hsGO, nGene, 4)[1:nGene],
                     s2 = sampleTerms(useGO, hsGO, nGene, 4)[1:nGene])
 
-save(noiseSamples, cleanSample, sizeNoise, fracShared, universeGenes, useGO, sizeClass, file=file.path(useDir, 'inst/data/noiseSamples.RData'))
+save(noiseSamples, cleanSample, sizeNoise, fracShared, universeGenes, useGO, useGOSizeClass, file=file.path(useDir, 'inst/data/noiseSamples.RData'))
 ```
 
 ```{r runSweptNoise}
@@ -545,7 +540,7 @@ runSweepNoise <- function(noiseGenes){
   noiseRes <- hyperGOMultiEnrichment(inNoise, universe=universeGenes)
   noiseP <- pvaluesMultiEnrich(names(inNoise), useGO, noiseRes)
   noisePComp <- pvalueDiffSig(noiseP$values, pCutoff=0.05, log=TRUE)
-  noisePComp$class <- sizeClass
+  noisePComp$class <- useGOSizeClass
   return(noisePComp)
 }
 
@@ -554,7 +549,7 @@ sfInit(parallel=TRUE, cpus=10)
 sfLibrary(ccPaperRev)
 sfLibrary(org.Hs.eg.db)
 sfLibrary(GO.db)
-sfExport("universeGenes", "useGO", "sizeClass", "cleanSample")
+sfExport("universeGenes", "useGO", "useGOSizeClass", "cleanSample")
 noiseSweepRes <- sfLapply(useNoise, runSweepNoise)
 sfStop()
 save(noiseSweepRes, file.path(useDir, "inst/data/noiseSweepRes.RData"))
