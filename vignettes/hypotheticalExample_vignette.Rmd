@@ -623,7 +623,7 @@ So this appears to be a different trend than for the hypergeometric case, in tha
 So what happens if we add some noisy genes into the top 1000? Stuff that isn't annotated at all to the GO terms of interest?
 
 ```{r gseaNoise}
-nNoise <- 500
+nNoise <- 2000
 noiseGenes <- possibleNoise(hsGO, useGO)
 noiseGenes <- sample(noiseGenes, nNoise)
 
