@@ -556,13 +556,6 @@ save(noiseSweepRes, file.path(useDir, "inst/data/noiseSweepRes.RData"))
 ```
 
 
-## Expectations
-
-Based on the above results, what I expect we will see if we do a programmatic search over the space is that there is a dependence on both the fraction of DE genes that are noisy, and the fraction of noisy genes that are shared (which really amounts to the same thing, but is a subtle point). 
-
-# To Do:
-
-* Vary the fraction of noise genes, and also vary the fraction that is common, and find a way to quantify the effect.
 
 # GSEA
 
@@ -588,6 +581,8 @@ tValues <- sample(tALL$t, length(universeGenes), replace=TRUE)
 gseaSamples <- list(s1 = sampleTerms(useGO, hsGO, 1000, 4),
                     s2 = sampleTerms(useGO, hsGO, 1000, 4))
 
+gseaGOFracS1 <- calcFraction(hsGO[useGO], list(s1=gseaSamples[[1]]))
+
 gseaTValues <- sampletValueGenGSEA(gseaSamples, universeGenes, tValues)
 ```
 
@@ -596,11 +591,11 @@ Check that we did what we thought. If done right, all of the **sample** genes sh
 ```{r checkValues}
 tmpDat <- data.frame(x=gseaTValues[[1]], type="all", stringsAsFactors=FALSE)
 tmpDat$type[(universeGenes %in% gseaSamples[[1]])] <- "sample"
-ggplot(tmpDat, aes(x=x, color=type)) + geom_histogram(binwidth=0.1, position="identity")
+ggplot(tmpDat, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity")
 
 tmpComb <- data.frame(x=gseaTValues[["comb"]], type="all", stringsAsFactors=FALSE)
 tmpComb$type[(universeGenes %in% gseaSamples[[1]])] <- "sample"
-ggplot(tmpComb, aes(x=x, color=type)) + geom_histogram(binwidth=0.1, position="identity")
+ggplot(tmpComb, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity")
 ```
 
 Now lets actually do some calculations.
@@ -616,5 +611,43 @@ And figure out what is doing better.
 
 ```{r gseaBetter}
 cleanDiff <- gseaDiffs(gseaSetResults)
+cleanDiff$sizeClass <- useGOSizeClass
+cleanDiff$sizeClass <- factor(cleanDiff$sizeClass, c("low", "med", "hi"), ordered=TRUE)
+cleanDiff$frac <- gseaGOFracS1$frac
+
+ggplot(cleanDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass)
 ```
 
+So this appears to be a different trend than for the hypergeometric case, in that a **meta** sample (achieved by averaging the t-statistics) actually does no worse, and in many cases much better than the worst p-value. This effect is less-pronounced as the number of genes in a class become larger, and as the fraction covered increases.
+
+So what happens if we add some noisy genes into the top 1000? Stuff that isn't annotated at all to the GO terms of interest?
+
+```{r gseaNoise}
+nNoise <- 500
+noiseGenes <- possibleNoise(hsGO, useGO)
+noiseGenes <- sample(noiseGenes, nNoise)
+
+gseaNoise <- list(s1=c(gseaSamples[["s1"]], noiseGenes),
+                  s2=c(gseaSamples[["s2"]], noiseGenes))
+
+gseaTValues_noise <- sampletValueGenGSEA(gseaNoise, universeGenes, tValues)
+
+tmpDat <- data.frame(x=gseaTValues_noise[[1]], type="all", stringsAsFactors=FALSE)
+tmpDat$type[(universeGenes %in% gseaSamples[[1]])] <- "sample"
+ggplot(tmpDat, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity", alpha=0.75)
+```
+
+```{r runGSEANoise}
+gseaSetResults_noise <- lapply(gseaTValues_noise, function(x){
+  mmGeneSetTest(go2index, x)
+})
+```
+
+```{r gseaBetter}
+noiseDiff <- gseaDiffs(gseaSetResults_noise)
+noiseDiff$sizeClass <- useGOSizeClass
+noiseDiff$sizeClass <- factor(noiseDiff$sizeClass, c("low", "med", "hi"), ordered=TRUE)
+noiseDiff$frac <- gseaGOFracS1$frac
+
+ggplot(noiseDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass)
+```
