@@ -48,11 +48,13 @@ ggplot(hsGO_count, aes(x=count)) + geom_bar(binwidth=10) + xlim(0, 2000) + ylim(
 
 ### Set up groups
 
-```{r defineMin}
-minGO <- 10
-```
+Based on the distribution in the previous figure, we will set up 3 different groups of GO terms, with a different number from each group:
 
-Let us define a minimum number of genes that need to be annotated to a GO term (`r minGO`), and then divide the GO terms into groups that we can subsequently take random samples from.
+  * low: 10-100, 50 terms
+  * med: 250-500, 30 terms
+  * hi: 500-1500, 20 terms
+  
+This gives us a total of 100 GO terms, with a good sample from each group. We will generate random samples that are defined by these limits, and use this set of GO terms going forward.
 
 ```{r defineGroupLimits}
 grpLow <- c(10, 100)
@@ -68,6 +70,9 @@ names(nGO) <- c("low", "med", "hi")
 GO_low <- limitedRandomSample(hsGO_count, grpLow, nGO["low"])
 GO_med <- limitedRandomSample(hsGO_count, grpMed, nGO["med"])
 GO_hi <- limitedRandomSample(hsGO_count, grpHi, nGO["hi"])
+
+useGO <- c(GO_low, GO_med, GO_hi)
+useGOSizeClass <- c(rep("low", nGO["low"]), rep("med", nGO["med"]), rep("hi", nGO["hi"]))
 ```
 
 ### Examine Gene-GO Distribution for Real Data
