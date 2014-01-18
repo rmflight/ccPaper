@@ -575,8 +575,8 @@ We will use the t-values that `limma` has generated for the ALL data set, and ju
 
 ```{r generateSampleRanks}
 tALL <- topTable(fitALL2, number=Inf)
-
-tValues <- sample(tALL$t, length(universeGenes), replace=TRUE)
+tALL <- tALL$t[(tALL$t < 10) & (tALL$t > -10)]
+tValues <- sample(tALL, length(universeGenes), replace=TRUE)
 
 gseaSamples <- list(s1 = sampleTerms(useGO, hsGO, 1000, 4),
                     s2 = sampleTerms(useGO, hsGO, 1000, 4))
