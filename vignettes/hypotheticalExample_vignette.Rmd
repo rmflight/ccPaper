@@ -576,7 +576,7 @@ We will use the t-values that `limma` has generated for the ALL data set, and ju
 ```{r generateSampleRanks}
 tALL <- topTable(fitALL2, number=Inf)
 tALL <- tALL$t[(tALL$t < 10) & (tALL$t > -10)]
-tValues <- sample(tALL, length(universeGenes), replace=TRUE)
+tValues <- runif(length(universeGenes), -6, 6)
 
 gseaSamples <- list(s1 = sampleTerms(useGO, hsGO, 1000, 4),
                     s2 = sampleTerms(useGO, hsGO, 1000, 4))
@@ -650,4 +650,69 @@ noiseDiff$sizeClass <- factor(noiseDiff$sizeClass, c("low", "med", "hi"), ordere
 noiseDiff$frac <- gseaGOFracS1$frac
 
 ggplot(noiseDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass)
+
+diffDiff <- data.frame(diff=(noiseDiff$diff - cleanDiff$diff), sizeClass=noiseDiff$sizeClass, frac=noiseDiff$frac)
+ggplot(diffDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass)
+
 ```
+
+So, it appears that having a uniform distribution does not make things behave the way we might expect. What if it is more an issue of independence, that GO is a bad fit for GSEA type analysis because of the issue that many of the terms are heavily overlapped. 
+
+### Independence
+
+What if we force independence on our objects? i.e. each object has independent sets of genes, and treat them appropriately? i.e. to count as "diff" we will put genes (features) into the top 50% of ranked t-values (therefore reducing coverage means pushing annotated genes down into the bottom 50% of ranked values), and adding noise means to push un-annotated (i.e. random) above in rank.
+
+Lets try this for a single example.
+
+```{r independentGSEA}
+nGene <- 10000
+indepTValues <- sort(runif(nGene, -6, 6))
+names(indepTValues) <- as.character(seq(1, nGene))
+
+gseaMap <- list(t1=sample(seq(1, nGene/2), 100))
+
+tmpDat <- data.frame(tVal=indepTValues, status="all", stringsAsFactors=F)
+tmpDat$status[gseaMap[["t1"]]] <- "sample"
+ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.1, position="identity")
+
+geneSetTest(gseaMap$t1, indepTValues, alternative="down", ranks.only=FALSE)
+
+gseaMap80 <- list(t1 = c(sample(seq(1, nGene/2), 80), 
+                         sample(seq((nGene/2) + 1, nGene), 20 )))
+
+geneSetTest(gseaMap80$t1, indepTValues, alternative="down", ranks.only=FALSE)
+
+tmpDat <- data.frame(tVal=indepTValues, status="all", stringsAsFactors=F)
+tmpDat$status[gseaMap80[["t1"]]] <- "sample"
+ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.1, position="identity")
+
+
+gseaMap50 <- list(t1 = c(sample(seq(1, nGene/2), 50),
+                         sample(seq((nGene/2) + 1, nGene), 50)))
+
+geneSetTest(gseaMap50$t1, indepTValues, alternative="down", ranks.only=FALSE)
+
+gseaMapUnif <- list(t1 = sample(nGene, 100))
+geneSetTest(gseaMapUnif$t1, indepTValues, alternative="down", ranks.only=FALSE)
+```
+
+OK, so at least we verify that as the percentage of genes in the top 50% decreases, then the p-values decrease as well, as we expect they should. What about as we increase the number of genes above above the set, while keeping the number in the top 50 the same?
+
+```{r checkNabove}
+gseaAbove100 <- list(t1=sample(seq(100, nGene/2), 100))
+geneSetTest(gseaAbove100$t1, indepTValues, alternative="down", ranks.only=FALSE)
+
+gseaAbove500 <- list(t1=sample(seq(501, nGene/2), 100))
+geneSetTest(gseaAbove500$t1, indepTValues, alternative="down", ranks.only=FALSE)
+
+gseaAbove1000 <- list(t1=sample(seq(1001, nGene/2), 100))
+geneSetTest(gseaAbove1000$t1, indepTValues, alternative="down", ranks.only=FALSE)
+
+gseaAbove2000 <- list(t1=sample(seq(2001, nGene/2), 100))
+geneSetTest(gseaAbove2000$t1, indepTValues, alternative="down", ranks.only=FALSE)
+
+gseaAbove4000 <- list(t1=sample(seq(4001, nGene/2), 100))
+geneSetTest(gseaAbove4000$t1, indepTValues, alternative="down", ranks.only=FALSE)
+```
+
+OK, so it takes a rather large proportion above to change the p-value any amount.
