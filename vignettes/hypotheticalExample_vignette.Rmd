@@ -716,3 +716,50 @@ geneSetTest(gseaAbove4000$t1, indepTValues, alternative="down", ranks.only=FALSE
 ```
 
 OK, so it takes a rather large proportion above to change the p-value any amount.
+
+So, what should we do. We need a function that will let us vary the size and proportion of genes that are in the bottom 50% of values.
+
+```{r gseaProportion}
+gseaSamples <- function(inLimits, nSample){
+  round(runif(nSample, inLimits[1], inLimits[2]))
+}
+
+gseaProportion <- function(inSize, useProp, statistics){
+  statistics <- sort(statistics)
+  nPosGene <- length(statistics)
+  allProp <- runif(length(inSize), 0.1, 1)
+  topLoc <- seq(1, round(nPosGene/2))
+  botLoc <- seq(round(nPosGene/2)+1, nPosGene)
+  gseaIndex <- lapply(seq(1, length(inSize)), function(index){
+    nGene <- inSize[index]
+    sigProp <- allProp[index]
+    
+    nTop <- round(nGene*sigProp)
+    nBot <- nGene - nTop
+    
+    useIndex <- c(sample(topLoc, nTop), sample(botLoc, nBot))
+    return(useIndex)
+  })
+  gseaData <- list(index=gseaIndex, size=inSize, frac=allProp, statistics=statistics)
+}
+```
+
+```{r defineGroupLimits}
+grpLow <- c(100, 250)
+grpMed <- c(250, 500)
+grpHi <- c(500, 1000)
+```
+
+```{r sampleGroups}
+set.seed(271113) # for reproducibility
+nGO <- c(50, 30, 20)
+names(nGO) <- c("low", "med", "hi")
+
+GO_low <- limitedRandomSample(hsGO_count, grpLow, nGO["low"])
+GO_med <- limitedRandomSample(hsGO_count, grpMed, nGO["med"])
+GO_hi <- limitedRandomSample(hsGO_count, grpHi, nGO["hi"])
+
+useGO <- c(GO_low, GO_med, GO_hi)
+useGOSizeClass <- c(rep("low", nGO["low"]), rep("med", nGO["med"]), rep("hi", nGO["hi"]))
+names(useGOSizeClass) <- useGO
+```
