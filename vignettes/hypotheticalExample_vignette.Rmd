@@ -731,12 +731,13 @@ This function generates for each term of given size a set of random indices into
 gseaProportion <- function(inSize, sigProp, statistics, nSample=2){
   statistics <- sort(statistics)
   nPosGene <- length(statistics)
-  topStats <- statistics[seq(1, round(nPosGene/2))]
-  botStats <- statistics[seq(round(nPosGene/2)+1, nPosGene)]
+  grpLoc <- seq(1, nPosGene, round(nPosGene / 4))
+  topStats <- statistics[seq(1, grpLoc[2])]
+  botStats <- statistics[seq(grpLoc[3], nPosGene)]
   gseaStatistics <- lapply(seq(1, length(inSize)), function(inIndex){
     nGene <- inSize[inIndex]
     outIndex <- sample(nPosGene, nGene)
-    useProp <- sigProp[index]
+    useProp <- sigProp[inIndex]
     tmpStat <- statistics
     
     nTop <- round(nGene*useProp)
@@ -762,14 +763,14 @@ gseaProportion <- function(inSize, sigProp, statistics, nSample=2){
 ```
 
 ```{r testFunctions}
-testSize <- gseaSizeRange(c(250, 500), 50)
+testSize <- gseaSizeRange(c(500,500), 50)
 useStatistics <- runif(10000, -6, 6)
-useSig <- runif(50, .25, 1)
+useSig <- runif(50, .1, 1)
 testStats <- gseaProportion(testSize, useSig, useStatistics)
 
 outP <- lapply(testStats, function(inStat){
   tmpP <- lapply(seq(1, ncol(inStat$stats)), function(useColumn){
-    geneSetTest(inStat$index, inStat$stats[,useColumn], "down", ranks.only=FALSE)
+    geneSetTest(inStat$index, inStat$stats[,useColumn], "down", ranks.only=TRUE)
   })
   tmpP <- do.call(cbind, tmpP)
   colnames(tmpP) <- colnames(inStat$stats)
@@ -783,18 +784,4 @@ tmpP <- data.frame(set=apply(outP2[, c("s1", "s2")], 1, min), list=outP2[,"comb"
 tmpP$diff <- tmpP$set - tmpP$list
 tmpP$frac <- useSig
 ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
-```
-
-```{r sampleGroups}
-set.seed(271113) # for reproducibility
-nGO <- c(50, 30, 20)
-names(nGO) <- c("low", "med", "hi")
-
-GO_low <- limitedRandomSample(hsGO_count, grpLow, nGO["low"])
-GO_med <- limitedRandomSample(hsGO_count, grpMed, nGO["med"])
-GO_hi <- limitedRandomSample(hsGO_count, grpHi, nGO["hi"])
-
-useGO <- c(GO_low, GO_med, GO_hi)
-useGOSizeClass <- c(rep("low", nGO["low"]), rep("med", nGO["med"]), rep("hi", nGO["hi"]))
-names(useGOSizeClass) <- useGO
 ```
