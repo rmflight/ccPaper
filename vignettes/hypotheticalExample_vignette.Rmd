@@ -732,8 +732,8 @@ gseaProportion <- function(inSize, sigProp, statistics, nSample=2){
   statistics <- sort(statistics)
   nPosGene <- length(statistics)
   grpLoc <- seq(1, nPosGene, round(nPosGene / 4))
-  topStats <- statistics[seq(1, grpLoc[4])]
-  botStats <- statistics[seq(grpLoc[4], nPosGene)]
+  topStats <- statistics[seq(1, grpLoc[3])]
+  botStats <- statistics[seq(grpLoc[3], nPosGene)]
   gseaStatistics <- lapply(seq(1, length(inSize)), function(inIndex){
     nGene <- inSize[inIndex]
     outIndex <- sample(nPosGene, nGene)
@@ -761,6 +761,34 @@ gseaProportion <- function(inSize, sigProp, statistics, nSample=2){
   return(gseaStatistics)
 }
 ```
+
+Lets verify this function is doing what we think it is.
+
+```{r checkGSEAProp}
+testSize <- gseaSizeRange(c(500,500), 50)
+useStatistics <- runif(10000, -6, 6)
+useSig <- runif(50, .1, 1)
+testStats <- gseaProportion(testSize, useSig, useStatistics)
+
+fullIndex <- seq(1, length(useStatistics))
+useCut <- 5000
+
+realRanks <- lapply(testStats, function(inStat){
+  
+  apply(inStat$stats, 2, function(inCol){
+    outRank <- rank(inCol)[inStat$index]
+    sum(outRank < useCut) / length(inStat$index)
+  })
+  
+})
+
+realRanks <- do.call(rbind, realRanks)
+plot(realRanks[,1], useSig)
+plot(realRanks[,2], useSig)
+plot(realRanks[,3], useSig)
+```
+
+OK, it looks like it is working. That's good.
 
 ```{r testFunctions}
 testSize <- gseaSizeRange(c(500,500), 50)
