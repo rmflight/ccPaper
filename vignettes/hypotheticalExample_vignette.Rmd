@@ -924,3 +924,60 @@ ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
 So, none of this has really worked, at least not in the way we hoped. 
 
 Last chance.
+
+### GSEA using p-values instead of t-statistics
+
+For our hypothetical comparison, we need to think of how one would combine two studies. In this case, one might combine two studies by combining the p-values. Therefore, we will use ranked p-values as our metric in the `geneSetTest`.
+
+Verify that using p-values and changing proportion in the top will actually work.
+
+For this to work with `geneSetTest`, we need to make the range 0, 0.5, 1 conform to -1, 0, 1.  Let's use a linear regression.
+
+```{r generateRegression}
+regData <- data.frame(y=c(-1, 0, 1), x=c(0, 0.5, 1))
+regModel <- lm(y ~ x, regData)
+
+testData <- runif(10000, 0, 1)
+outData <- regModel$coefficients[1] + regModel$coefficients[2]*testData
+hist(outData, 100)
+```
+
+```{r doTransform}
+p2signed <- function(inModel, pvalues){
+  outSigned <- inModel$coefficients[1] + inModel$coefficients[2]*pvalues
+}
+```
+
+
+So our transformation works. Lets make sure it will work in our other data.
+
+```{r pvalRanks}
+nGene <- 10000
+indepTValues <- sort(runif(nGene, 0, 1))
+names(indepTValues) <- as.character(seq(1, nGene))
+
+gseaMap <- list(t1=sample(seq(1, nGene/4), 100))
+
+tmpDat <- data.frame(tVal=indepTValues, status="all", stringsAsFactors=F)
+tmpDat$status[gseaMap[["t1"]]] <- "sample"
+ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.01, position="identity")
+
+geneSetTest(gseaMap$t1, p2signed(regModel,indepTValues), alternative="down", ranks.only=FALSE)
+
+gseaMap80 <- list(t1 = c(sample(seq(1, nGene/2), 80), 
+                         sample(seq((nGene/2) + 1, nGene), 20 )))
+
+geneSetTest(gseaMap80$t1, p2signed(regModel,indepTValues), alternative="down", ranks.only=FALSE)
+
+tmpDat <- data.frame(tVal=indepTValues, status="all", stringsAsFactors=F)
+tmpDat$status[gseaMap80[["t1"]]] <- "sample"
+ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.1, position="identity")
+
+
+gseaMap50 <- list(t1 = c(sample(seq(1, nGene/2), 50),
+                         sample(seq((nGene/2) + 1, nGene), 50)))
+
+geneSetTest(gseaMap50$t1, p2signed(regModel,indepTValues), alternative="down", ranks.only=FALSE)
+```
+
+Now, lets maintain proportions between samples as we did before, but for the **list** method, combine the p-values using Fisher's method.
