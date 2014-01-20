@@ -817,24 +817,22 @@ ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
 
 What if GSEA is dependent on the **shared** proportion that is in the up or down state? i.e. if we allow the proportion "down" to vary between the two samples, and plot the difference in **set** and **list** values based on how **close** the value of the proportion in the top is??
 
-```{r}
+```{r gseaVaryProp}
 # in this case, sigProp is a list, one list for each sample
 gseaProportion2 <- function(inSize, sigProp, statistics){
   statistics <- sort(statistics)
   nPosGene <- length(statistics)
+  nSample <- length(sigProp)
   grpLoc <- seq(1, nPosGene, round(nPosGene / 4))
   topStats <- statistics[seq(1, grpLoc[4])]
   botStats <- statistics[seq(grpLoc[4], nPosGene)]
   gseaStatistics <- lapply(seq(1, length(inSize)), function(inIndex){
+    
     nGene <- inSize[inIndex]
     outIndex <- sample(nPosGene, nGene)
-    
     tmpStat <- statistics
     
-    nTop <- round(nGene*useProp)
-    nBot <- nGene - nTop
-    
-    outStatistics <- lapply(seq(1, length(sigProp)), function(inSample){
+    outStatistics <- lapply(seq(1, nSample), function(inSample){
       # get significance proportion for each sample individually
       nTop <- round(nGene * sigProp[[inSample]][inIndex])
       nBot <- nGene - nTop
@@ -857,3 +855,72 @@ gseaProportion2 <- function(inSize, sigProp, statistics){
 ```
 
 
+Check that we generate different significant proportions for independent samples, and what is the combined.
+
+```{r checkgseaProportions2}
+testSize <- gseaSizeRange(c(500,500), 50)
+useStatistics <- runif(10000, -6, 6)
+useSig <- list(s1=runif(50, .1, 1), s2=runif(50, .1, 1))
+testStats <- gseaProportion2(testSize, useSig, useStatistics)
+
+fullIndex <- seq(1, length(useStatistics))
+useCut <- 5000
+
+realRanks <- lapply(testStats, function(inStat){
+  
+  apply(inStat$stats, 2, function(inCol){
+    outRank <- rank(inCol)[inStat$index]
+    sum(outRank < useCut) / length(inStat$index)
+  })
+  
+})
+
+realRanks <- do.call(rbind, realRanks)
+plot(realRanks[,1], useSig[[1]])
+plot(realRanks[,2], useSig[[2]])
+plot(realRanks[,3], useSig)
+```
+
+OK, this seems to be working still.
+
+Now, lets try this on some fake data.
+
+```{r gseaProportions2Data}
+testSize <- gseaSizeRange(c(500,500), 50)
+useStatistics <- runif(10000, -6, 6)
+useSig <- list(s1=runif(50, .1, 1), s2=runif(50, .1, 1))
+testStats <- gseaProportion2(testSize, useSig, useStatistics)
+
+outP <- lapply(testStats, function(inStat){
+  tmpP <- lapply(seq(1, ncol(inStat$stats)), function(useColumn){
+    geneSetTest(inStat$index, inStat$stats[,useColumn], "down", ranks.only=FALSE)
+  })
+  tmpP <- do.call(cbind, tmpP)
+  colnames(tmpP) <- colnames(inStat$stats)
+  return(tmpP)
+})
+
+outP2 <- do.call(rbind, outP)
+outP2 <- -1 * log(outP2)
+
+tmpP <- data.frame(set=apply(outP2[, c("s1", "s2")], 1, min), list=outP2[,"comb"])
+tmpP$diff <- tmpP$set - tmpP$list
+
+realRanks <- lapply(testStats, function(inStat){
+  
+  apply(inStat$stats, 2, function(inCol){
+    outRank <- rank(inCol)[inStat$index]
+    sum(outRank < useCut) / length(inStat$index)
+  })
+  
+})
+
+realRanks <- do.call(rbind, realRanks)
+
+tmpP$frac <- realRanks[,3]
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
+```
+
+So, none of this has really worked, at least not in the way we hoped. 
+
+Last chance.
