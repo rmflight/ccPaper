@@ -732,8 +732,8 @@ gseaProportion <- function(inSize, sigProp, statistics, nSample=2){
   statistics <- sort(statistics)
   nPosGene <- length(statistics)
   grpLoc <- seq(1, nPosGene, round(nPosGene / 4))
-  topStats <- statistics[seq(1, grpLoc[2])]
-  botStats <- statistics[seq(grpLoc[3], nPosGene)]
+  topStats <- statistics[seq(1, grpLoc[4])]
+  botStats <- statistics[seq(grpLoc[4], nPosGene)]
   gseaStatistics <- lapply(seq(1, length(inSize)), function(inIndex){
     nGene <- inSize[inIndex]
     outIndex <- sample(nPosGene, nGene)
@@ -770,7 +770,7 @@ testStats <- gseaProportion(testSize, useSig, useStatistics)
 
 outP <- lapply(testStats, function(inStat){
   tmpP <- lapply(seq(1, ncol(inStat$stats)), function(useColumn){
-    geneSetTest(inStat$index, inStat$stats[,useColumn], "down", ranks.only=TRUE)
+    geneSetTest(inStat$index, inStat$stats[,useColumn], "down", ranks.only=FALSE)
   })
   tmpP <- do.call(cbind, tmpP)
   colnames(tmpP) <- colnames(inStat$stats)
@@ -785,3 +785,6 @@ tmpP$diff <- tmpP$set - tmpP$list
 tmpP$frac <- useSig
 ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
 ```
+
+
+Lets try this another way that maybe isn't as realistic, but might provide a better
