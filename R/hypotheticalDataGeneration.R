@@ -777,6 +777,15 @@ gseaProportionVary <- function(inSize, sigProp, statistics){
   return(gseaStatistics)
 }
 
+#' apply regression model to pvalues
+#' 
+#' To transform p-values to a signed range, we will apply the results of a regression model to the p-values
+#' 
+#' @param inModel result from \code{lm}
+#' @param pvalues set of pvalues to transform
+p2signed <- function(inModel, pvalues){
+  outSigned <- inModel$coefficients[1] + inModel$coefficients[2]*pvalues
+}
 
 #' @name lung.RData
 #' @title lung.RData
