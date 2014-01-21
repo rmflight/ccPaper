@@ -776,50 +776,19 @@ tmpP$frac <- useSig
 ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
 ```
 
+Yeah, that doesn't seem to really work. 
+
 
 What if GSEA is dependent on the **shared** proportion that is in the up or down state? i.e. if we allow the proportion "down" to vary between the two samples, and plot the difference in **set** and **list** values based on how **close** the value of the proportion in the top is??
 
-```{r gseaVaryProp}
-# in this case, sigProp is a list, one list for each sample
-gseaProportion2 <- function(inSize, sigProp, statistics){
-  statistics <- sort(statistics)
-  nPosGene <- length(statistics)
-  nSample <- length(sigProp)
-  grpLoc <- seq(1, nPosGene, round(nPosGene / 4))
-  topStats <- statistics[seq(1, grpLoc[4])]
-  botStats <- statistics[seq(grpLoc[4], nPosGene)]
-  gseaStatistics <- lapply(seq(1, length(inSize)), function(inIndex){
-    
-    nGene <- inSize[inIndex]
-    outIndex <- sample(nPosGene, nGene)
-    tmpStat <- statistics
-    
-    outStatistics <- lapply(seq(1, nSample), function(inSample){
-      # get significance proportion for each sample individually
-      nTop <- round(nGene * sigProp[[inSample]][inIndex])
-      nBot <- nGene - nTop
-      topIndex <- sample(outIndex, nTop)
-      botIndex <- outIndex[!(outIndex %in% topIndex)]
-      tmpT <- tmpStat
-      tmpT[topIndex] <- sample(topStats, nTop)
-      tmpT[botIndex] <- sample(botStats, nBot)
-      return(tmpT)
-    })
-    
-    outStatistics <- do.call(cbind,outStatistics)
-    outStatistics <- cbind(outStatistics, rowMeans(outStatistics))
-    colnames(outStatistics) <- c(paste("s", seq(1, nSample), sep=""), "comb")
-    
-    return(list(index=outIndex, stats=outStatistics))
-  })
-  return(gseaStatistics)
-}
+```{r gseaVaryProp, eval=FALSE}
+?gseaProportionVary
 ```
 
 
 Check that we generate different significant proportions for independent samples, and what is the combined.
 
-```{r checkgseaProportions2}
+```{r checkgseaProportionsVary}
 testSize <- gseaSizeRange(c(500,500), 50)
 useStatistics <- runif(10000, -6, 6)
 useSig <- list(s1=runif(50, .1, 1), s2=runif(50, .1, 1))
