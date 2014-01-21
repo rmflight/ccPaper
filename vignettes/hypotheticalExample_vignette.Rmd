@@ -1080,6 +1080,98 @@ tmpP$frac <- useSig
 ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
 ```
 
+How about we use the maximum p-value as Tseng did?
+
+```{r gseaProportionMax}
+gseaProportionMax <- function(inSize, sigProp, statistics, nSample=2){
+  statistics <- sort(statistics)
+  nPosGene <- length(statistics)
+  grpLoc <- seq(1, nPosGene, round(nPosGene / 4))
+  topStats <- statistics[seq(1, grpLoc[3])]
+  botStats <- statistics[seq(grpLoc[3]+1, nPosGene)]
+  gseaStatistics <- lapply(seq(1, length(inSize)), function(inIndex){
+    
+    nGene <- inSize[inIndex]
+    outIndex <- sample(nPosGene, nGene)
+    tmpStat <- statistics
+    
+    outStatistics <- lapply(seq(1, nSample), function(inSample){
+      # get significance proportion for each sample individually
+      nTop <- round(nGene * sigProp[inIndex])
+      nBot <- nGene - nTop
+      topIndex <- sample(outIndex, nTop)
+      botIndex <- outIndex[!(outIndex %in% topIndex)]
+      tmpT <- tmpStat
+      tmpT[topIndex] <- sample(topStats, nTop)
+      tmpT[botIndex] <- sample(botStats, nBot)
+      return(tmpT)
+    })
+    
+    outStatistics <- do.call(cbind,outStatistics)
+    outStatistics <- cbind(outStatistics, rowMax(outStatistics))
+    colnames(outStatistics) <- c(paste("s", seq(1, nSample), sep=""), "comb")
+    
+    return(list(index=outIndex, stats=outStatistics))
+  })
+  return(gseaStatistics)
+}
+```
+
+```{r checkGSEAMax}
+testSize <- gseaSizeRange(c(500,500), 50)
+useStatistics <- runif(10000, 0, 1)
+useSig <- runif(50, .1, 1)
+testStats <- gseaProportionMax(testSize, useSig, useStatistics)
+
+fullIndex <- seq(1, length(useStatistics))
+useCut <- 5000
+
+realRanks <- lapply(testStats, function(inStat){
+  
+  apply(inStat$stats, 2, function(inCol){
+    outRank <- rank(inCol)[inStat$index]
+    sum(outRank < useCut) / length(inStat$index)
+  })
+  
+})
+
+realRanks <- do.call(rbind, realRanks)
+plot(realRanks[,1], useSig)
+plot(realRanks[,2], useSig)
+plot(realRanks[,3], useSig)
+```
+
+```{r runGSEAMax}
+testSize <- gseaSizeRange(c(500,500), 50)
+useStatistics <- runif(10000, 0, 1)
+useSig <- runif(50, .1, 1)
+testStats <- gseaProportionMax(testSize, useSig, useStatistics)
+
+outP <- lapply(testStats, function(inStat){
+  tmpP <- lapply(seq(1, ncol(inStat$stats)), function(useColumn){
+    geneSetTest(inStat$index, p2signed(regModel, inStat$stats[,useColumn]), "down", ranks.only=FALSE)
+  })
+  tmpP <- do.call(cbind, tmpP)
+  colnames(tmpP) <- colnames(inStat$stats)
+  return(tmpP)
+})
+
+outP2 <- do.call(rbind, outP)
+outP2 <- -1 * log(outP2)
+
+tmpP <- data.frame(set=apply(outP2[, c("s1", "s2")], 1, min), list=outP2[,"comb"])
+tmpP$diff <- tmpP$set - tmpP$list
+tmpP$frac <- useSig
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
+```
+
+And wow! It appears to work!
+
+Lets test using different size ranges and the proportions. 
+
+```{r varySizesAndProps}
+
+```
 
 
 Other options to think about: use maximum p-value to do the combining (as tseng did), and using ranks only.
