@@ -792,7 +792,7 @@ Check that we generate different significant proportions for independent samples
 testSize <- gseaSizeRange(c(500,500), 50)
 useStatistics <- runif(10000, -6, 6)
 useSig <- list(s1=runif(50, .1, 1), s2=runif(50, .1, 1))
-testStats <- gseaProportion2(testSize, useSig, useStatistics)
+testStats <- gseaProportionVary(testSize, useSig, useStatistics)
 
 fullIndex <- seq(1, length(useStatistics))
 useCut <- 5000
@@ -809,7 +809,8 @@ realRanks <- lapply(testStats, function(inStat){
 realRanks <- do.call(rbind, realRanks)
 plot(realRanks[,1], useSig[[1]])
 plot(realRanks[,2], useSig[[2]])
-plot(realRanks[,3], useSig)
+plot(realRanks[,3], useSig[[1]])
+plot(realRanks[,3], useSig[[2]])
 ```
 
 OK, this seems to be working still.
@@ -820,7 +821,7 @@ Now, lets try this on some fake data.
 testSize <- gseaSizeRange(c(500,500), 50)
 useStatistics <- runif(10000, -6, 6)
 useSig <- list(s1=runif(50, .1, 1), s2=runif(50, .1, 1))
-testStats <- gseaProportion2(testSize, useSig, useStatistics)
+testStats <- gseaProportionVary(testSize, useSig, useStatistics)
 
 outP <- lapply(testStats, function(inStat){
   tmpP <- lapply(seq(1, ncol(inStat$stats)), function(useColumn){
@@ -852,17 +853,13 @@ tmpP$frac <- realRanks[,3]
 ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
 ```
 
-So, none of this has really worked, at least not in the way we hoped. 
-
-Last chance.
+So, none of this has really worked, at least not in the way that was hoped. 
 
 ### GSEA using p-values instead of t-statistics
 
 For our hypothetical comparison, we need to think of how one would combine two studies. In this case, one might combine two studies by combining the p-values. Therefore, we will use ranked p-values as our metric in the `geneSetTest`.
 
-Verify that using p-values and changing proportion in the top will actually work.
-
-For this to work with `geneSetTest`, we need to make the range 0, 0.5, 1 conform to -1, 0, 1.  Let's use a linear regression.
+For this to work with `geneSetTest`, we need to make the range 0, 0.5, 1 conform to -1, 0, 1, because `geneSetTest` works nicer with signed values. We will use a linear regression to transform the p-values to a signed range.
 
 ```{r generateRegression}
 regData <- data.frame(y=c(-1, 0, 1), x=c(0, 0.5, 1))
@@ -873,14 +870,7 @@ outData <- regModel$coefficients[1] + regModel$coefficients[2]*testData
 hist(outData, 100)
 ```
 
-```{r doTransform}
-p2signed <- function(inModel, pvalues){
-  outSigned <- inModel$coefficients[1] + inModel$coefficients[2]*pvalues
-}
-```
-
-
-So our transformation works. Lets make sure it will work in our other data.
+So our transformation works. Lets make sure it will work like the t-statistic.
 
 ```{r pvalRanks}
 nGene <- 10000
