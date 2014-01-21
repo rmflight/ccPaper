@@ -983,7 +983,40 @@ geneSetTest(gseaMap50$t1, p2signed(regModel,indepTValues), alternative="down", r
 Now, lets maintain proportions between samples as we did before, but for the **list** method, combine the p-values using Fisher's method.
 
 ```{r }
-
+gseaProportionFisher <- function(inSize, sigProp, statistics){
+  statistics <- sort(statistics)
+  nPosGene <- length(statistics)
+  nSample <- length(sigProp)
+  grpLoc <- seq(1, nPosGene, round(nPosGene / 4))
+  topStats <- statistics[seq(1, grpLoc[3])]
+  botStats <- statistics[seq(grpLoc[3]+1, nPosGene)]
+  gseaStatistics <- lapply(seq(1, length(inSize)), function(inIndex){
+    
+    nGene <- inSize[inIndex]
+    outIndex <- sample(nPosGene, nGene)
+    tmpStat <- statistics
+    
+    outStatistics <- lapply(seq(1, nSample), function(inSample){
+      # get significance proportion for each sample individually
+      nTop <- round(nGene * sigProp[inIndex])
+      nBot <- nGene - nTop
+      topIndex <- sample(outIndex, nTop)
+      botIndex <- outIndex[!(outIndex %in% topIndex)]
+      tmpT <- tmpStat
+      tmpT[topIndex] <- sample(topStats, nTop)
+      tmpT[botIndex] <- sample(botStats, nBot)
+      return(tmpT)
+    })
+    
+    outStatistics <- do.call(cbind,outStatistics)
+    combStat <- apply(outStatistics, 1, fishersMethod)
+    outStatistics <- cbind(outStatistics, combStat)
+    colnames(outStatistics) <- c(paste("s", seq(1, nSample), sep=""), "comb")
+    
+    return(list(index=outIndex, stats=outStatistics))
+  })
+  return(gseaStatistics)
+}
 ```
 
 
