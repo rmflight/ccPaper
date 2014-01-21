@@ -1066,6 +1066,28 @@ tmpP$class <- factor(tmpP$class, c("low", "med", "hi"), ordered=TRUE)
 ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ class)
 ```
 
+So, this is very important. The method of combining p-values for the **list** method is **extremely** important. 
 
-Other options to think about: use maximum p-value to do the combining (as tseng did), and using ranks only.
+Now we could ask the question, is the difference in the **proportion** between **set** and **list** related to the difference in **p-values**?
 
+```{r diffProp}
+useCut <- 5000
+calcRank <- lapply(testStats, function(inStat){
+  
+  apply(inStat$stats, 2, function(inCol){
+    outRank <- rank(inCol)[inStat$index]
+    sum(outRank < useCut) / length(inStat$index)
+  })
+  
+})
+
+calcRank <- do.call(rbind, calcRank)
+
+minRankSample <- rowMin(calcRank[, c("s1", "s2")])
+
+tmpP$diffRank <- minRankSample / calcRank[, "comb"]
+
+ggplot(tmpP, aes(x=diffRank, y=diff)) + geom_point() + facet_grid(. ~ class)
+```
+
+Nope, that doesn't seem to be the cause, at least not directly. 
