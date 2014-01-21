@@ -981,3 +981,11 @@ geneSetTest(gseaMap50$t1, p2signed(regModel,indepTValues), alternative="down", r
 ```
 
 Now, lets maintain proportions between samples as we did before, but for the **list** method, combine the p-values using Fisher's method.
+
+```{r }
+
+```
+
+
+Other options to think about: use maximum p-value to do the combining (as tseng did), and using ranks only.
+
