@@ -783,6 +783,8 @@ gseaProportionVary <- function(inSize, sigProp, statistics){
 #' 
 #' @param inModel result from \code{lm}
 #' @param pvalues set of pvalues to transform
+#' @export 
+#' @return transformed values
 p2signed <- function(inModel, pvalues){
   outSigned <- inModel$coefficients[1] + inModel$coefficients[2]*pvalues
 }
