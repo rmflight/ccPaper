@@ -979,10 +979,9 @@ geneSetTest(gseaMap50$t1, p2signed(regModel,indepTValues), alternative="down", r
 Now, lets maintain proportions between samples as we did before, but for the **list** method, combine the p-values using Fisher's method.
 
 ```{r }
-gseaProportionFisher <- function(inSize, sigProp, statistics){
+gseaProportionFisher <- function(inSize, sigProp, statistics, nSample=2){
   statistics <- sort(statistics)
   nPosGene <- length(statistics)
-  nSample <- length(sigProp)
   grpLoc <- seq(1, nPosGene, round(nPosGene / 4))
   topStats <- statistics[seq(1, grpLoc[3])]
   botStats <- statistics[seq(grpLoc[3]+1, nPosGene)]
@@ -1019,7 +1018,7 @@ gseaProportionFisher <- function(inSize, sigProp, statistics){
 testSize <- gseaSizeRange(c(500,500), 50)
 useStatistics <- runif(10000, 0, 1)
 useSig <- runif(50, .1, 1)
-testStats <- gseaProportion(testSize, useSig, useStatistics)
+testStats <- gseaProportionFisher(testSize, useSig, useStatistics)
 
 fullIndex <- seq(1, length(useStatistics))
 useCut <- 5000
@@ -1038,6 +1037,49 @@ plot(realRanks[,1], useSig)
 plot(realRanks[,2], useSig)
 plot(realRanks[,3], useSig)
 ```
+
+```{r testFishers}
+testSize <- gseaSizeRange(c(500,500), 50)
+useStatistics <- runif(10000, 0, 1)
+useSig <- runif(50, .1, 1)
+testStats <- gseaProportionFisher(testSize, useSig, useStatistics)
+
+outP <- lapply(testStats, function(inStat){
+  tmpP <- lapply(seq(1, ncol(inStat$stats)), function(useColumn){
+    geneSetTest(inStat$index, p2signed(regModel, inStat$stats[,useColumn]), "down", ranks.only=FALSE)
+  })
+  tmpP <- do.call(cbind, tmpP)
+  colnames(tmpP) <- colnames(inStat$stats)
+  return(tmpP)
+})
+
+outP2 <- do.call(rbind, outP)
+outP2 <- -1 * log(outP2)
+
+tmpP <- data.frame(set=apply(outP2[, c("s1", "s2")], 1, min), list=outP2[,"comb"])
+tmpP$diff <- tmpP$set - tmpP$list
+tmpP$frac <- useSig
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
+
+
+outPRank <- lapply(testStats, function(inStat){
+  tmpP <- lapply(seq(1, ncol(inStat$stats)), function(useColumn){
+    geneSetTest(inStat$index, inStat$stats, ranks.only=TRUE)
+  })
+  tmpP <- do.call(cbind, tmpP)
+  colnames(tmpP) <- colnames(inStat$stats)
+  return(tmpP)
+})
+
+outP2Rank <- do.call(rbind, outPRank)
+outP2Rank <- -1 * log(outP2Rank)
+
+tmpP <- data.frame(set=apply(outP2Rank[, c("s1", "s2")], 1, min), list=outP2Rank[,"comb"])
+tmpP$diff <- tmpP$set - tmpP$list
+tmpP$frac <- useSig
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
+```
+
 
 
 Other options to think about: use maximum p-value to do the combining (as tseng did), and using ranks only.
