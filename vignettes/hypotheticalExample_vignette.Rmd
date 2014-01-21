@@ -1170,7 +1170,36 @@ And wow! It appears to work!
 Lets test using different size ranges and the proportions. 
 
 ```{r varySizesAndProps}
+gseaLo <- gseaSizeRange(c(20, 250), 50)
+gseaMed <- gseaSizeRange(c(250, 500), 30)
+gseaHi <- gseaSizeRange(c(500, 1000), 20)
 
+gseaSizes <- c(gseaLo, gseaMed, gseaHi)
+gseaSizeClass <- c(rep("low", 50), rep("med", 30), rep("hi", 20))
+
+gseaFrac <- runif(100, 0.3, 1)
+gseaStatistics <- runif(10000, 0, 1)
+
+testStats <- gseaProportionMax(gseaSizes, gseaFrac, gseaStatistics)
+
+outP <- lapply(testStats, function(inStat){
+  tmpP <- lapply(seq(1, ncol(inStat$stats)), function(useColumn){
+    geneSetTest(inStat$index, p2signed(regModel, inStat$stats[,useColumn]), "down", ranks.only=FALSE)
+  })
+  tmpP <- do.call(cbind, tmpP)
+  colnames(tmpP) <- colnames(inStat$stats)
+  return(tmpP)
+})
+
+outP2 <- do.call(rbind, outP)
+outP2 <- -1 * log(outP2)
+
+tmpP <- data.frame(set=apply(outP2[, c("s1", "s2")], 1, min), list=outP2[,"comb"])
+tmpP$diff <- tmpP$set - tmpP$list
+tmpP$frac <- gseaFrac
+tmpP$class <- gseaSizeClass
+tmpP$class <- factor(tmpP$class, c("low", "med", "hi"), ordered=TRUE)
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ class)
 ```
 
 
