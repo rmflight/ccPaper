@@ -687,6 +687,50 @@ gseaSizeRange <- function(inLimits, nSample){
   round(runif(nSample, inLimits[1], inLimits[2]))
 }
 
+#' generates proportion of genes in top 50
+#' 
+#' @param inSize vector of sizes to sample
+#' @param sigProp vector of significant proportion, i.e. fraction above 50 rank
+#' @param statistics the set of statistics to use (will be ranked by function)
+#' @param nSample number of samples to use
+#' 
+#' @details For each supplied inSize and sigProp, random indices of \code{inSize} are taken from the statistics. Based on \code{sigProp}, for each sample different numbers of indices take values from the upper 50 of ranked values and the lower 50 of ranked values. In this case each entry in \code{inSize} and \code{sigProp} denotes a different term, and they are treated independently. The \emph{list} combined method is based on averaging the statistics in this case.
+#' 
+#' @export
+#' @return list of lists for each \code{term}, with \emph{index} and \emph{stats}, \code{stats} contains a column for each sample, as well as a combined column. 
+gseaProportion <- function(inSize, sigProp, statistics, nSample=2){
+  statistics <- sort(statistics)
+  nPosGene <- length(statistics)
+  grpLoc <- seq(1, nPosGene, round(nPosGene / 4))
+  topStats <- statistics[seq(1, grpLoc[3])]
+  botStats <- statistics[seq(grpLoc[3], nPosGene)]
+  gseaStatistics <- lapply(seq(1, length(inSize)), function(inIndex){
+    nGene <- inSize[inIndex]
+    outIndex <- sample(nPosGene, nGene)
+    useProp <- sigProp[inIndex]
+    tmpStat <- statistics
+    
+    nTop <- round(nGene*useProp)
+    nBot <- nGene - nTop
+    
+    outStatistics <- lapply(seq(1, nSample), function(inSample){
+      topIndex <- sample(outIndex, nTop)
+      botIndex <- outIndex[!(outIndex %in% topIndex)]
+      tmpT <- tmpStat
+      tmpT[topIndex] <- sample(topStats, nTop)
+      tmpT[botIndex] <- sample(botStats, nBot)
+      return(tmpT)
+    })
+    
+    outStatistics <- do.call(cbind,outStatistics)
+    outStatistics <- cbind(outStatistics, rowMeans(outStatistics))
+    colnames(outStatistics) <- c(paste("s", seq(1, nSample), sep=""), "comb")
+    
+    return(list(index=outIndex, stats=outStatistics))
+  })
+  return(gseaStatistics)
+}
+
 #' @name lung.RData
 #' @title lung.RData
 #' @docType data

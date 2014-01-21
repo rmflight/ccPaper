@@ -719,43 +719,9 @@ OK, so it takes a rather large proportion above to change the p-value any amount
 
 So, what should we do. We need a function that will let us vary the size and proportion of genes that are in the bottom 50% of values.
 
-
-
-This function generates for each term of given size a set of random indices into the statistics, and then reshuffles the statistics to put the  proper proportion of genes into the top and bottom of the ranked statistics. So we are basically considering a set of statistics  for each term and sample.
-
-```{r gseaSamples}
-gseaProportion <- function(inSize, sigProp, statistics, nSample=2){
-  statistics <- sort(statistics)
-  nPosGene <- length(statistics)
-  grpLoc <- seq(1, nPosGene, round(nPosGene / 4))
-  topStats <- statistics[seq(1, grpLoc[3])]
-  botStats <- statistics[seq(grpLoc[3], nPosGene)]
-  gseaStatistics <- lapply(seq(1, length(inSize)), function(inIndex){
-    nGene <- inSize[inIndex]
-    outIndex <- sample(nPosGene, nGene)
-    useProp <- sigProp[inIndex]
-    tmpStat <- statistics
-    
-    nTop <- round(nGene*useProp)
-    nBot <- nGene - nTop
-    
-    outStatistics <- lapply(seq(1, nSample), function(inSample){
-      topIndex <- sample(outIndex, nTop)
-      botIndex <- outIndex[!(outIndex %in% topIndex)]
-      tmpT <- tmpStat
-      tmpT[topIndex] <- sample(topStats, nTop)
-      tmpT[botIndex] <- sample(botStats, nBot)
-      return(tmpT)
-    })
-    
-    outStatistics <- do.call(cbind,outStatistics)
-    outStatistics <- cbind(outStatistics, rowMeans(outStatistics))
-    colnames(outStatistics) <- c(paste("s", seq(1, nSample), sep=""), "comb")
-    
-    return(list(index=outIndex, stats=outStatistics))
-  })
-  return(gseaStatistics)
-}
+```{r gseaFunctions, eval=FALSE}
+?gseaSizeRange
+?gseaProportion
 ```
 
 Lets verify this function is doing what we think it is.
