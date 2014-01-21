@@ -676,6 +676,16 @@ multicontrastRomer <- function(index, y, design, contrastMatrix, nrot=9999){
   })
 }
 
+#' generate entries within a distribution
+#' 
+#' @param inLimits the range to use
+#' @param nSample how many entries within the range
+#' 
+#' @return set of sizes
+#' @export
+gseaSizeRange <- function(inLimits, nSample){
+  round(runif(nSample, inLimits[1], inLimits[2]))
+}
 
 #' @name lung.RData
 #' @title lung.RData

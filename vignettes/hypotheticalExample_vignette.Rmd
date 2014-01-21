@@ -719,11 +719,7 @@ OK, so it takes a rather large proportion above to change the p-value any amount
 
 So, what should we do. We need a function that will let us vary the size and proportion of genes that are in the bottom 50% of values.
 
-```{r gseaProportion}
-gseaSizeRange <- function(inLimits, nSample){
-  round(runif(nSample, inLimits[1], inLimits[2]))
-}
-```
+
 
 This function generates for each term of given size a set of random indices into the statistics, and then reshuffles the statistics to put the  proper proportion of genes into the top and bottom of the ranked statistics. So we are basically considering a set of statistics  for each term and sample.
 
@@ -1017,6 +1013,30 @@ gseaProportionFisher <- function(inSize, sigProp, statistics){
   })
   return(gseaStatistics)
 }
+```
+
+```{r checkGSEAProp}
+testSize <- gseaSizeRange(c(500,500), 50)
+useStatistics <- runif(10000, 0, 1)
+useSig <- runif(50, .1, 1)
+testStats <- gseaProportion(testSize, useSig, useStatistics)
+
+fullIndex <- seq(1, length(useStatistics))
+useCut <- 5000
+
+realRanks <- lapply(testStats, function(inStat){
+  
+  apply(inStat$stats, 2, function(inCol){
+    outRank <- rank(inCol)[inStat$index]
+    sum(outRank < useCut) / length(inStat$index)
+  })
+  
+})
+
+realRanks <- do.call(rbind, realRanks)
+plot(realRanks[,1], useSig)
+plot(realRanks[,2], useSig)
+plot(realRanks[,3], useSig)
 ```
 
 
