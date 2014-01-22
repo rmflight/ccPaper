@@ -1094,15 +1094,38 @@ ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ class)
 
 So, this is very important. The method of combining p-values for the **list** method is **extremely** important. 
 
+Does this hold using ranks only for the calculation?
+
+```{r maxPRankOnly}
+outPRank <- lapply(testStats, function(inStat){
+  tmpP <- lapply(seq(1, ncol(inStat$stats)), function(useColumn){
+    geneSetTest(inStat$index, inStat$stats[,useColumn], ranks.only=TRUE)
+  })
+  tmpP <- do.call(cbind, tmpP)
+  colnames(tmpP) <- colnames(inStat$stats)
+  return(tmpP)
+})
+
+outP2Rank <- do.call(rbind, outPRank)
+outP2Rank <- -1 * log(outP2Rank)
+
+tmpPRank <- data.frame(set=apply(outP2Rank[, c("s1", "s2")], 1, min), list=outP2Rank[,"comb"])
+tmpPRank$diff <- tmpPRank$set - tmpPRank$list
+tmpPRank$frac <- gseaFrac
+tmpPRank$class <- gseaSizeClass
+tmpPRank$class <- factor(tmpPRank$class, c("low", "med", "hi"), ordered=TRUE)
+ggplot(tmpPRank, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ class)
+```
+
+No, it doesn't because the `ranks.only=TRUE` will only check for **mixed** values, not at one end or the other.
+
 Now we could ask the question, is the difference in the **proportion** between **set** and **list** related to the difference in **p-values**?
 
 ```{r diffProp}
-useCut <- 5000
 calcRank <- lapply(testStats, function(inStat){
   
   apply(inStat$stats, 2, function(inCol){
-    outRank <- rank(inCol)[inStat$index]
-    sum(outRank < useCut) / length(inStat$index)
+    
   })
   
 })
