@@ -17,7 +17,9 @@ To demonstrate the utility of the general `categoryCompare` approach, we will co
 ## GO Terms
 
 ```{r nGO}
-nGO <- 20
+library(ggplot2)
+library(ggthemes)
+useTheme <- theme_gdocs()
 ```
 
 We will make use of three sets of `r nGO` GO terms from *H. sapiens*. For each set, we want differing numbers of genes annotated to them.
@@ -42,8 +44,8 @@ universeGenes <- unique(unlist(hsGO))
 ```{r goCountDist}
 library(ggplot2)
 hsGO_count <- sapply(hsGO, length)
-hsGO_count <- data.frame(count=hsGO_count)
-ggplot(hsGO_count, aes(x=count)) + geom_bar(binwidth=10) + xlim(0, 2000) + ylim(0, 500)
+hsGO_count <- data.frame(size=hsGO_count)
+ggplot(hsGO_count, aes(x=size)) + geom_bar(binwidth=10) + xlim(0, 2000) + ylim(0, 500) + useTheme
 ```
 
 ### Set up groups
@@ -105,7 +107,7 @@ Now for all the GO terms that map to the probes in the `ALL` differentially expr
 library(hgu95av2.db)
 ALLgo <- as.list(hgu95av2GO2ALLPROBES)
 ALL_sizeFrac <- trimGOFrac(ALLgo, deALL)
-ggplot(ALL_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500)
+ggplot(ALL_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + useTheme
 ```
 
 
@@ -135,7 +137,7 @@ library(hgu133plus2.db)
 lung2go <- as.list(hgu133plus2GO2ALLPROBES)
 lung_sizeFrac <- trimGOFrac(lung2go, deLung)
 lung_sizeFrac$genelist <- "lung"
-ggplot(lung_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500)
+ggplot(lung_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + useTheme
 ```
 
 
@@ -165,7 +167,7 @@ sample2_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
 
 #check our expectations
 goFractions <- calcFraction(hsGO[useGO], list(sample1=sample1_org, sample2=sample2_org))
-ggplot(goFractions, aes(x=size, y=frac, color=genelist)) + geom_point()
+ggplot(goFractions, aes(x=size, y=frac, color=genelist)) + geom_point() + useTheme
 ```
 
 ### Ccompare to experimental
@@ -176,7 +178,7 @@ Lets actually compare this to the distribution of fractions *vs* sizes from the 
 sampleGOFracs <- calcFraction(hsGO, list(sample1=sample1_org, sample2=sample2_org))
 ALL_sizeFrac$genelist <- "all"
 ALL_tmp <- rbind(ALL_sizeFrac, lung_sizeFrac, sampleGOFracs[,c("frac", "genelist", "size")])
-ggplot(ALL_tmp, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + facet_grid(genelist ~ .)
+ggplot(ALL_tmp, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + facet_grid(genelist ~ .) + useTheme
 ```
 
 
