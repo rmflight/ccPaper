@@ -42,10 +42,9 @@ universeGenes <- unique(unlist(hsGO))
 ```
 
 ```{r goCountDist}
-library(ggplot2)
 hsGO_count <- sapply(hsGO, length)
 hsGO_count <- data.frame(size=hsGO_count)
-ggplot(hsGO_count, aes(x=size)) + geom_bar(binwidth=10) + xlim(0, 2000) + ylim(0, 500) + useTheme
+ggplot(hsGO_count, aes(x=size)) + geom_bar(binwidth=10) + xlim(0, 2000) + ylim(0, 500) + useTheme + ggtitle("Number of genes annotated to GO terms")
 ```
 
 ### Set up groups
@@ -167,7 +166,7 @@ sample2_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
 
 #check our expectations
 goFractions <- calcFraction(hsGO[useGO], list(sample1=sample1_org, sample2=sample2_org))
-ggplot(goFractions, aes(x=size, y=frac, color=genelist)) + geom_point() + useTheme
+ggplot(goFractions, aes(x=size, y=frac, color=genelist)) + geom_point() + useTheme + ggtitle("Sample GO fractions")
 ```
 
 ### Ccompare to experimental
@@ -178,7 +177,7 @@ Lets actually compare this to the distribution of fractions *vs* sizes from the 
 sampleGOFracs <- calcFraction(hsGO, list(sample1=sample1_org, sample2=sample2_org))
 ALL_sizeFrac$genelist <- "all"
 ALL_tmp <- rbind(ALL_sizeFrac, lung_sizeFrac, sampleGOFracs[,c("frac", "genelist", "size")])
-ggplot(ALL_tmp, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + facet_grid(genelist ~ .) + useTheme
+ggplot(ALL_tmp, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + facet_grid(genelist ~ .) + useTheme + ggtitle("Sample GO fractions for all")
 ```
 
 
@@ -219,7 +218,7 @@ Now we will plot the difference in log-p-values (where we have **set** - **list*
 
 ```{r noNoisePlotStuff}
 noNoise_pvalues$sizeClass <- factor(noNoise_pvalues$sizeClass, levels=c("low", "med", "hi"), ordered=TRUE)
-ggplot(noNoise_pvalues, aes(x=frac, y=diff, color=sigState)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x")
+ggplot(noNoise_pvalues, aes(x=frac, y=diff, color=sigState)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x") + xlab("fraction") + useTheme + ggtitle("Sample - Combined Differences")
 ggplot(noNoise_pvalues, aes(x=sizeClass, y=diff)) + geom_boxplot() + geom_point()
 ```
 
@@ -275,7 +274,7 @@ noise_pvalues$frac <- goFracNoise$frac[1:length(useGOSizeClass)]
 
 ```{r plotSummarizeNoise}
 noise_pvalues$sizeClass <- factor(noise_pvalues$sizeClass, c("low", "med", "hi"), ordered=TRUE)
-ggplot(noise_pvalues, aes(x=frac, y=diff, color=sigState)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x")
+ggplot(noise_pvalues, aes(x=frac, y=diff, color=sigState)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x") + useTheme + ggtitle("Sample - Combined with Noise")
 ```
 
 ```{r summarizeCountsNoise}
@@ -575,10 +574,19 @@ outMedians <- lapply(noiseSweepRes, function(inRes){
 outMedians <- do.call(rbind, outMedians)
 outMedians <- cbind(outMedians, noiseFrac)
 
-ggplot(outMedians, aes(x=size, y=hi, color=shared)) + geom_point() + useTheme
+ggplot(outMedians, aes(x=size, y=hi color=shared)) + geom_point() + useTheme + ggtitle("Hi Median Difference")
 
-ggplot(outMedians, aes(x=size, y=med, color=shared)) + geom_point() + useTheme
-ggplot(outMedians, aes(x=size, y=low, color=shared)) + geom_point() + useTheme
+ggplot(outMedians, aes(x=size, y=med, color=shared)) + geom_point() + useTheme + ggtitle("Medium Median Difference")
+
+ggplot(outMedians, aes(x=size, y=low, color=shared)) + geom_point() + useTheme + ggtitle("Low Median Difference")
+```
+
+
+```{r examine2}
+outMedians2 <- data.frame(diff=c(outMedians$low, outMedians$med, outMedians$hi), class=c(rep("low", nrow(outMedians)), rep("med", nrow(outMedians)), rep("hi", nrow(outMedians))), size=rep(outMedians$size, 3), shared=rep(outMedians$shared, 3))
+outMedians2$class <- factor(outMedians2$class, c("low", "med", "hi"), ordered=TRUE)
+
+ggplot(outMedians2, aes(x=size, y=diff, color=shared)) + geom_point() + useTheme + facet_grid(class ~ ., scales="free_y") + ggtitle("Sample - Combined as a function of size and shared fraction")
 ```
 
 
@@ -799,7 +807,7 @@ outP2 <- -1 * log(outP2)
 tmpP <- data.frame(set=apply(outP2[, c("s1", "s2")], 1, min), list=outP2[,"comb"])
 tmpP$diff <- tmpP$set - tmpP$list
 tmpP$frac <- useSig
-ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + useTheme + ggtitle("Sample - Combined average t-statistics")
 ```
 
 Yeah, that doesn't seem to really work. 
@@ -1089,7 +1097,9 @@ tmpP$diff <- tmpP$set - tmpP$list
 tmpP$frac <- gseaFrac
 tmpP$class <- gseaSizeClass
 tmpP$class <- factor(tmpP$class, c("low", "med", "hi"), ordered=TRUE)
-ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ class)
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ class) + useTheme
+
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + useTheme + ggtitle("Sample - Combined max-p")
 ```
 
 So, this is very important. The method of combining p-values for the **list** method is **extremely** important. 
