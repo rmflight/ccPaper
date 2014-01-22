@@ -557,6 +557,30 @@ sfStop()
 save(noiseSweepRes, file.path(useDir, "inst/data/noiseSweepRes.RData"))
 ```
 
+Examine the noise results.
+
+```{r loadSweptNoise}
+useDir <- '/mlab/data/rmflight/Documents/projects/work/categoryComparePaperRev/'
+load(file.path(useDir, 'inst/data/noiseSamples.RData'))
+load(file.path(useDir, 'inst/data/noiseSweepRes.RData'))
+
+noiseFrac <- data.frame(size=rep(sizeNoise, each=length(fracShared)),
+                        shared=rep(fracShared, length(sizeNoise)))
+```
+
+```{r examineSweptNoise}
+outMedians <- lapply(noiseSweepRes, function(inRes){
+  tapply(inRes$diff, inRes$class, median)
+})
+outMedians <- do.call(rbind, outMedians)
+outMedians <- cbind(outMedians, noiseFrac)
+
+ggplot(outMedians, aes(x=size, y=hi, color=shared)) + geom_point() + useTheme
+
+ggplot(outMedians, aes(x=size, y=med, color=shared)) + geom_point() + useTheme
+ggplot(outMedians, aes(x=size, y=low, color=shared)) + geom_point() + useTheme
+```
+
 
 
 # GSEA
