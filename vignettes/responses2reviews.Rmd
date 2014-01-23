@@ -44,6 +44,10 @@ One publications Supporting Materials (http://www.nature.com/nature/journal/v466
 
 The combined coefficient has been implemented, see https://github.com/rmflight/categoryCompare/commit/7d00dcbcfb4c1fdae3401e45e5c4dccbe3637822 for the actual commit adding the function, and commits https://github.com/rmflight/categoryCompare/commit/7930b0925d31fa2d7691ce3d182a2ae7a89c174d https://github.com/rmflight/categoryCompare/commit/4bf13e21ed174dc73c4d360f92fb5aa75d40d72c for where the slot is added to the classes so it can be used. 
 
+* You are right, we should be able to handle just about any input. Some support was available using the "GENcc" methods, however they have been significantly updatedto allow the use of any results as long as they are supplied with significant annotations from each sample, and a mapping of annotations to genes. This was used to enable GSEA type analysis of both experimental data-sets discussed in the publication. 
+
+* This is a good point. Although for small numbers of experiments (see for example the Crohn's vs UC comparison, which has only 4 distinct lists, and a total of 7 meaningful comparisons) solid colors may not be too bad, beyond that it gets rather complicated. However, using pie-graphs where the pie is split only by the significant experiments may lead to perception problems, as solid (only significant in one experiment) or a few slices (significant in 2 or 3) may be percieved as more important. Based on this thinking, we have provided a method that splits nodes into pie-graphs with a slice for each condition / sample, and non-significance is denoted by complete desaturation of the color for that condition. In addition, a **generateLegend** function is included that plots a legend in an R plot window for reference. Note that we use png graphics that replace the node in Cytoscape, because we are using RCytoscape to communicate with Cytoscape, we cannot interact with other plugins in Cytoscape from R.
+
 
 # Discussion Problems
 
@@ -59,6 +63,11 @@ The combined coefficient has been implemented, see https://github.com/rmflight/c
 **Rev 2**:
 * 1. Authors discussed the advantages of the CategoryCompare approach, but have not mentioned possible concerns or limitations. It would help to list the assumptions of the approach.
 *  2. While using CategoryCompare for mice and rats, authors preserved only the genes that have homologs in both species. How many genes (%) where discarded as a result of such selection. How much information is lost? Why was it necessary if you perform comparison at the level of pathways and biological processes? Have you tried the same comparison without discarding the genes that had no homologs?
+
+**Responses:**
+* 1. This was an oversight. We hope that an assessment of the method using hypothetical data demonstrates possible limitations.
+
+* 2. The question of necessity is a good one, and we could not think of any particular reason to enforce that outside of other previous studies doing it, and therefore used all the genes in both cases. 
 
 **Rev 3**:
 * besides the well thought point about angiogenesis, there is a bit too much speculation about biological results; unless results are more convincing, this just burdens the paper, which is more about the tool and its demonstratation of use; the only point that may deserve a bit more attention is the presence / absence of an inflammatory / immune response signature
