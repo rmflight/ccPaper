@@ -90,7 +90,7 @@ skinSet <- symbols2indices(rnGO, rownames(skinCollapse))
 ```
 
 
-```{r setupContrasts}
+```{r skinContrasts}
 skinStatus <- skinCharacter$timePoint2
 f <- factor(skinStatus)
 skinDesign <- model.matrix(~0 + f)
@@ -101,7 +101,7 @@ skinContrast <- makeContrasts(contrasts=skinComps, levels=skinDesign)
 save(list=ls(), file="runSkinRomer.RData")
 ```
 
-```{r runRomer, eval=FALSE}
+```{r skinRomer, eval=FALSE}
 load("runSkinRomer.RData")
 options(mc.cores=12) # at least if we are on hera
 t1 <- Sys.time()
@@ -130,3 +130,72 @@ save(skinGeneSetTest, t1, t2, file="inst/data/skinGeneSetTest.RData")
 
 
 ## Muscle Gene Lists and Enrichment
+
+
+```{r diffMuscle}
+library(limma)
+library(mouse4302.db)
+load("inst/data/muscle_data.RData")
+
+muscleComps <- c("denervated - innervated")
+geneID <- unlist(mget(featureNames(muscleData), mouse4302ENTREZID))
+
+muscleExpr <- exprs(muscleData)
+muscleCollapse <- collapseProbes(muscleExpr, geneID) # collapse to single genes using median of expression
+muscleCharacter <- pData(muscleData)
+
+muscleFC <- rankGenes(muscleCollapse, muscleCharacter$innervation, muscleComps, doAggregation=FALSE, aggregateIndex=NA)
+names(muscleFC) <- "denervation"
+
+muscleDiff <- lapply(muscleFC, getDiffGenes, id="id")
+```
+
+```{r setupGeneSetsMuscle}
+library(GO.db)
+library(org.Mm.eg.db)
+library(limma)
+mmGO <- as.list(org.Mm.egGO2ALLEGS)
+mmGO <- mmGO[(Ontology(names(mmGO)) == "BP")]
+mmGO <- lapply(mmGO, unique)
+
+muscleSet <- symbols2indices(mmGO, rownames(muscleCollapse))
+```
+
+
+```{r muscleContrasts}
+muscleStatus <- muscleCharacter$innervation
+f <- factor(muscleStatus)
+muscleDesign <- model.matrix(~0 + f)
+colnames(muscleDesign) <- levels(f)
+
+muscleContrast <- makeContrasts(contrasts=muscleComps, levels=muscleDesign)
+
+save(muscleSet, muscleCollapse, muscleDesign, muscleContrast, mmGO, muscleFC, file="runMuscleRomer.RData")
+```
+
+```{r muscleRomer, eval=FALSE}
+load("runMuscleRomer.RData")
+options(mc.cores=12) # at least if we are on hera
+t1 <- Sys.time()
+muscleRomer <- multicontrastRomer(muscleSet, muscleCollapse, muscleDesign, muscleContrast, nrot=10000)
+names(muscleRomer) <- "denervation"
+save(muscleRomer, file="inst/data/muscleRomer.RData")
+t2 <- Sys.time()
+difftime(t2, t1)
+```
+
+
+Run using `geneSetTest`
+
+```{r runGeneSetTestMuscle}
+load("runMuscleRomer.RData")
+options(mc.cores=12) # at least if we are on hera
+t1 <- Sys.time()
+muscleGeneSetTest <- lapply(muscleFC, function(x){
+  mmGeneSetTest(muscleSet, x$t)
+})
+
+t2 <- Sys.time()
+difftime(t2, t1)
+save(muscleGeneSetTest, t1, t2, file="inst/data/muscleGeneSetTest.RData")
+```

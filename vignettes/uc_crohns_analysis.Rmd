@@ -1,3 +1,8 @@
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{UC vs Crohn's}
+-->
+
 # Crohn's VS Ulcerative Colitis
 
 GEO dataset **GSE36807** has crohn's, uc, and normal samples. 
