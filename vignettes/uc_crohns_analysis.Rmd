@@ -138,7 +138,7 @@ genCCSigList <- function(inSig){
 
 cucCCSig <- lapply(cucSigRomer, genCCSigList)
 
-cucCCRomer <- new("GENccEnrichResult", cucCCSig, categoryName="GSEAGO", geneAnnMapping=geneAnnMapping, overlapType="overlap")
+cucCCRomer <- new("GENccEnrichResult", cucCCSig, categoryName="GSEAGO", geneAnnMapping=geneAnnMapping, overlapType="overlap", annDescription=Term(names(geneAnnMapping)))
 
 cucRomerOpts <- new("ccOptions", listNames=names(cucCCRomer), compareNames=c(
   "UC.Up", "UC.Down", "CROHNS.Up", "CROHNS.Down", "UC.Up,CROHNS.Up", "UC.Up,CROHNS.Down", "UC.Down,CROHNS.Up", "UC.Down,CROHNS.Down"))
