@@ -52,8 +52,81 @@ save(muscleData, .sessionInfo, .timeDate, file="inst/data/muscle_data.RData")
 
 # Gene Lists
 
-For both the skin and muscle data sets, we will calculate the p-values using `limma`. We will probably attempt to do both hypergeometric enrichment and GSEA (using )
+For both the skin and muscle data sets, we will calculate the p-values using `limma`. We will probably attempt to do both hypergeometric enrichment and GSEA.
 
-## Skin Gene Lists
+Do not forget that these are from different organisms. **Skin**: rat, **muscle**: mouse.
 
-We are going to create gene lists for the skin 
+## Skin Gene Lists and Enrichment
+
+```{r diffSkin}
+library(limma)
+library(rat2302.db)
+load("inst/data/skin_rma_data.RData")
+
+skinComps <- c("T7 - T0", "T14 - T0")
+geneID <- unlist(mget(featureNames(skinData), rat2302ENTREZID))
+
+skinExpr <- exprs(skinData)
+skinCollapse <- collapseProbes(skinExpr, geneID) # collapse to single genes using median of expression
+skinCharacter <- pData(skinData)
+skinCharacter$timePoint2 <- paste("T", skinCharacter$timePoint, sep="")
+
+skinFC <- rankGenes(skinCollapse, skinCharacter$timePoint2, skinComps, doAggregation=FALSE, aggregateIndex=NA)
+names(skinFC) <- c("T7", "T14")
+
+skinDiff <- lapply(skinFC, getDiffGenes, id="id")
+```
+
+
+```{r setupGeneSets}
+library(GO.db)
+library(org.Rn.eg.db)
+library(limma)
+rnGO <- as.list(org.Rn.egGO2ALLEGS)
+rnGO <- rnGO[(Ontology(names(rnGO)) == "BP")]
+rnGO <- lapply(rnGO, unique)
+
+skinSet <- symbols2indices(rnGO, rownames(skinCollapse))
+```
+
+
+```{r setupContrasts}
+skinStatus <- skinCharacter$timePoint2
+f <- factor(skinStatus)
+skinDesign <- model.matrix(~0 + f)
+colnames(skinDesign) <- levels(f)
+
+skinContrast <- makeContrasts(contrasts=skinComps, levels=skinDesign)
+
+save(list=ls(), file="runSkinRomer.RData")
+```
+
+```{r runRomer, eval=FALSE}
+load("runSkinRomer.RData")
+options(mc.cores=12) # at least if we are on hera
+t1 <- Sys.time()
+skinRomer <- multicontrastRomer(skinSet, skinCollapse, skinDesign, skinContrast, nrot=10000)
+names(skinRomer) <- c("T7", "T14")
+save(skinRomer, file="inst/data/skinRomer.RData")
+t2 <- Sys.time()
+difftime(t2, t1)
+```
+
+
+Run using `geneSetTest`
+
+```{r runGeneSetTest}
+load("runSkinRomer.RData")
+options(mc.cores=12) # at least if we are on hera
+t1 <- Sys.time()
+skinGeneSetTest <- lapply(skinFC, function(x){
+  mmGeneSetTest(skinSet, x$t)
+})
+
+t2 <- Sys.time()
+difftime(t2, t1)
+save(skinGeneSetTest, t1, t2, file="inst/data/skinGeneSetTest.RData")
+```
+
+
+## Muscle Gene Lists and Enrichment
