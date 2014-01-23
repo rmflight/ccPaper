@@ -84,6 +84,12 @@ The combined coefficient has been implemented, see https://github.com/rmflight/c
 * GSEA (pre-ranked using the limma moderated t statistic) should be tried out for the analysis, results may get better  I am disappointed there is no clue of axonogenesis or other developmental gradients other than angiogenesis and VEGF
 * the authors should compare to the use of Enrichment Map (EM), with the following two-comparison maps: muscle up + skin 7t up, muscle up + skin 14t up, muscle down + skin 7t dw, muscle down + skin 14t dw. Yes , EM was not designed for (wildly) multi-condition studies, but in these cases comparison can still be broken down and analyzed -- the authors should strive to make a convincing point about the increased intuitiveness of their representation, and convince the reader. Note this would probably work better with GSEA NES for coloring nodes. 
 
+**Reponse**:
+
+* Re: GSEA: we have used GSEA for both data-sets. Please see the revised manuscript and the "UC vs Crohn's" and "Skin vs Muscle" vignettes in the ccPaperRev package. https://github.com/rmflight/ccPaperRev
+
+* There are many similarities between categoryCompare and other tools, and we admit that. However, we are not seeking to demonstrate that our visualization is better than EM's, but the goal is to provide a tool that is for the most part self-contained in R, from analysis to visualization. Although the data can be visualized in EM, that is merely a convenience, and we were wrong to try and place so much emphasis on the visualization in the original manuscript. In addition, all of the graph information is accessible in the original R instance.
+
 
 # Submission Petruska of data to GEO
 
@@ -91,7 +97,7 @@ The combined coefficient has been implemented, see https://github.com/rmflight/c
 
 **Response**:
 
-* I worked with Jeff on this, and he is supposed to take care of it. Check with him.
+* This was an oversight on the first author's part on not checking the status of getting the data submitted. We have started the submission process, and are still waiting on protocol details to complete the submission.
 
 # Test on multiple datasets
 
