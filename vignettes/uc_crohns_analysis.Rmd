@@ -68,6 +68,10 @@ cucCompare <- ccCompare(cucEnrich, cucOpts)
 
 cucCy <- ccOutCyt(cucCompare$BP, cucOpts)
 breakEdges(cucCy, 1)
+
+cucMF <- ccOutCyt(cucCompare$MF, cucOpts)
+cucCC <- ccOutCyt(cucCompare$CC, cucOpts)
+breakEdges(cucCC, 0.8)
 ```
 
 
@@ -83,6 +87,8 @@ We're going to try both and see what we get out.
 
 ```{r setupGeneSets}
 library(GO.db)
+library(org.Hs.eg.db)
+library(limma)
 hsGO <- as.list(org.Hs.egGO2ALLEGS)
 hsGO <- hsGO[(Ontology(names(hsGO)) == "BP")]
 hsGO <- lapply(hsGO, unique)
@@ -104,9 +110,63 @@ contrast.matrix <- makeContrasts(contrasts=doComps, levels=design)
 
 ```{r runRomer}
 cucRomer <- multicontrastRomer(useSet, cucCollapse, design, contrast.matrix, nrot=10000)
+names(cucRomer) <- c("UC", "CROHNS")
 save(cucRomer, file="inst/data/cucRomer.RData")
 
 ```
+
+
+```{r examineResults}
+load("inst/data/cucRomer.RData")
+
+geneAnnMapping <- new("namedList", .Data=hsGO, names=names(hsGO))
+
+getSigID <- function(inRomer, pCut=0.05, whichCol=c("Up", "Down")){
+  sigID <- lapply(whichCol, function(inCol){
+    rownames(inRomer[(inRomer[, inCol] <= pCut),])
+  })
+  names(sigID) <- whichCol
+  return(sigID)
+}
+
+cucSigRomer <- lapply(cucRomer, getSigID)
+cucSigRomer <- unlist(cucSigRomer, recursive=FALSE)
+
+genCCSigList <- function(inSig){
+  tmp <- new("ccSigList", sigID=inSig)
+}
+
+cucCCSig <- lapply(cucSigRomer, genCCSigList)
+
+cucCCRomer <- new("GENccEnrichResult", cucCCSig, categoryName="GSEAGO", geneAnnMapping=geneAnnMapping, overlapType="overlap")
+
+cucRomerOpts <- new("ccOptions", listNames=names(cucCCRomer), compareNames=c(
+  "UC.Up", "UC.Down", "CROHNS.Up", "CROHNS.Down", "UC.Up,CROHNS.Up", "UC.Up,CROHNS.Down", "UC.Down,CROHNS.Up", "UC.Down,CROHNS.Down"))
+compareCUCRomer <- ccCompare(cucCCRomer, cucRomerOpts)
+```
+
+```{r send2Cytoscape}
+compareCUCRomer <- breakEdges(compareCUCRomer, 0.8)
+cucRomerCW <- ccOutCyt(compareCUCRomer, cucRomerOpts)
+breakEdges(cucRomerCW, 0.9)
+```
+
+
+```{r cucRomerPie}
+cucRomerOptP <- new("ccOptions", listNames=names(cucCCRomer), colorType="pie")
+compareCUCRomerPie <- ccCompare(cucCCRomer, cucRomerOptP)
+compareCUCRomerPie <- breakEdges(compareCUCRomerPie, 0.9)
+cucRomerPieCW <- ccOutCyt(compareCUCRomerPie, cucRomerOptP, postText="pie", rpcPort=9001)
+
+drawLegend <- function(ccOpts){
+  if (ccOpts@colorType == "pie"){
+    nSlice <- length(listNames(ccOpts))
+    useArea <- 1 / nSlice
+    useCols <- 
+  }
+}
+```
+
 
 Run using `geneSetTest`
 
