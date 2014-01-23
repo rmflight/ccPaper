@@ -129,7 +129,7 @@ getSigID <- function(inRomer, pCut=0.05, whichCol=c("Up", "Down")){
   return(sigID)
 }
 
-cucSigRomer <- lapply(cucRomer, getSigID)
+cucSigRomer <- lapply(cucRomer, getSigID, pCut=0.01)
 cucSigRomer <- unlist(cucSigRomer, recursive=FALSE)
 
 genCCSigList <- function(inSig){
@@ -157,14 +157,8 @@ cucRomerOptP <- new("ccOptions", listNames=names(cucCCRomer), colorType="pie")
 compareCUCRomerPie <- ccCompare(cucCCRomer, cucRomerOptP)
 compareCUCRomerPie <- breakEdges(compareCUCRomerPie, 0.9)
 cucRomerPieCW <- ccOutCyt(compareCUCRomerPie, cucRomerOptP, postText="pie", rpcPort=9001)
+breakEdges(cucRomerPieCW, 1)
 
-drawLegend <- function(ccOpts){
-  if (ccOpts@colorType == "pie"){
-    nSlice <- length(listNames(ccOpts))
-    useArea <- 1 / nSlice
-    useCols <- 
-  }
-}
 ```
 
 
