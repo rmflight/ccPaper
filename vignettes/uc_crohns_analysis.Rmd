@@ -3,6 +3,11 @@
 %\VignetteIndexEntry{UC vs Crohn's}
 -->
 
+```{r loadLibrary}
+library(ccPaperRev)
+```
+
+
 # Crohn's VS Ulcerative Colitis
 
 GEO dataset **GSE36807** has crohn's, uc, and normal samples. 
@@ -34,7 +39,7 @@ Use the `limma` package to rank probes.
 ```{r rankProbes}
 library(limma)
 library(hgu133plus2.db)
-load("inst/data/uc_crohns_rawData.RData")
+data(uc_crohns_rawData)
 
 cucComps <- c("uc - control", "crohns - control")
 geneID <- unlist(mget(featureNames(cucData), hgu133plus2ENTREZID))
@@ -55,6 +60,7 @@ cucDiff <- lapply(cucFC, getDiffGenes, id="id")
 Do normal over-representation analysis on the `cucDiff`, those genes differentially expressed in the Crohn's and UC samples.
 
 ```{r ORA}
+library(GO.db)
 cucGeneList <- list(UC_up=list(genes=cucDiff$UC$up, universe=cucDiff$UC$universe, annotation="org.Hs.eg.db"),
                     UC_dn=list(genes=cucDiff$UC$dn, universe=cucDiff$UC$universe, annotation="org.Hs.eg.db"),
                     CR_up=list(genes=cucDiff$CROHNS$up, universe=cucDiff$CROHNS$universe, annotation="org.Hs.eg.db"),
@@ -65,18 +71,20 @@ cucEnrich <- ccEnrich(cucGeneList)
 pvalueType(cucEnrich) <- "pval"
 pvalueCutoff(cucEnrich) <- 0.01
 
+cucEnrich
 
 cucOpts <- new("ccOptions", listNames=names(cucGeneList), compareNames=
                 c("UC_up", "UC_dn", "CR_up", "CR_dn", "UC_up,CR_up", "UC_up,CR_dn", "UC_dn,CR_up", "UC_dn,CR_dn"))
 cucCompare <- ccCompare(cucEnrich, cucOpts)
 
+cucCompare
+
+```
+
+```{r out2Cytoscape, eval=FALSE}
 cucCompare <- breakEdges(cucCompare$BP, 0.8)
 cucCy <- ccOutCyt(cucCompare, cucOpts)
 breakEdges(cucCy, 1)
-
-cucMF <- ccOutCyt(cucCompare$MF, cucOpts)
-cucCC <- ccOutCyt(cucCompare$CC, cucOpts)
-breakEdges(cucCC, 0.8)
 ```
 
 
@@ -113,7 +121,7 @@ colnames(design) <- levels(f)
 contrast.matrix <- makeContrasts(contrasts=doComps, levels=design)
 ```
 
-```{r runRomer}
+```{r runRomer, eval=FALSE}
 cucRomer <- multicontrastRomer(useSet, cucCollapse, design, contrast.matrix, nrot=10000)
 names(cucRomer) <- c("UC", "CROHNS")
 save(cucRomer, file="inst/data/cucRomer.RData")
@@ -122,7 +130,7 @@ save(cucRomer, file="inst/data/cucRomer.RData")
 
 
 ```{r examineResults}
-load("inst/data/cucRomer.RData")
+data(cucRomer)
 
 geneAnnMapping <- new("namedList", .Data=hsGO, names=names(hsGO))
 
@@ -148,9 +156,10 @@ cucCCRomer <- new("GENccEnrichResult", cucCCSig, categoryName="GSEAGO", geneAnnM
 cucRomerOpts <- new("ccOptions", listNames=names(cucCCRomer), compareNames=c(
   "UC.Up", "UC.Down", "CROHNS.Up", "CROHNS.Down", "UC.Up,CROHNS.Up", "UC.Up,CROHNS.Down", "UC.Down,CROHNS.Up", "UC.Down,CROHNS.Down"))
 compareCUCRomer <- ccCompare(cucCCRomer, cucRomerOpts)
+compareCUCRomer
 ```
 
-```{r send2Cytoscape}
+```{r send2Cytoscape, eval=FALSE}
 compareCUCRomer <- breakEdges(compareCUCRomer, 0.8)
 cucRomerCW <- ccOutCyt(compareCUCRomer, cucRomerOpts, postText="romer", rpcPort=9001)
 generateLegend(cucRomerOpts)
