@@ -59,19 +59,19 @@ cucGeneList <- list(UC_up=list(genes=cucDiff$UC$up, universe=cucDiff$UC$universe
                     UC_dn=list(genes=cucDiff$UC$dn, universe=cucDiff$UC$universe, annotation="org.Hs.eg.db"),
                     CR_up=list(genes=cucDiff$CROHNS$up, universe=cucDiff$CROHNS$universe, annotation="org.Hs.eg.db"),
                     CR_dn=list(genes=cucDiff$CROHNS$dn, universe=cucDiff$CROHNS$universe, annotation="org.Hs.eg.db"))
-cucGeneList <- new("ccGeneList", cucGeneList, ccType=c("BP", "CC", "MF", "KEGG"))
+cucGeneList <- new("ccGeneList", cucGeneList, ccType="BP")
 
-library(KEGG.db)
 cucEnrich <- ccEnrich(cucGeneList)
 pvalueType(cucEnrich) <- "pval"
-pvalueCutoff(cucEnrich) <- 0.001
+pvalueCutoff(cucEnrich) <- 0.01
 
 
 cucOpts <- new("ccOptions", listNames=names(cucGeneList), compareNames=
                 c("UC_up", "UC_dn", "CR_up", "CR_dn", "UC_up,CR_up", "UC_up,CR_dn", "UC_dn,CR_up", "UC_dn,CR_dn"))
 cucCompare <- ccCompare(cucEnrich, cucOpts)
 
-cucCy <- ccOutCyt(cucCompare$BP, cucOpts)
+cucCompare <- breakEdges(cucCompare$BP, 0.8)
+cucCy <- ccOutCyt(cucCompare, cucOpts)
 breakEdges(cucCy, 1)
 
 cucMF <- ccOutCyt(cucCompare$MF, cucOpts)
@@ -152,31 +152,6 @@ compareCUCRomer <- ccCompare(cucCCRomer, cucRomerOpts)
 
 ```{r send2Cytoscape}
 compareCUCRomer <- breakEdges(compareCUCRomer, 0.8)
-cucRomerCW <- ccOutCyt(compareCUCRomer, cucRomerOpts)
-breakEdges(cucRomerCW, 0.9)
+cucRomerCW <- ccOutCyt(compareCUCRomer, cucRomerOpts, postText="romer", rpcPort=9001)
+generateLegend(cucRomerOpts)
 ```
-
-
-```{r cucRomerPie}
-cucRomerOptP <- new("ccOptions", listNames=names(cucCCRomer), colorType="pie")
-compareCUCRomerPie <- ccCompare(cucCCRomer, cucRomerOptP)
-compareCUCRomerPie <- breakEdges(compareCUCRomerPie, 0.9)
-cucRomerPieCW <- ccOutCyt(compareCUCRomerPie, cucRomerOptP, postText="pie", rpcPort=9001)
-breakEdges(cucRomerPieCW, 1)
-
-```
-
-
-Run using `geneSetTest`
-
-```{r runGeneSetTest}
-t1 <- Sys.time()
-cucGeneSetTest <- lapply(cucFC, function(x){
-  mmGeneSetTest(useSet, x$t)
-})
-
-t2 <- Sys.time()
-difftime(t2, t1)
-save(cucGeneSetTest, t1, t2, file="inst/data/cucGeneSetTest.RData")
-```
-
