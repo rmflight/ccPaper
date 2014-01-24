@@ -1,7 +1,7 @@
 <!--
   %\VignetteEngine{knitr}
   %\VignetteIndexEntry{hypothetical example}
-  %\VignetteDepends{categoryComparePaperRev, ggplot2, ALL, GO.db, hgu95av.db, hgu133plus2.db, limma}
+  %\VignetteDepends{categoryComparePaperRev, ggplot2, ALL, GO.db, hgu95av.db, hgu133plus2.db, limma, ggthemes}
 -->
   
 # Hypothetical Example
@@ -169,7 +169,7 @@ goFractions <- calcFraction(hsGO[useGO], list(sample1=sample1_org, sample2=sampl
 ggplot(goFractions, aes(x=size, y=frac, color=genelist)) + geom_point() + useTheme + ggtitle("Sample GO fractions")
 ```
 
-### Ccompare to experimental
+### Compare to experimental
 
 Lets actually compare this to the distribution of fractions *vs* sizes from the experimental data sets. Because those used **all** the GO terms, we will redo them with **all** GO terms as well, not just those from our sample.
 
@@ -321,6 +321,7 @@ save(useGO, testSamples, universeGenes, useGOSizeClass, file="inst/data/100GeneS
 ```
 
 ```{r runSamples, eval=FALSE}
+data(100GeneSamples)
 library(snowfall)
 # load("inst/data/100GeneSamples.RData")
 testFun <- function(x){
@@ -353,8 +354,7 @@ save(testRes, file="inst/data/100GeneResults.RData")
 For each of the GO terms, we want to calculate the mean, standard deviation, and then a 95% confidence interval to represent graphically.
 
 ```{r noNoiseStats}
-useDir <- "/mlab/data/rmflight/Documents/projects/work/categoryComparePaperRev"
-load(file.path(useDir, "inst/data/100GeneResults.RData"))
+data("100GeneResults")
 cleanRes <- lapply(testRes, function(x){x$clean})
 testStats_clean <- sameGOStats(cleanRes)
 testStats_clean$class <- useGOSizeClass
@@ -415,6 +415,7 @@ save(testGOSample, file="inst/data/100GOSamples.RData")
 Running those samples:
 
 ```{r runGOSamples, eval=FALSE}
+data("100GOSamples")
 runGOSamples <- function(x){
   cleanSample <- x$geneSample
   cleanRes <- hyperGOMultiEnrichment(cleanSample, universe=universeGenes)
@@ -447,7 +448,7 @@ save(testGORes, file="inst/data/100GOResults.RData")
 ```
 
 ```{r lookDiffs}
-load(file.path(useDir, "inst/data/100GOResults.RData"))
+data("100GOResults")
 
 grab_noNoise <- function(x){
   x$clean[,c("diff", "class", "frac")]
@@ -525,9 +526,8 @@ cleanSample <- list(s1 = sampleTerms(useGO, hsGO, nGene, 4)[1:nGene],
 save(noiseSamples, cleanSample, sizeNoise, fracShared, universeGenes, useGO, useGOSizeClass, file=file.path(useDir, 'inst/data/noiseSamples.RData'))
 ```
 
-```{r runSweptNoise}
-useDir <- '/mlab/data/rmflight/Documents/projects/work/categoryComparePaperRev/'
-load(file.path(useDir, 'inst/data/noiseSamples.RData'))
+```{r runSweptNoise, eval=FALSE}
+data(noiseSamples)
 
 useNoise <- unlist(noiseSamples, recursive=FALSE)
 sizeNoiseAll <- rep(sizeNoise, each=length(fracShared))
@@ -560,9 +560,8 @@ save(noiseSweepRes, file.path(useDir, "inst/data/noiseSweepRes.RData"))
 Examine the noise results.
 
 ```{r loadSweptNoise}
-useDir <- '/mlab/data/rmflight/Documents/projects/work/categoryComparePaperRev/'
-load(file.path(useDir, 'inst/data/noiseSamples.RData'))
-load(file.path(useDir, 'inst/data/noiseSweepRes.RData'))
+data(noiseSamples)
+data(noiseSweepRes)
 
 noiseFrac <- data.frame(size=rep(sizeNoise, each=length(fracShared)),
                         shared=rep(fracShared, length(sizeNoise)))

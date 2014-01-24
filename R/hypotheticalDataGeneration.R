@@ -885,3 +885,43 @@ gseaProportionMax <- function(inSize, sigProp, statistics, nSample=2){
 #' @source ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE18nnn/GSE18842/matrix/GSE18842_series_matrix.txt.gz
 #' @details Downloaded, created an \code{ExpressionSet} object using \code{getGEO} on Dec 6, 2013.
 NULL
+
+#' @name 100GeneSamples.RData
+#' @title 100GeneSamples.RData
+#' @docType data
+#' @source generated in the hypothetical example vignette
+#' @details for the supplied set of GO terms, take 100 different 2 samples of 1000 genes.
+NULL
+
+#' @name 100GeneResults.RData
+#' @title 100GeneResults.RData
+#' @docType data
+#' @source running hypergeometric test on the samples in \code{100GeneSamples}
+#' @details did enrichment on the samples in \code{100GeneSamples}
+NULL
+
+#' @name 100GOSamples.RData
+#' @title 100GOSamples.RData
+#' @docType data
+#' @source for 100 different GO samples of size 100, generate 2 samples with 1000 genes
+NULL
+
+#' @name 100GOResults.RData
+#' @title 100GOResults.RData
+#' @docType data
+#' @source running enrichment and diffs on \code{100GOSamples}
+NULL
+
+#' @name noiseSamples.RData
+#' @title noiseSamples.RData
+#' @docType data
+#' @source hypothetical vignette from \package{ccPaperRev}
+#' @details For two 1000 gene samples, different amounts of noise (0 - 1000) genes (genes not annotated to 100 GO terms defining the samples) were added, with different fractions of overlap between the noise gene lists (0 - 1). 
+NULL
+
+#' @name noiseSweepRes.RData
+#' @title noiseSweepRes.RData
+#' @docType data
+#' @source running hypergeometric calculations and differences on \code{noiseSamples}
+NULL
+
