@@ -31,7 +31,7 @@ Let's first look at the distribution of number of genes annotated to the GO term
 ```{r goAnnotations}
 library(org.Hs.eg.db)
 library(GO.db)
-library(ccPaperRev)
+library(ccPaperRevHypo)
 hsGO <- as.list(org.Hs.egGO2ALLEGS)
 
 goOntology <- Ontology(names(hsGO))
@@ -360,7 +360,7 @@ testStats_clean <- sameGOStats(cleanRes)
 testStats_clean$class <- useGOSizeClass
 testStats_clean$frac <- goFractions$frac[1:length(useGOSizeClass)]
 testStats_clean$class <- factor(testStats_clean$class, levels=c("low", "med", "hi"), ordered=TRUE)
-ggplot(testStats_clean, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x")
+ggplot(testStats_clean, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x") + useTheme
 ```
 
 ```{r noiseStats}
@@ -455,8 +455,9 @@ grab_noNoise <- function(x){
 
 go_noNoise <- lapply(testGORes, grab_noNoise)
 go_noNoise <- do.call(rbind, go_noNoise)
-go_noNoise$class <- factor(go_noNoise$class, levels=c("low", "med", "hi"), ordered=TRUE)
-ggplot(go_noNoise, aes(x = frac, y = diff)) + geom_point() + facet_grid(. ~ class, scales="free_x")
+go_noNoise$class <- factor(go_noNoise$class, levels=c("low", "med", "hi"), ordered=TRUE) 
+go_noNoiseT <- go_noNoise[(!is.nan(go_noNoise$diff)),]
+ggplot(go_noNoiseT, aes(x = frac, y = diff)) + geom_point() + facet_grid(. ~ class, scales="free_x") + useTheme + stat_density2d(aes(fill = ..level..), geom="polygon")
 
 grab_noise <- function(x){
   x$noise[, c("diff", "class", "frac")]
