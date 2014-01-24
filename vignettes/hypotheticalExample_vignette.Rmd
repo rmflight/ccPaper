@@ -643,7 +643,7 @@ gseaSetResults <- lapply(gseaTValues, function(x){
 
 And figure out what is doing better.
 
-```{r gseaBetter}
+```{r gseaBetterGO}
 cleanDiff <- gseaDiffs(gseaSetResults)
 cleanDiff$sizeClass <- useGOSizeClass
 cleanDiff$sizeClass <- factor(cleanDiff$sizeClass, c("low", "med", "hi"), ordered=TRUE)
