@@ -1,3 +1,13 @@
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{Skin vs Muscle}
+-->
+
+```{r loadLibrary}
+library(ccPaperRev)
+```
+
+
 # Muscle Skin Data processing
 
 How do we process the data for muscle and skin to something we can start running through `categoryCompare`?
@@ -61,7 +71,7 @@ Do not forget that these are from different organisms. **Skin**: rat, **muscle**
 ```{r diffSkin}
 library(limma)
 library(rat2302.db)
-load("inst/data/skin_rma_data.RData")
+data(skin_rma_data)
 
 skinComps <- c("T7 - T0", "T14 - T0")
 geneID <- unlist(mget(featureNames(skinData), rat2302ENTREZID))
@@ -90,7 +100,7 @@ skinSet <- symbols2indices(rnGO, rownames(skinCollapse))
 ```
 
 
-```{r skinContrasts}
+```{r skinContrasts, eval=FALSE}
 skinStatus <- skinCharacter$timePoint2
 f <- factor(skinStatus)
 skinDesign <- model.matrix(~0 + f)
@@ -115,7 +125,7 @@ difftime(t2, t1)
 
 Run using `geneSetTest`
 
-```{r runGeneSetTest}
+```{r runGeneSetTest, eval=FALSE}
 load("runSkinRomer.RData")
 options(mc.cores=12) # at least if we are on hera
 t1 <- Sys.time()
@@ -135,7 +145,7 @@ save(skinGeneSetTest, t1, t2, file="inst/data/skinGeneSetTest.RData")
 ```{r diffMuscle}
 library(limma)
 library(mouse4302.db)
-load("inst/data/muscle_data.RData")
+data(muscle_data)
 
 muscleComps <- c("denervated - innervated")
 geneID <- unlist(mget(featureNames(muscleData), mouse4302ENTREZID))
@@ -162,7 +172,7 @@ muscleSet <- symbols2indices(mmGO, rownames(muscleCollapse))
 ```
 
 
-```{r muscleContrasts}
+```{r muscleContrasts, eval=FALSE}
 muscleStatus <- muscleCharacter$innervation
 f <- factor(muscleStatus)
 muscleDesign <- model.matrix(~0 + f)
@@ -185,9 +195,77 @@ difftime(t2, t1)
 ```
 
 
+## Compare Skin and Muscle
+
+```{r getDataOut}
+data(muscleRomer)
+data(skinRomer)
+
+bothGO <- union(names(rnGO), names(mmGO))
+combMapping <- lapply(bothGO, function(inName){
+  isMM <- inName %in% names(mmGO)
+  isRN <- inName %in% names(rnGO)
+  
+  tmpGene <- character(0)
+  
+  if (isMM){
+    tmpGene <- c(tmpGene, mmGO[[inName]])
+  }
+  if (isRN){
+    tmpGene <- c(tmpGene, rnGO[[inName]])
+  }
+  tmpGene <- unique(tmpGene)
+  return(tmpGene)
+})
+
+names(combMapping) <- bothGO
+
+geneAnnMapping <- new("namedList", .Data=combMapping, names=names(combMapping))
+
+
+getSigID <- function(inRomer, pCut=0.05, whichCol=c("Up", "Down")){
+  sigID <- lapply(whichCol, function(inCol){
+    rownames(inRomer[(inRomer[, inCol] <= pCut),])
+  })
+  names(sigID) <- whichCol
+  return(sigID)
+}
+
+muscleSigRomer <- lapply(muscleRomer, getSigID, pCut=0.01)
+muscleSigRomer <- unlist(muscleSigRomer, recursive=FALSE)
+names(muscleSigRomer) <- c("muscle.Up", "muscle.Down")
+
+skinSigRomer <- lapply(skinRomer, getSigID, pCut = 0.01)
+skinSigRomer <- unlist(skinSigRomer, recursive=FALSE)
+
+allSigRomer <- c(skinSigRomer, muscleSigRomer)
+
+genCCSigList <- function(inSig){
+  tmp <- new("ccSigList", sigID=inSig)
+}
+
+allCCSig <- lapply(allSigRomer, genCCSigList)
+
+allCCRomer <- new("GENccEnrichResult", allCCSig, categoryName="GSEAGO", geneAnnMapping=geneAnnMapping, overlapType="overlap", annDescription=Term(names(geneAnnMapping)))
+
+allRomerOpts <- new("ccOptions", listNames=names(allCCRomer), colorType="pie")
+compareSMRomer <- ccCompare(allCCRomer, allRomerOpts)
+compareSMRomer
+```
+
+```{r saveData, eval=FALSE}
+save(compareSMRomer, allRomerOpts, file="skinMuscleCompare.RData")
+```
+
+```{r out2cytoscape, eval=FALSE}
+compareSMRomer <- breakEdges(compareSMRomer, 0.8)
+cwSM <- ccOutCyt(compareSMRomer, allRomerOpts, postText="GSEAGO", rpcPort=9001)
+```
+
+
 Run using `geneSetTest`
 
-```{r runGeneSetTestMuscle}
+```{r runGeneSetTestMuscle, eval=FALSE}
 load("runMuscleRomer.RData")
 options(mc.cores=12) # at least if we are on hera
 t1 <- Sys.time()
