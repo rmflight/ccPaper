@@ -48,6 +48,7 @@ The combined coefficient has been implemented, see https://github.com/rmflight/c
 
 * This is a good point. Although for small numbers of experiments (see for example the Crohn's vs UC comparison, which has only 4 distinct lists, and a total of 7 meaningful comparisons) solid colors may not be too bad, beyond that it gets rather complicated. However, using pie-graphs where the pie is split only by the significant experiments may lead to perception problems, as solid (only significant in one experiment) or a few slices (significant in 2 or 3) may be percieved as more important. Based on this thinking, we have provided a method that splits nodes into pie-graphs with a slice for each condition / sample, and non-significance is denoted by complete desaturation of the color for that condition. In addition, a **generateLegend** function is included that plots a legend in an R plot window for reference. Note that we use png graphics that replace the node in Cytoscape, because we are using RCytoscape to communicate with Cytoscape, we cannot interact with other plugins in Cytoscape from R.
 
+* Piegraph visualization addition in commit: https://github.com/rmflight/categoryCompare/commit/40168a0d55578e96fae9f0e6f3d1f4ef9b42c028
 
 # Discussion Problems
 
