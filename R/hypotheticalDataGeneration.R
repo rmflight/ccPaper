@@ -699,6 +699,208 @@ multicontrastRomer <- function(index, y, design, contrastMatrix, nrot=9999, do.p
   }, mc.cores=currCores, mc.preschedule=FALSE)
 }
 
+#' generate entries within a distribution
+#' 
+#' @param inLimits the range to use
+#' @param nSample how many entries within the range
+#' 
+#' @return set of sizes
+#' @export
+gseaSizeRange <- function(inLimits, nSample){
+  round(runif(nSample, inLimits[1], inLimits[2]))
+}
+
+#' generates proportion of genes in top 50
+#' 
+#' @param inSize vector of sizes to sample
+#' @param sigProp vector of significant proportion, i.e. fraction above 50 rank
+#' @param statistics the set of statistics to use (will be ranked by function)
+#' @param nSample number of samples to use
+#' 
+#' @details For each supplied inSize and sigProp, random indices of \code{inSize} are taken from the statistics. Based on \code{sigProp}, for each sample different numbers of indices take values from the upper 50 of ranked values and the lower 50 of ranked values. In this case each entry in \code{inSize} and \code{sigProp} denotes a different term, and they are treated independently. The \emph{list} combined method is based on averaging the statistics in this case.
+#' 
+#' @export
+#' @return list of lists for each \code{term}, with \emph{index} and \emph{stats}, \code{stats} contains a column for each sample, as well as a combined column. 
+gseaProportion <- function(inSize, sigProp, statistics, nSample=2){
+  statistics <- sort(statistics)
+  nPosGene <- length(statistics)
+  grpLoc <- seq(1, nPosGene, round(nPosGene / 4))
+  topStats <- statistics[seq(1, grpLoc[3])]
+  botStats <- statistics[seq(grpLoc[3], nPosGene)]
+  gseaStatistics <- lapply(seq(1, length(inSize)), function(inIndex){
+    nGene <- inSize[inIndex]
+    outIndex <- sample(nPosGene, nGene)
+    useProp <- sigProp[inIndex]
+    tmpStat <- statistics
+    
+    nTop <- round(nGene*useProp)
+    nBot <- nGene - nTop
+    
+    outStatistics <- lapply(seq(1, nSample), function(inSample){
+      topIndex <- sample(outIndex, nTop)
+      botIndex <- outIndex[!(outIndex %in% topIndex)]
+      tmpT <- tmpStat
+      tmpT[topIndex] <- sample(topStats, nTop)
+      tmpT[botIndex] <- sample(botStats, nBot)
+      return(tmpT)
+    })
+    
+    outStatistics <- do.call(cbind,outStatistics)
+    outStatistics <- cbind(outStatistics, rowMeans(outStatistics))
+    colnames(outStatistics) <- c(paste("s", seq(1, nSample), sep=""), "comb")
+    
+    return(list(index=outIndex, stats=outStatistics))
+  })
+  return(gseaStatistics)
+}
+
+
+
+#' vary gsea proportion
+#' 
+#' @param inSize vector of sizes
+#' @param sigProp list of proportions, one for each sample
+#' @param statistics the statistics to use
+#' 
+#' @details For each supplied inSize and sigProp, random indices of \code{inSize} are taken from the statistics. Based on \code{sigProp}, for each sample different numbers of indices take values from the upper 50 of ranked values and the lower 50 of ranked values. In this case each entry in \code{inSize} and denotes a different term, and they are treated independently. Each \emph{list} entry of \code{sigProp} is a sample, and each vector should be the same length as \code{inSize}. The \emph{list} combined method is based on averaging the statistics in this case.
+#' 
+#' @export
+#' @return list of lists for each \code{term}, with \emph{index} and \emph{stats}, \code{stats} contains a column for each sample, as well as a combined column. 
+gseaProportionVary <- function(inSize, sigProp, statistics){
+  statistics <- sort(statistics)
+  nPosGene <- length(statistics)
+  nSample <- length(sigProp)
+  grpLoc <- seq(1, nPosGene, round(nPosGene / 4))
+  topStats <- statistics[seq(1, grpLoc[4])]
+  botStats <- statistics[seq(grpLoc[4], nPosGene)]
+  gseaStatistics <- lapply(seq(1, length(inSize)), function(inIndex){
+    
+    nGene <- inSize[inIndex]
+    outIndex <- sample(nPosGene, nGene)
+    tmpStat <- statistics
+    
+    outStatistics <- lapply(seq(1, nSample), function(inSample){
+      # get significance proportion for each sample individually
+      nTop <- round(nGene * sigProp[[inSample]][inIndex])
+      nBot <- nGene - nTop
+      topIndex <- sample(outIndex, nTop)
+      botIndex <- outIndex[!(outIndex %in% topIndex)]
+      tmpT <- tmpStat
+      tmpT[topIndex] <- sample(topStats, nTop)
+      tmpT[botIndex] <- sample(botStats, nBot)
+      return(tmpT)
+    })
+    
+    outStatistics <- do.call(cbind,outStatistics)
+    outStatistics <- cbind(outStatistics, rowMeans(outStatistics))
+    colnames(outStatistics) <- c(paste("s", seq(1, nSample), sep=""), "comb")
+    
+    return(list(index=outIndex, stats=outStatistics))
+  })
+  return(gseaStatistics)
+}
+
+#' apply regression model to pvalues
+#' 
+#' To transform p-values to a signed range, we will apply the results of a regression model to the p-values
+#' 
+#' @param inModel result from \code{lm}
+#' @param pvalues set of pvalues to transform
+#' @export 
+#' @return transformed values
+p2signed <- function(inModel, pvalues){
+  outSigned <- inModel$coefficients[1] + inModel$coefficients[2]*pvalues
+}
+
+#' gseaProportion, combined using Fisher's method
+#' 
+#' @param inSize vector of sizes to sample
+#' @param sigProp vector of significant proportion, i.e. fraction above 50 rank
+#' @param statistics the set of statistics to use (will be ranked by function)
+#' @param nSample number of samples to use
+#' 
+#' @details For each supplied inSize and sigProp, random indices of \code{inSize} are taken from the statistics. Based on \code{sigProp}, for each sample different numbers of indices take values from the upper 50 of ranked values and the lower 50 of ranked values. In this case each entry in \code{inSize} and \code{sigProp} denotes a different term, and they are treated independently. The \emph{list} combined method is based on averaging the statistics in this case.
+#' 
+#' @export
+#' @return list of lists for each \code{term}, with \emph{index} and \emph{stats}, \code{stats} contains a column for each sample, as well as a combined column. 
+gseaProportionFisher <- function(inSize, sigProp, statistics, nSample=2){
+  statistics <- sort(statistics)
+  nPosGene <- length(statistics)
+  grpLoc <- seq(1, nPosGene, round(nPosGene / 4))
+  topStats <- statistics[seq(1, grpLoc[3])]
+  botStats <- statistics[seq(grpLoc[3]+1, nPosGene)]
+  gseaStatistics <- lapply(seq(1, length(inSize)), function(inIndex){
+    
+    nGene <- inSize[inIndex]
+    outIndex <- sample(nPosGene, nGene)
+    tmpStat <- statistics
+    
+    outStatistics <- lapply(seq(1, nSample), function(inSample){
+      # get significance proportion for each sample individually
+      nTop <- round(nGene * sigProp[inIndex])
+      nBot <- nGene - nTop
+      topIndex <- sample(outIndex, nTop)
+      botIndex <- outIndex[!(outIndex %in% topIndex)]
+      tmpT <- tmpStat
+      tmpT[topIndex] <- sample(topStats, nTop)
+      tmpT[botIndex] <- sample(botStats, nBot)
+      return(tmpT)
+    })
+    
+    outStatistics <- do.call(cbind,outStatistics)
+    combStat <- apply(outStatistics, 1, fishersMethod)
+    outStatistics <- cbind(outStatistics, combStat)
+    colnames(outStatistics) <- c(paste("s", seq(1, nSample), sep=""), "comb")
+    
+    return(list(index=outIndex, stats=outStatistics))
+  })
+  return(gseaStatistics)
+}
+
+
+#' gseaProportion combining using max p-value
+#' 
+#' @param inSize vector of sizes to sample
+#' @param sigProp vector of significant proportion, i.e. fraction above 50 rank
+#' @param statistics the set of statistics to use (will be ranked by function)
+#' @param nSample number of samples to use
+#' 
+#' @details For each supplied inSize and sigProp, random indices of \code{inSize} are taken from the statistics. Based on \code{sigProp}, for each sample different numbers of indices take values from the upper 50 of ranked values and the lower 50 of ranked values. In this case each entry in \code{inSize} and \code{sigProp} denotes a different term, and they are treated independently. The \emph{list} combined method is based on taking the maximum p-value among the samples.
+#' 
+#' @export
+#' @return list of lists for each \code{term}, with \emph{index} and \emph{stats}, \code{stats} contains a column for each sample, as well as a combined column. 
+gseaProportionMax <- function(inSize, sigProp, statistics, nSample=2){
+  statistics <- sort(statistics)
+  nPosGene <- length(statistics)
+  grpLoc <- seq(1, nPosGene, round(nPosGene / 4))
+  topStats <- statistics[seq(1, grpLoc[3])]
+  botStats <- statistics[seq(grpLoc[3]+1, nPosGene)]
+  gseaStatistics <- lapply(seq(1, length(inSize)), function(inIndex){
+    
+    nGene <- inSize[inIndex]
+    outIndex <- sample(nPosGene, nGene)
+    tmpStat <- statistics
+    
+    outStatistics <- lapply(seq(1, nSample), function(inSample){
+      # get significance proportion for each sample individually
+      nTop <- round(nGene * sigProp[inIndex])
+      nBot <- nGene - nTop
+      topIndex <- sample(outIndex, nTop)
+      botIndex <- outIndex[!(outIndex %in% topIndex)]
+      tmpT <- tmpStat
+      tmpT[topIndex] <- sample(topStats, nTop)
+      tmpT[botIndex] <- sample(botStats, nBot)
+      return(tmpT)
+    })
+    
+    outStatistics <- do.call(cbind,outStatistics)
+    outStatistics <- cbind(outStatistics, rowMax(outStatistics))
+    colnames(outStatistics) <- c(paste("s", seq(1, nSample), sep=""), "comb")
+    
+    return(list(index=outIndex, stats=outStatistics))
+  })
+  return(gseaStatistics)
+}
 
 #' @name lung.RData
 #' @title lung.RData
@@ -706,3 +908,43 @@ multicontrastRomer <- function(index, y, design, contrastMatrix, nrot=9999, do.p
 #' @source ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE18nnn/GSE18842/matrix/GSE18842_series_matrix.txt.gz
 #' @details Downloaded, created an \code{ExpressionSet} object using \code{getGEO} on Dec 6, 2013.
 NULL
+
+#' @name 100GeneSamples.RData
+#' @title 100GeneSamples.RData
+#' @docType data
+#' @source generated in the hypothetical example vignette
+#' @details for the supplied set of GO terms, take 100 different 2 samples of 1000 genes.
+NULL
+
+#' @name 100GeneResults.RData
+#' @title 100GeneResults.RData
+#' @docType data
+#' @source running hypergeometric test on the samples in \code{100GeneSamples}
+#' @details did enrichment on the samples in \code{100GeneSamples}
+NULL
+
+#' @name 100GOSamples.RData
+#' @title 100GOSamples.RData
+#' @docType data
+#' @source for 100 different GO samples of size 100, generate 2 samples with 1000 genes
+NULL
+
+#' @name 100GOResults.RData
+#' @title 100GOResults.RData
+#' @docType data
+#' @source running enrichment and diffs on \code{100GOSamples}
+NULL
+
+#' @name noiseSamples.RData
+#' @title noiseSamples.RData
+#' @docType data
+#' @source hypothetical vignette from \package{ccPaperRev}
+#' @details For two 1000 gene samples, different amounts of noise (0 - 1000) genes (genes not annotated to 100 GO terms defining the samples) were added, with different fractions of overlap between the noise gene lists (0 - 1). 
+NULL
+
+#' @name noiseSweepRes.RData
+#' @title noiseSweepRes.RData
+#' @docType data
+#' @source running hypergeometric calculations and differences on \code{noiseSamples}
+NULL
+

@@ -1,11 +1,13 @@
-Package: ccPaperRev
+Package: ccPaperRevHypo
 Type: Package
 Title: work for categoryCompare paper revisions
 Version: 0.0.2
 Author: Robert M Flight <rflight79@gmail.com>
 Maintainer: Robert M Flight <rflight79@gmail.com>
 Depends:
-    categoryComparePaperRev
+    categoryComparePaperRev,
+    limma,
+    ggplot2
 Suggests:
     knitr,
     GEOquery,
@@ -18,3 +20,5 @@ Description: In response to reviewer comments on our originally submitted
     revisions, outside of modifications to the categoryCompare package itself.
 License: CC0
 VignetteBuilder: knitr
+Collate:
+    'hypotheticalDataGeneration.R'

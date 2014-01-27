@@ -1,7 +1,7 @@
 <!--
   %\VignetteEngine{knitr}
   %\VignetteIndexEntry{hypothetical example}
-  %\VignetteDepends{categoryComparePaperRev, ggplot2, ALL, GO.db, hgu95av.db, hgu133plus2.db, limma}
+  %\VignetteDepends{categoryComparePaperRev, ggplot2, ALL, GO.db, hgu95av.db, hgu133plus2.db, limma, ggthemes}
 -->
   
 # Hypothetical Example
@@ -17,10 +17,12 @@ To demonstrate the utility of the general `categoryCompare` approach, we will co
 ## GO Terms
 
 ```{r nGO}
-nGO <- 20
+library(ggplot2)
+library(ggthemes)
+useTheme <- theme_gdocs()
 ```
 
-We will make use of three sets of `r nGO` GO terms from *H. sapiens*. For each set, we want differing numbers of genes annotated to them.
+We will make use of three sets of GO terms from *H. sapiens*. For each set, we want differing numbers of genes annotated to them.
 
 ### Num Annotations Dist
 
@@ -29,7 +31,7 @@ Let's first look at the distribution of number of genes annotated to the GO term
 ```{r goAnnotations}
 library(org.Hs.eg.db)
 library(GO.db)
-library(ccPaperRev)
+library(ccPaperRevHypo)
 hsGO <- as.list(org.Hs.egGO2ALLEGS)
 
 goOntology <- Ontology(names(hsGO))
@@ -40,19 +42,20 @@ universeGenes <- unique(unlist(hsGO))
 ```
 
 ```{r goCountDist}
-library(ggplot2)
 hsGO_count <- sapply(hsGO, length)
-hsGO_count <- data.frame(count=hsGO_count)
-ggplot(hsGO_count, aes(x=count)) + geom_bar(binwidth=10) + xlim(0, 2000) + ylim(0, 500)
+hsGO_count <- data.frame(size=hsGO_count)
+ggplot(hsGO_count, aes(x=size)) + geom_bar(binwidth=10) + xlim(0, 2000) + ylim(0, 500) + useTheme + ggtitle("Number of genes annotated to GO terms")
 ```
 
 ### Set up groups
 
-```{r defineMin}
-minGO <- 10
-```
+Based on the distribution in the previous figure, we will set up 3 different groups of GO terms, with a different number from each group:
 
-Let us define a minimum number of genes that need to be annotated to a GO term (`r minGO`), and then divide the GO terms into groups that we can subsequently take random samples from.
+  * low: 10-100, 50 terms
+  * med: 250-500, 30 terms
+  * hi: 500-1500, 20 terms
+  
+This gives us a total of 100 GO terms, with a good sample from each group. We will generate random samples that are defined by these limits, and use this set of GO terms going forward.
 
 ```{r defineGroupLimits}
 grpLow <- c(10, 100)
@@ -68,6 +71,10 @@ names(nGO) <- c("low", "med", "hi")
 GO_low <- limitedRandomSample(hsGO_count, grpLow, nGO["low"])
 GO_med <- limitedRandomSample(hsGO_count, grpMed, nGO["med"])
 GO_hi <- limitedRandomSample(hsGO_count, grpHi, nGO["hi"])
+
+useGO <- c(GO_low, GO_med, GO_hi)
+useGOSizeClass <- c(rep("low", nGO["low"]), rep("med", nGO["med"]), rep("hi", nGO["hi"]))
+names(useGOSizeClass) <- useGO
 ```
 
 ### Examine Gene-GO Distribution for Real Data
@@ -99,7 +106,7 @@ Now for all the GO terms that map to the probes in the `ALL` differentially expr
 library(hgu95av2.db)
 ALLgo <- as.list(hgu95av2GO2ALLPROBES)
 ALL_sizeFrac <- trimGOFrac(ALLgo, deALL)
-ggplot(ALL_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500)
+ggplot(ALL_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + useTheme
 ```
 
 
@@ -129,7 +136,7 @@ library(hgu133plus2.db)
 lung2go <- as.list(hgu133plus2GO2ALLPROBES)
 lung_sizeFrac <- trimGOFrac(lung2go, deLung)
 lung_sizeFrac$genelist <- "lung"
-ggplot(lung_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500)
+ggplot(lung_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + useTheme
 ```
 
 
@@ -151,22 +158,18 @@ What we expect from this is that in both datasets, the GO terms with lower numbe
 
 These expectations should be checked.
 
-
-
 ```{r generateSamples}
-useGO <- c(GO_low, GO_med, GO_hi)
 goList <- list(low=GO_low, med=GO_med, hi=GO_hi)
 nGene <- 1000
 sample1_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
 sample2_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
-```
 
-### Checking our expectations about the fractions of GO terms.
-
-```{r checkFractions}
+#check our expectations
 goFractions <- calcFraction(hsGO[useGO], list(sample1=sample1_org, sample2=sample2_org))
-ggplot(goFractions, aes(x=size, y=frac, color=genelist)) + geom_point()
+ggplot(goFractions, aes(x=size, y=frac, color=genelist)) + geom_point() + useTheme + ggtitle("Sample GO fractions")
 ```
+
+### Compare to experimental
 
 Lets actually compare this to the distribution of fractions *vs* sizes from the experimental data sets. Because those used **all** the GO terms, we will redo them with **all** GO terms as well, not just those from our sample.
 
@@ -174,12 +177,12 @@ Lets actually compare this to the distribution of fractions *vs* sizes from the 
 sampleGOFracs <- calcFraction(hsGO, list(sample1=sample1_org, sample2=sample2_org))
 ALL_sizeFrac$genelist <- "all"
 ALL_tmp <- rbind(ALL_sizeFrac, lung_sizeFrac, sampleGOFracs[,c("frac", "genelist", "size")])
-ggplot(ALL_tmp, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + facet_grid(genelist ~ .)
+ggplot(ALL_tmp, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + facet_grid(genelist ~ .) + useTheme + ggtitle("Sample GO fractions for all")
 ```
 
 
 ```{r cleanupData}
-keepItems <- c("goFractions", "sample1_org", "sample2_org", "hsGO", "useGO", "GO_hi", "GO_low", "GO_med", "grpHi", "grpLow", "grpMed", "minGO", "nGO", "nGene", "universeGenes")
+keepItems <- c("goFractions", "sample1_org", "sample2_org", "hsGO", "useGO", "useGOSizeClass", "GO_hi", "GO_low", "GO_med", "grpHi", "grpLow", "grpMed", "minGO", "nGO", "nGene", "universeGenes")
 allItems <- ls()
 delItems <- allItems[!(allItems %in% keepItems)]
 rm(list=delItems)
@@ -206,18 +209,16 @@ noNoise_pvalues <- pvalueDiffSig(noNoise_results$values, pCutoff=0.05, log=TRUE)
 Finally, lets add in our values of the fraction, total genes, and the class (**low**, **med**, **hi**) so we can do some fancy plotting stuff with it.
 
 ```{r noNoiseAddInfo}
-sizeClass <- c(rep("low", nGO["low"]), rep("med", nGO["med"]), rep("hi", nGO["hi"]))
-names(sizeClass) <- useGO
-noNoise_pvalues$sizeClass <- sizeClass
-noNoise_pvalues$size <- goFractions[1:length(sizeClass),4]
-noNoise_pvalues$frac <- goFractions$frac[1:length(sizeClass)]
+noNoise_pvalues$sizeClass <- useGOSizeClass
+noNoise_pvalues$size <- goFractions[1:length(useGOSizeClass),4]
+noNoise_pvalues$frac <- goFractions$frac[1:length(useGOSizeClass)]
 ```
 
 Now we will plot the difference in log-p-values (where we have **set** - **list**), so that positive values imply that **set** had lower p-values than **list**, based on the *fraction* of genes annotated.
 
 ```{r noNoisePlotStuff}
 noNoise_pvalues$sizeClass <- factor(noNoise_pvalues$sizeClass, levels=c("low", "med", "hi"), ordered=TRUE)
-ggplot(noNoise_pvalues, aes(x=frac, y=diff, color=sigState)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x")
+ggplot(noNoise_pvalues, aes(x=frac, y=diff, color=sigState)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x") + xlab("fraction") + useTheme + ggtitle("Sample - Combined Differences")
 ggplot(noNoise_pvalues, aes(x=sizeClass, y=diff)) + geom_boxplot() + geom_point()
 ```
 
@@ -266,14 +267,14 @@ noise_results <- pvaluesMultiEnrich(c("sample1", "sample2"), useGO, go_noise)
 
 noise_pvalues <- pvalueDiffSig(noise_results$values, pCutoff=0.05, log=TRUE)
 
-noise_pvalues$sizeClass <- sizeClass
-noise_pvalues$size <- goFracNoise[1:length(sizeClass),4]
-noise_pvalues$frac <- goFracNoise$frac[1:length(sizeClass)]
+noise_pvalues$sizeClass <- useGOSizeClass
+noise_pvalues$size <- goFracNoise[1:length(useGOSizeClass),4]
+noise_pvalues$frac <- goFracNoise$frac[1:length(useGOSizeClass)]
 ```
 
 ```{r plotSummarizeNoise}
 noise_pvalues$sizeClass <- factor(noise_pvalues$sizeClass, c("low", "med", "hi"), ordered=TRUE)
-ggplot(noise_pvalues, aes(x=frac, y=diff, color=sigState)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x")
+ggplot(noise_pvalues, aes(x=frac, y=diff, color=sigState)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x") + useTheme + ggtitle("Sample - Combined with Noise")
 ```
 
 ```{r summarizeCountsNoise}
@@ -316,10 +317,11 @@ testSamples <- lapply(seq(1, nTimes), function(x){
        noise = sample(noiseGenes, nNoise))
 })
 
-save(useGO, testSamples, universeGenes, sizeClass, file="inst/data/100GeneSamples.RData")
+save(useGO, testSamples, universeGenes, useGOSizeClass, file="inst/data/100GeneSamples.RData")
 ```
 
 ```{r runSamples, eval=FALSE}
+data(100GeneSamples)
 library(snowfall)
 # load("inst/data/100GeneSamples.RData")
 testFun <- function(x){
@@ -327,18 +329,18 @@ testFun <- function(x){
   nnRes <- hyperGOMultiEnrichment(nnList, universe=universeGenes)
   nn_res <- pvaluesMultiEnrich(c("s1", "s2"), useGO, nnRes)
   nnP <- pvalueDiffSig(nn_res$values, pCutoff=0.05, log=TRUE)
-  nnP$class <- sizeClass
+  nnP$class <- useGOSizeClass
   
   noiList <- list(s1 = c(x$s1, x$noise), s2 = c(x$s2, x$noise))
   noiRes <- hyperGOMultiEnrichment(noiList, universe=universeGenes)
   noi_res <- pvaluesMultiEnrich(c("s1", "s2"), useGO, noiRes)
   noiP <- pvalueDiffSig(noi_res$values, pCutoff=0.05, log=TRUE)
-  noiP$class <- sizeClass
+  noiP$class <- useGOSizeClass
 
   return(list(clean = nnP, noise = noiP))
 }
 sfInit(parallel=TRUE, cpus=10)
-sfExport("sizeClass", "universeGenes", "useGO")
+sfExport("useGOSizeClass", "universeGenes", "useGO")
 sfLibrary(ccPaperRev)
 sfLibrary(GO.db)
 sfLibrary(org.Hs.eg.db)
@@ -352,21 +354,20 @@ save(testRes, file="inst/data/100GeneResults.RData")
 For each of the GO terms, we want to calculate the mean, standard deviation, and then a 95% confidence interval to represent graphically.
 
 ```{r noNoiseStats}
-useDir <- "/mlab/data/rmflight/Documents/projects/work/categoryComparePaperRev"
-load(file.path(useDir, "inst/data/100GeneResults.RData"))
+data("100GeneResults")
 cleanRes <- lapply(testRes, function(x){x$clean})
 testStats_clean <- sameGOStats(cleanRes)
-testStats_clean$class <- sizeClass
-testStats_clean$frac <- goFractions$frac[1:length(sizeClass)]
+testStats_clean$class <- useGOSizeClass
+testStats_clean$frac <- goFractions$frac[1:length(useGOSizeClass)]
 testStats_clean$class <- factor(testStats_clean$class, levels=c("low", "med", "hi"), ordered=TRUE)
-ggplot(testStats_clean, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x")
+ggplot(testStats_clean, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x") + useTheme
 ```
 
 ```{r noiseStats}
 noiseRes <- lapply(testRes, function(x){x$noise})
 testStats_noise <- sameGOStats(noiseRes)
-testStats_noise$class <- sizeClass
-testStats_noise$frac <- goFracNoise$frac[1:length(sizeClass)]
+testStats_noise$class <- useGOSizeClass
+testStats_noise$frac <- goFracNoise$frac[1:length(useGOSizeClass)]
 testStats_noise$class <- factor(testStats_noise$class, levels=c("low", "med", "hi"), ordered=TRUE)
 ggplot(testStats_noise, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x")
 ```
@@ -377,8 +378,8 @@ What about differences between noise and clean?
 
 ```{r 100GeneNoiseClean}
 noiseCleanDiff <- diffGOStats(testRes)
-noiseCleanDiff$class <- sizeClass
-noiseCleanDiff$frac <- goFracNoise$frac[1:length(sizeClass)]
+noiseCleanDiff$class <- useGOSizeClass
+noiseCleanDiff$frac <- goFracNoise$frac[1:length(useGOSizeClass)]
 noiseCleanDiff$class <- factor(noiseCleanDiff$class, levels=c("low", "med", "hi"), ordered=TRUE)
 ggplot(noiseCleanDiff, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x")
 ```
@@ -414,6 +415,7 @@ save(testGOSample, file="inst/data/100GOSamples.RData")
 Running those samples:
 
 ```{r runGOSamples, eval=FALSE}
+data("100GOSamples")
 runGOSamples <- function(x){
   cleanSample <- x$geneSample
   cleanRes <- hyperGOMultiEnrichment(cleanSample, universe=universeGenes)
@@ -446,7 +448,7 @@ save(testGORes, file="inst/data/100GOResults.RData")
 ```
 
 ```{r lookDiffs}
-load(file.path(useDir, "inst/data/100GOResults.RData"))
+data("100GOResults")
 
 grab_noNoise <- function(x){
   x$clean[,c("diff", "class", "frac")]
@@ -454,8 +456,9 @@ grab_noNoise <- function(x){
 
 go_noNoise <- lapply(testGORes, grab_noNoise)
 go_noNoise <- do.call(rbind, go_noNoise)
-go_noNoise$class <- factor(go_noNoise$class, levels=c("low", "med", "hi"), ordered=TRUE)
-ggplot(go_noNoise, aes(x = frac, y = diff)) + geom_point() + facet_grid(. ~ class, scales="free_x")
+go_noNoise$class <- factor(go_noNoise$class, levels=c("low", "med", "hi"), ordered=TRUE) 
+go_noNoiseT <- go_noNoise[(!is.nan(go_noNoise$diff)),]
+ggplot(go_noNoiseT, aes(x = frac, y = diff)) + geom_point() + facet_grid(. ~ class, scales="free_x") + useTheme + stat_density2d(aes(fill = ..level..), geom="polygon")
 
 grab_noise <- function(x){
   x$noise[, c("diff", "class", "frac")]
@@ -520,12 +523,11 @@ nGene <- 1000
 cleanSample <- list(s1 = sampleTerms(useGO, hsGO, nGene, 4)[1:nGene],
                     s2 = sampleTerms(useGO, hsGO, nGene, 4)[1:nGene])
 
-save(noiseSamples, cleanSample, sizeNoise, fracShared, universeGenes, useGO, sizeClass, file=file.path(useDir, 'inst/data/noiseSamples.RData'))
+save(noiseSamples, cleanSample, sizeNoise, fracShared, universeGenes, useGO, useGOSizeClass, file=file.path(useDir, 'inst/data/noiseSamples.RData'))
 ```
 
-```{r runSweptNoise}
-useDir <- '/mlab/data/rmflight/Documents/projects/work/categoryComparePaperRev/'
-load(file.path(useDir, 'inst/data/noiseSamples.RData'))
+```{r runSweptNoise, eval=FALSE}
+data(noiseSamples)
 
 useNoise <- unlist(noiseSamples, recursive=FALSE)
 sizeNoiseAll <- rep(sizeNoise, each=length(fracShared))
@@ -540,7 +542,7 @@ runSweepNoise <- function(noiseGenes){
   noiseRes <- hyperGOMultiEnrichment(inNoise, universe=universeGenes)
   noiseP <- pvaluesMultiEnrich(names(inNoise), useGO, noiseRes)
   noisePComp <- pvalueDiffSig(noiseP$values, pCutoff=0.05, log=TRUE)
-  noisePComp$class <- sizeClass
+  noisePComp$class <- useGOSizeClass
   return(noisePComp)
 }
 
@@ -549,20 +551,45 @@ sfInit(parallel=TRUE, cpus=10)
 sfLibrary(ccPaperRev)
 sfLibrary(org.Hs.eg.db)
 sfLibrary(GO.db)
-sfExport("universeGenes", "useGO", "sizeClass", "cleanSample")
+sfExport("universeGenes", "useGO", "useGOSizeClass", "cleanSample")
 noiseSweepRes <- sfLapply(useNoise, runSweepNoise)
 sfStop()
 save(noiseSweepRes, file.path(useDir, "inst/data/noiseSweepRes.RData"))
 ```
 
+Examine the noise results.
 
-## Expectations
+```{r loadSweptNoise}
+data(noiseSamples)
+data(noiseSweepRes)
 
-Based on the above results, what I expect we will see if we do a programmatic search over the space is that there is a dependence on both the fraction of DE genes that are noisy, and the fraction of noisy genes that are shared (which really amounts to the same thing, but is a subtle point). 
+noiseFrac <- data.frame(size=rep(sizeNoise, each=length(fracShared)),
+                        shared=rep(fracShared, length(sizeNoise)))
+```
 
-# To Do:
+```{r examineSweptNoise}
+outMedians <- lapply(noiseSweepRes, function(inRes){
+  tapply(inRes$diff, inRes$class, median)
+})
+outMedians <- do.call(rbind, outMedians)
+outMedians <- cbind(outMedians, noiseFrac)
 
-* Vary the fraction of noise genes, and also vary the fraction that is common, and find a way to quantify the effect.
+ggplot(outMedians, aes(x=size, y=hi, color=shared)) + geom_point() + useTheme + ggtitle("Hi Median Difference")
+
+ggplot(outMedians, aes(x=size, y=med, color=shared)) + geom_point() + useTheme + ggtitle("Medium Median Difference")
+
+ggplot(outMedians, aes(x=size, y=low, color=shared)) + geom_point() + useTheme + ggtitle("Low Median Difference")
+```
+
+
+```{r examine2}
+outMedians2 <- data.frame(diff=c(outMedians$low, outMedians$med, outMedians$hi), class=c(rep("low", nrow(outMedians)), rep("med", nrow(outMedians)), rep("hi", nrow(outMedians))), size=rep(outMedians$size, 3), shared=rep(outMedians$shared, 3))
+outMedians2$class <- factor(outMedians2$class, c("low", "med", "hi"), ordered=TRUE)
+
+ggplot(outMedians2, aes(x=size, y=diff, color=shared)) + geom_point() + useTheme + facet_grid(class ~ ., scales="free_y") + ggtitle("Sample - Combined as a function of size and shared fraction")
+```
+
+
 
 # GSEA
 
@@ -582,11 +609,13 @@ We will use the t-values that `limma` has generated for the ALL data set, and ju
 
 ```{r generateSampleRanks}
 tALL <- topTable(fitALL2, number=Inf)
-
-tValues <- sample(tALL$t, length(universeGenes), replace=TRUE)
+tALL <- tALL$t[(tALL$t < 10) & (tALL$t > -10)]
+tValues <- runif(length(universeGenes), -6, 6)
 
 gseaSamples <- list(s1 = sampleTerms(useGO, hsGO, 1000, 4),
                     s2 = sampleTerms(useGO, hsGO, 1000, 4))
+
+gseaGOFracS1 <- calcFraction(hsGO[useGO], list(s1=gseaSamples[[1]]))
 
 gseaTValues <- sampletValueGenGSEA(gseaSamples, universeGenes, tValues)
 ```
@@ -596,11 +625,11 @@ Check that we did what we thought. If done right, all of the **sample** genes sh
 ```{r checkValues}
 tmpDat <- data.frame(x=gseaTValues[[1]], type="all", stringsAsFactors=FALSE)
 tmpDat$type[(universeGenes %in% gseaSamples[[1]])] <- "sample"
-ggplot(tmpDat, aes(x=x, color=type)) + geom_histogram(binwidth=0.1, position="identity")
+ggplot(tmpDat, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity")
 
 tmpComb <- data.frame(x=gseaTValues[["comb"]], type="all", stringsAsFactors=FALSE)
 tmpComb$type[(universeGenes %in% gseaSamples[[1]])] <- "sample"
-ggplot(tmpComb, aes(x=x, color=type)) + geom_histogram(binwidth=0.1, position="identity")
+ggplot(tmpComb, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity")
 ```
 
 Now lets actually do some calculations.
@@ -614,7 +643,510 @@ gseaSetResults <- lapply(gseaTValues, function(x){
 
 And figure out what is doing better.
 
-```{r gseaBetter}
+```{r gseaBetterGO}
 cleanDiff <- gseaDiffs(gseaSetResults)
+cleanDiff$sizeClass <- useGOSizeClass
+cleanDiff$sizeClass <- factor(cleanDiff$sizeClass, c("low", "med", "hi"), ordered=TRUE)
+cleanDiff$frac <- gseaGOFracS1$frac
+
+ggplot(cleanDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass)
 ```
 
+So this appears to be a different trend than for the hypergeometric case, in that a **meta** sample (achieved by averaging the t-statistics) actually does no worse, and in many cases much better than the worst p-value. This effect is less-pronounced as the number of genes in a class become larger, and as the fraction covered increases.
+
+So what happens if we add some noisy genes into the top 1000? Stuff that isn't annotated at all to the GO terms of interest?
+
+```{r gseaNoise}
+nNoise <- 2000
+noiseGenes <- possibleNoise(hsGO, useGO)
+noiseGenes <- sample(noiseGenes, nNoise)
+
+gseaNoise <- list(s1=c(gseaSamples[["s1"]], noiseGenes),
+                  s2=c(gseaSamples[["s2"]], noiseGenes))
+
+gseaTValues_noise <- sampletValueGenGSEA(gseaNoise, universeGenes, tValues)
+
+tmpDat <- data.frame(x=gseaTValues_noise[[1]], type="all", stringsAsFactors=FALSE)
+tmpDat$type[(universeGenes %in% gseaSamples[[1]])] <- "sample"
+ggplot(tmpDat, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity", alpha=0.75)
+```
+
+```{r runGSEANoise}
+gseaSetResults_noise <- lapply(gseaTValues_noise, function(x){
+  mmGeneSetTest(go2index, x)
+})
+```
+
+```{r gseaBetter}
+noiseDiff <- gseaDiffs(gseaSetResults_noise)
+noiseDiff$sizeClass <- useGOSizeClass
+noiseDiff$sizeClass <- factor(noiseDiff$sizeClass, c("low", "med", "hi"), ordered=TRUE)
+noiseDiff$frac <- gseaGOFracS1$frac
+
+ggplot(noiseDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass)
+
+diffDiff <- data.frame(diff=(noiseDiff$diff - cleanDiff$diff), sizeClass=noiseDiff$sizeClass, frac=noiseDiff$frac)
+ggplot(diffDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass)
+
+```
+
+So, it appears that having a uniform distribution does not make things behave the way we might expect. What if it is more an issue of independence, that GO is a bad fit for GSEA type analysis because of the issue that many of the terms are heavily overlapped. 
+
+### Independence
+
+What if we force independence on our objects? i.e. each object has independent sets of genes, and treat them appropriately? i.e. to count as "diff" we will put genes (features) into the top 50% of ranked t-values (therefore reducing coverage means pushing annotated genes down into the bottom 50% of ranked values), and adding noise means to push un-annotated (i.e. random) above in rank.
+
+Lets try this for a single example.
+
+```{r independentGSEA}
+nGene <- 10000
+indepTValues <- sort(runif(nGene, -6, 6))
+names(indepTValues) <- as.character(seq(1, nGene))
+
+gseaMap <- list(t1=sample(seq(1, nGene/2), 100))
+
+tmpDat <- data.frame(tVal=indepTValues, status="all", stringsAsFactors=F)
+tmpDat$status[gseaMap[["t1"]]] <- "sample"
+ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.1, position="identity")
+
+geneSetTest(gseaMap$t1, indepTValues, alternative="down", ranks.only=FALSE)
+
+gseaMap80 <- list(t1 = c(sample(seq(1, nGene/2), 80), 
+                         sample(seq((nGene/2) + 1, nGene), 20 )))
+
+geneSetTest(gseaMap80$t1, indepTValues, alternative="down", ranks.only=FALSE)
+
+tmpDat <- data.frame(tVal=indepTValues, status="all", stringsAsFactors=F)
+tmpDat$status[gseaMap80[["t1"]]] <- "sample"
+ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.1, position="identity")
+
+
+gseaMap50 <- list(t1 = c(sample(seq(1, nGene/2), 50),
+                         sample(seq((nGene/2) + 1, nGene), 50)))
+
+geneSetTest(gseaMap50$t1, indepTValues, alternative="down", ranks.only=FALSE)
+
+gseaMapUnif <- list(t1 = sample(nGene, 100))
+geneSetTest(gseaMapUnif$t1, indepTValues, alternative="down", ranks.only=FALSE)
+```
+
+OK, so at least we verify that as the percentage of genes in the top 50% decreases, then the p-values decrease as well, as we expect they should. What about as we increase the number of genes above above the set, while keeping the number in the top 50 the same?
+
+```{r checkNabove}
+gseaAbove100 <- list(t1=sample(seq(100, nGene/2), 100))
+geneSetTest(gseaAbove100$t1, indepTValues, alternative="down", ranks.only=FALSE)
+
+gseaAbove500 <- list(t1=sample(seq(501, nGene/2), 100))
+geneSetTest(gseaAbove500$t1, indepTValues, alternative="down", ranks.only=FALSE)
+
+gseaAbove1000 <- list(t1=sample(seq(1001, nGene/2), 100))
+geneSetTest(gseaAbove1000$t1, indepTValues, alternative="down", ranks.only=FALSE)
+
+gseaAbove2000 <- list(t1=sample(seq(2001, nGene/2), 100))
+geneSetTest(gseaAbove2000$t1, indepTValues, alternative="down", ranks.only=FALSE)
+
+gseaAbove4000 <- list(t1=sample(seq(4001, nGene/2), 100))
+geneSetTest(gseaAbove4000$t1, indepTValues, alternative="down", ranks.only=FALSE)
+```
+
+OK, so it takes a rather large proportion above to change the p-value any amount.
+
+So, what should we do. We need a function that will let us vary the size and proportion of genes that are in the bottom 50% of values.
+
+```{r gseaFunctions, eval=FALSE}
+?gseaSizeRange
+?gseaProportion
+```
+
+Lets verify this function is doing what we think it is.
+
+```{r checkGSEAProp}
+testSize <- gseaSizeRange(c(500,500), 50)
+useStatistics <- runif(10000, -6, 6)
+useSig <- runif(50, .1, 1)
+testStats <- gseaProportion(testSize, useSig, useStatistics)
+
+fullIndex <- seq(1, length(useStatistics))
+useCut <- 5000
+
+realRanks <- lapply(testStats, function(inStat){
+  
+  apply(inStat$stats, 2, function(inCol){
+    outRank <- rank(inCol)[inStat$index]
+    sum(outRank < useCut) / length(inStat$index)
+  })
+  
+})
+
+realRanks <- do.call(rbind, realRanks)
+plot(realRanks[,1], useSig)
+plot(realRanks[,2], useSig)
+plot(realRanks[,3], useSig)
+```
+
+OK, it looks like it is working. That's good.
+
+```{r testFunctions}
+testSize <- gseaSizeRange(c(500,500), 50)
+useStatistics <- runif(10000, -6, 6)
+useSig <- runif(50, .1, 1)
+testStats <- gseaProportion(testSize, useSig, useStatistics)
+
+outP <- lapply(testStats, function(inStat){
+  tmpP <- lapply(seq(1, ncol(inStat$stats)), function(useColumn){
+    geneSetTest(inStat$index, inStat$stats[,useColumn], "down", ranks.only=FALSE)
+  })
+  tmpP <- do.call(cbind, tmpP)
+  colnames(tmpP) <- colnames(inStat$stats)
+  return(tmpP)
+})
+
+outP2 <- do.call(rbind, outP)
+outP2 <- -1 * log(outP2)
+
+tmpP <- data.frame(set=apply(outP2[, c("s1", "s2")], 1, min), list=outP2[,"comb"])
+tmpP$diff <- tmpP$set - tmpP$list
+tmpP$frac <- useSig
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + useTheme + ggtitle("Sample - Combined average t-statistics")
+```
+
+Yeah, that doesn't seem to really work. 
+
+
+What if GSEA is dependent on the **shared** proportion that is in the up or down state? i.e. if we allow the proportion "down" to vary between the two samples, and plot the difference in **set** and **list** values based on how **close** the value of the proportion in the top is??
+
+```{r gseaVaryProp, eval=FALSE}
+?gseaProportionVary
+```
+
+
+Check that we generate different significant proportions for independent samples, and what is the combined.
+
+```{r checkgseaProportionsVary}
+testSize <- gseaSizeRange(c(500,500), 50)
+useStatistics <- runif(10000, -6, 6)
+useSig <- list(s1=runif(50, .1, 1), s2=runif(50, .1, 1))
+testStats <- gseaProportionVary(testSize, useSig, useStatistics)
+
+fullIndex <- seq(1, length(useStatistics))
+useCut <- 5000
+
+realRanks <- lapply(testStats, function(inStat){
+  
+  apply(inStat$stats, 2, function(inCol){
+    outRank <- rank(inCol)[inStat$index]
+    sum(outRank < useCut) / length(inStat$index)
+  })
+  
+})
+
+realRanks <- do.call(rbind, realRanks)
+plot(realRanks[,1], useSig[[1]])
+plot(realRanks[,2], useSig[[2]])
+plot(realRanks[,3], useSig[[1]])
+plot(realRanks[,3], useSig[[2]])
+```
+
+OK, this seems to be working still.
+
+Now, lets try this on some fake data.
+
+```{r gseaProportions2Data}
+testSize <- gseaSizeRange(c(500,500), 50)
+useStatistics <- runif(10000, -6, 6)
+useSig <- list(s1=runif(50, .1, 1), s2=runif(50, .1, 1))
+testStats <- gseaProportionVary(testSize, useSig, useStatistics)
+
+outP <- lapply(testStats, function(inStat){
+  tmpP <- lapply(seq(1, ncol(inStat$stats)), function(useColumn){
+    geneSetTest(inStat$index, inStat$stats[,useColumn], "down", ranks.only=FALSE)
+  })
+  tmpP <- do.call(cbind, tmpP)
+  colnames(tmpP) <- colnames(inStat$stats)
+  return(tmpP)
+})
+
+outP2 <- do.call(rbind, outP)
+outP2 <- -1 * log(outP2)
+
+tmpP <- data.frame(set=apply(outP2[, c("s1", "s2")], 1, min), list=outP2[,"comb"])
+tmpP$diff <- tmpP$set - tmpP$list
+
+realRanks <- lapply(testStats, function(inStat){
+  
+  apply(inStat$stats, 2, function(inCol){
+    outRank <- rank(inCol)[inStat$index]
+    sum(outRank < useCut) / length(inStat$index)
+  })
+  
+})
+
+realRanks <- do.call(rbind, realRanks)
+
+tmpP$frac <- realRanks[,3]
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
+```
+
+So, none of this has really worked, at least not in the way that was hoped. 
+
+### GSEA using p-values instead of t-statistics
+
+For our hypothetical comparison, we need to think of how one would combine two studies. In this case, one might combine two studies by combining the p-values. Therefore, we will use ranked p-values as our metric in the `geneSetTest`.
+
+For this to work with `geneSetTest`, we need to make the range 0, 0.5, 1 conform to -1, 0, 1, because `geneSetTest` works nicer with signed values. We will use a linear regression to transform the p-values to a signed range.
+
+```{r generateRegression}
+regData <- data.frame(y=c(-1, 0, 1), x=c(0, 0.5, 1))
+regModel <- lm(y ~ x, regData)
+
+testData <- runif(10000, 0, 1)
+outData <- regModel$coefficients[1] + regModel$coefficients[2]*testData
+hist(outData, 100)
+```
+
+So our transformation works. Lets make sure it will work like the t-statistic.
+
+```{r pvalRanks}
+nGene <- 10000
+indepTValues <- sort(runif(nGene, 0, 1))
+names(indepTValues) <- as.character(seq(1, nGene))
+
+gseaMap <- list(t1=sample(seq(1, nGene/4), 100))
+
+tmpDat <- data.frame(tVal=indepTValues, status="all", stringsAsFactors=F)
+tmpDat$status[gseaMap[["t1"]]] <- "sample"
+ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.01, position="identity")
+
+geneSetTest(gseaMap$t1, p2signed(regModel,indepTValues), alternative="down", ranks.only=FALSE)
+
+gseaMap80 <- list(t1 = c(sample(seq(1, nGene/2), 80), 
+                         sample(seq((nGene/2) + 1, nGene), 20 )))
+
+geneSetTest(gseaMap80$t1, p2signed(regModel,indepTValues), alternative="down", ranks.only=FALSE)
+
+tmpDat <- data.frame(tVal=indepTValues, status="all", stringsAsFactors=F)
+tmpDat$status[gseaMap80[["t1"]]] <- "sample"
+ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.1, position="identity")
+
+
+gseaMap50 <- list(t1 = c(sample(seq(1, nGene/2), 50),
+                         sample(seq((nGene/2) + 1, nGene), 50)))
+
+geneSetTest(gseaMap50$t1, p2signed(regModel,indepTValues), alternative="down", ranks.only=FALSE)
+```
+
+Now, lets maintain proportions between samples as we did before, but for the **list** method, combine the p-values using Fisher's method.
+
+```{r gseaPropFisher, eval=FALSE}
+?gseaProportionFisher
+```
+
+```{r checkGSEAPropFisher}
+testSize <- gseaSizeRange(c(500,500), 50)
+useStatistics <- runif(10000, 0, 1)
+useSig <- runif(50, .1, 1)
+testStats <- gseaProportionFisher(testSize, useSig, useStatistics)
+
+fullIndex <- seq(1, length(useStatistics))
+useCut <- 5000
+
+realRanks <- lapply(testStats, function(inStat){
+  
+  apply(inStat$stats, 2, function(inCol){
+    outRank <- rank(inCol)[inStat$index]
+    sum(outRank < useCut) / length(inStat$index)
+  })
+  
+})
+
+realRanks <- do.call(rbind, realRanks)
+plot(realRanks[,1], useSig)
+plot(realRanks[,2], useSig)
+plot(realRanks[,3], useSig)
+```
+
+```{r testFishers}
+testSize <- gseaSizeRange(c(500,500), 50)
+useStatistics <- runif(10000, 0, 1)
+useSig <- runif(50, .1, 1)
+testStats <- gseaProportionFisher(testSize, useSig, useStatistics)
+
+outP <- lapply(testStats, function(inStat){
+  tmpP <- lapply(seq(1, ncol(inStat$stats)), function(useColumn){
+    geneSetTest(inStat$index, p2signed(regModel, inStat$stats[,useColumn]), "down", ranks.only=FALSE)
+  })
+  tmpP <- do.call(cbind, tmpP)
+  colnames(tmpP) <- colnames(inStat$stats)
+  return(tmpP)
+})
+
+outP2 <- do.call(rbind, outP)
+outP2 <- -1 * log(outP2)
+
+tmpP <- data.frame(set=apply(outP2[, c("s1", "s2")], 1, min), list=outP2[,"comb"])
+tmpP$diff <- tmpP$set - tmpP$list
+tmpP$frac <- useSig
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
+
+# try also using ranks only
+outPRank <- lapply(testStats, function(inStat){
+  tmpP <- lapply(seq(1, ncol(inStat$stats)), function(useColumn){
+    geneSetTest(inStat$index, inStat$stats, ranks.only=TRUE)
+  })
+  tmpP <- do.call(cbind, tmpP)
+  colnames(tmpP) <- colnames(inStat$stats)
+  return(tmpP)
+})
+
+outP2Rank <- do.call(rbind, outPRank)
+outP2Rank <- -1 * log(outP2Rank)
+
+tmpP <- data.frame(set=apply(outP2Rank[, c("s1", "s2")], 1, min), list=outP2Rank[,"comb"])
+tmpP$diff <- tmpP$set - tmpP$list
+tmpP$frac <- useSig
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
+```
+
+#### Maximum p-value
+
+Finally, we note that [Shen & Tseng from 2010](http://dx.doi.org/10.1093/bioinformatics/btq148) combined independent experiments by taking the **maximum** p-value between samples. 
+
+```{r gseaProportionMax}
+?gseaProportionMax
+```
+
+```{r checkGSEAMax}
+testSize <- gseaSizeRange(c(500,500), 50)
+useStatistics <- runif(10000, 0, 1)
+useSig <- runif(50, .1, 1)
+testStats <- gseaProportionMax(testSize, useSig, useStatistics)
+
+fullIndex <- seq(1, length(useStatistics))
+useCut <- 5000
+
+realRanks <- lapply(testStats, function(inStat){
+  
+  apply(inStat$stats, 2, function(inCol){
+    outRank <- rank(inCol)[inStat$index]
+    sum(outRank < useCut) / length(inStat$index)
+  })
+  
+})
+
+realRanks <- do.call(rbind, realRanks)
+plot(realRanks[,1], useSig)
+plot(realRanks[,2], useSig)
+plot(realRanks[,3], useSig)
+```
+
+```{r runGSEAMax}
+testSize <- gseaSizeRange(c(500,500), 50)
+useStatistics <- runif(10000, 0, 1)
+useSig <- runif(50, .1, 1)
+testStats <- gseaProportionMax(testSize, useSig, useStatistics)
+
+outP <- lapply(testStats, function(inStat){
+  tmpP <- lapply(seq(1, ncol(inStat$stats)), function(useColumn){
+    geneSetTest(inStat$index, p2signed(regModel, inStat$stats[,useColumn]), "down", ranks.only=FALSE)
+  })
+  tmpP <- do.call(cbind, tmpP)
+  colnames(tmpP) <- colnames(inStat$stats)
+  return(tmpP)
+})
+
+outP2 <- do.call(rbind, outP)
+outP2 <- -1 * log(outP2)
+
+tmpP <- data.frame(set=apply(outP2[, c("s1", "s2")], 1, min), list=outP2[,"comb"])
+tmpP$diff <- tmpP$set - tmpP$list
+tmpP$frac <- useSig
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
+```
+
+And wow! It appears to work!
+
+Lets test using different size ranges and the proportions. 
+
+```{r varySizesAndProps}
+gseaLo <- gseaSizeRange(c(20, 250), 50)
+gseaMed <- gseaSizeRange(c(250, 500), 30)
+gseaHi <- gseaSizeRange(c(500, 1000), 20)
+
+gseaSizes <- c(gseaLo, gseaMed, gseaHi)
+gseaSizeClass <- c(rep("low", 50), rep("med", 30), rep("hi", 20))
+
+gseaFrac <- runif(100, 0.3, 1)
+gseaStatistics <- runif(10000, 0, 1)
+
+testStats <- gseaProportionMax(gseaSizes, gseaFrac, gseaStatistics)
+
+outP <- lapply(testStats, function(inStat){
+  tmpP <- lapply(seq(1, ncol(inStat$stats)), function(useColumn){
+    geneSetTest(inStat$index, p2signed(regModel, inStat$stats[,useColumn]), "down", ranks.only=FALSE)
+  })
+  tmpP <- do.call(cbind, tmpP)
+  colnames(tmpP) <- colnames(inStat$stats)
+  return(tmpP)
+})
+
+outP2 <- do.call(rbind, outP)
+outP2 <- -1 * log(outP2)
+
+tmpP <- data.frame(set=apply(outP2[, c("s1", "s2")], 1, min), list=outP2[,"comb"])
+tmpP$diff <- tmpP$set - tmpP$list
+tmpP$frac <- gseaFrac
+tmpP$class <- gseaSizeClass
+tmpP$class <- factor(tmpP$class, c("low", "med", "hi"), ordered=TRUE)
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ class) + useTheme
+
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + useTheme + ggtitle("Sample - Combined max-p")
+```
+
+So, this is very important. The method of combining p-values for the **list** method is **extremely** important. 
+
+Does this hold using ranks only for the calculation?
+
+```{r maxPRankOnly}
+outPRank <- lapply(testStats, function(inStat){
+  tmpP <- lapply(seq(1, ncol(inStat$stats)), function(useColumn){
+    geneSetTest(inStat$index, inStat$stats[,useColumn], ranks.only=TRUE)
+  })
+  tmpP <- do.call(cbind, tmpP)
+  colnames(tmpP) <- colnames(inStat$stats)
+  return(tmpP)
+})
+
+outP2Rank <- do.call(rbind, outPRank)
+outP2Rank <- -1 * log(outP2Rank)
+
+tmpPRank <- data.frame(set=apply(outP2Rank[, c("s1", "s2")], 1, min), list=outP2Rank[,"comb"])
+tmpPRank$diff <- tmpPRank$set - tmpPRank$list
+tmpPRank$frac <- gseaFrac
+tmpPRank$class <- gseaSizeClass
+tmpPRank$class <- factor(tmpPRank$class, c("low", "med", "hi"), ordered=TRUE)
+ggplot(tmpPRank, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ class)
+```
+
+No, it doesn't because the `ranks.only=TRUE` will only check for **mixed** values, not at one end or the other.
+
+Now we could ask the question, is the difference in the **proportion** between **set** and **list** related to the difference in **p-values**?
+
+```{r diffProp}
+calcRank <- lapply(testStats, function(inStat){
+  
+  apply(inStat$stats, 2, function(inCol){
+    
+  })
+  
+})
+
+calcRank <- do.call(rbind, calcRank)
+
+minRankSample <- rowMin(calcRank[, c("s1", "s2")])
+
+tmpP$diffRank <- minRankSample / calcRank[, "comb"]
+
+ggplot(tmpP, aes(x=diffRank, y=diff)) + geom_point() + facet_grid(. ~ class)
+```
+
+Nope, that doesn't seem to be the cause, at least not directly. 
