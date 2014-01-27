@@ -22,7 +22,7 @@ library(ggthemes)
 useTheme <- theme_gdocs()
 ```
 
-We will make use of three sets of `r nGO` GO terms from *H. sapiens*. For each set, we want differing numbers of genes annotated to them.
+We will make use of three sets of GO terms from *H. sapiens*. For each set, we want differing numbers of genes annotated to them.
 
 ### Num Annotations Dist
 
@@ -574,7 +574,7 @@ outMedians <- lapply(noiseSweepRes, function(inRes){
 outMedians <- do.call(rbind, outMedians)
 outMedians <- cbind(outMedians, noiseFrac)
 
-ggplot(outMedians, aes(x=size, y=hi color=shared)) + geom_point() + useTheme + ggtitle("Hi Median Difference")
+ggplot(outMedians, aes(x=size, y=hi, color=shared)) + geom_point() + useTheme + ggtitle("Hi Median Difference")
 
 ggplot(outMedians, aes(x=size, y=med, color=shared)) + geom_point() + useTheme + ggtitle("Medium Median Difference")
 
@@ -941,7 +941,7 @@ Now, lets maintain proportions between samples as we did before, but for the **l
 ?gseaProportionFisher
 ```
 
-```{r checkGSEAProp}
+```{r checkGSEAPropFisher}
 testSize <- gseaSizeRange(c(500,500), 50)
 useStatistics <- runif(10000, 0, 1)
 useSig <- runif(50, .1, 1)
