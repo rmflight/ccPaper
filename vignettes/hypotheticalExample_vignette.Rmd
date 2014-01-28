@@ -830,7 +830,9 @@ outP2 <- -1 * log(outP2)
 tmpP <- data.frame(set=apply(outP2[, c("s1", "s2")], 1, min), list=outP2[,"comb"])
 tmpP$diff <- tmpP$set - tmpP$list
 tmpP$frac <- useSig
-ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + useTheme + ggtitle("Sample - Combined average t-statistics")
+p <- ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + useTheme + ggtitle("Sample - Combined average t-statistics")
+p
+savePlot(p, "samplecombined_tstatistics.png")
 ```
 
 Yeah, that doesn't seem to really work. 
@@ -907,7 +909,7 @@ realRanks <- lapply(testStats, function(inStat){
 realRanks <- do.call(rbind, realRanks)
 
 tmpP$frac <- realRanks[,3]
-ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + ggtitle("Sample - Combined vary fraction")
 ```
 
 So, none of this has really worked, at least not in the way that was hoped. 
@@ -938,7 +940,7 @@ gseaMap <- list(t1=sample(seq(1, nGene/4), 100))
 
 tmpDat <- data.frame(tVal=indepTValues, status="all", stringsAsFactors=F)
 tmpDat$status[gseaMap[["t1"]]] <- "sample"
-ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.01, position="identity")
+ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.01, position="identity") + ggtitle("check p-values, 100%")
 
 geneSetTest(gseaMap$t1, p2signed(regModel,indepTValues), alternative="down", ranks.only=FALSE)
 
@@ -949,7 +951,7 @@ geneSetTest(gseaMap80$t1, p2signed(regModel,indepTValues), alternative="down", r
 
 tmpDat <- data.frame(tVal=indepTValues, status="all", stringsAsFactors=F)
 tmpDat$status[gseaMap80[["t1"]]] <- "sample"
-ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.1, position="identity")
+ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.1, position="identity") + ggtitle("check p-values, 80%")
 
 
 gseaMap50 <- list(t1 = c(sample(seq(1, nGene/2), 50),
@@ -1009,7 +1011,7 @@ outP2 <- -1 * log(outP2)
 tmpP <- data.frame(set=apply(outP2[, c("s1", "s2")], 1, min), list=outP2[,"comb"])
 tmpP$diff <- tmpP$set - tmpP$list
 tmpP$frac <- useSig
-ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + ggtitle("Sample - Combined Fishers")
 
 # try also using ranks only
 outPRank <- lapply(testStats, function(inStat){
@@ -1027,7 +1029,7 @@ outP2Rank <- -1 * log(outP2Rank)
 tmpP <- data.frame(set=apply(outP2Rank[, c("s1", "s2")], 1, min), list=outP2Rank[,"comb"])
 tmpP$diff <- tmpP$set - tmpP$list
 tmpP$frac <- useSig
-ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + ggtitle("Sample - Combined Fishers Ranks")
 ```
 
 #### Maximum p-value
@@ -1083,7 +1085,7 @@ outP2 <- -1 * log(outP2)
 tmpP <- data.frame(set=apply(outP2[, c("s1", "s2")], 1, min), list=outP2[,"comb"])
 tmpP$diff <- tmpP$set - tmpP$list
 tmpP$frac <- useSig
-ggplot(tmpP, aes(x=frac, y=diff)) + geom_point()
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + ggtitle("Sample - Combined Max-P")
 ```
 
 And wow! It appears to work!
@@ -1122,7 +1124,9 @@ tmpP$class <- gseaSizeClass
 tmpP$class <- factor(tmpP$class, c("low", "med", "hi"), ordered=TRUE)
 ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ class) + useTheme
 
-ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + useTheme + ggtitle("Sample - Combined max-p")
+p <- ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + useTheme + ggtitle("Sample - Combined Max-P")
+p
+savePlot(p, "samplecombined_maxp.png")
 ```
 
 So, this is very important. The method of combining p-values for the **list** method is **extremely** important. 
@@ -1147,7 +1151,7 @@ tmpPRank$diff <- tmpPRank$set - tmpPRank$list
 tmpPRank$frac <- gseaFrac
 tmpPRank$class <- gseaSizeClass
 tmpPRank$class <- factor(tmpPRank$class, c("low", "med", "hi"), ordered=TRUE)
-ggplot(tmpPRank, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ class)
+ggplot(tmpPRank, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ class) + ggtitle("Sample - Combined Max-P Ranks")
 ```
 
 No, it doesn't because the `ranks.only=TRUE` will only check for **mixed** values, not at one end or the other.
@@ -1169,7 +1173,7 @@ minRankSample <- rowMin(calcRank[, c("s1", "s2")])
 
 tmpP$diffRank <- minRankSample / calcRank[, "comb"]
 
-ggplot(tmpP, aes(x=diffRank, y=diff)) + geom_point() + facet_grid(. ~ class)
+ggplot(tmpP, aes(x=diffRank, y=diff)) + geom_point() + facet_grid(. ~ class) + ggtitle("Sample - Combined as Difference of Rank")
 ```
 
 Nope, that doesn't seem to be the cause, at least not directly. 
