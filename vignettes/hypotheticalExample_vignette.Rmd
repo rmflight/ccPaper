@@ -306,7 +306,7 @@ Is there any **difference** in the *difference of p-values* between **noise** vs
 ```{r diffDiffs}
 diff_pvalues <- noise_pvalues
 diff_pvalues$diff <- noise_pvalues$diff - noNoise_pvalues$diff
-ggplot(diff_pvalues, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x") + ggtitle("difference of differences noise vs noNoise")
+ggplot(diff_pvalues, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x") + ggtitle("difference of differences noise vs noNoise") + useTheme + xlab("Fraction") + ylab("Diff. noise / noNoise")
 tapply(diff_pvalues$diff, diff_pvalues$sizeClass, mean)
 ```
 
@@ -375,7 +375,7 @@ testStats_clean <- sameGOStats(cleanRes)
 testStats_clean$class <- useGOSizeClass
 testStats_clean$frac <- goFractions$frac[1:length(useGOSizeClass)]
 testStats_clean$class <- factor(testStats_clean$class, levels=c("low", "med", "hi"), ordered=TRUE)
-p <- ggplot(testStats_clean, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x") + useTheme + ggtitle("Sample - List Differences, 100 Gene Samples")
+p <- ggplot(testStats_clean, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x") + useTheme + ggtitle("Sample - List Differences, 100 Gene Samples") + xlab("Fraction") + ylab("Mean diff. log p-values")
 p
 savePlot(p, "genesamples100_sampleListDiffs.png")
 ```
@@ -386,7 +386,7 @@ testStats_noise <- sameGOStats(noiseRes)
 testStats_noise$class <- useGOSizeClass
 testStats_noise$frac <- goFracNoise$frac[1:length(useGOSizeClass)]
 testStats_noise$class <- factor(testStats_noise$class, levels=c("low", "med", "hi"), ordered=TRUE)
-ggplot(testStats_noise, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x") + ggtitle("Sample - List Differences, 100 Gene Samples, with noise")
+ggplot(testStats_noise, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x") + ggtitle("Sample - List Differences, 100 Gene Samples, with noise") + xlab("Fraction") + ylab("Mean diff. log p-values") + useTheme
 ```
 
 These show that if there is a difference in the p-values from **set** and **list**, they are real.
@@ -398,7 +398,7 @@ noiseCleanDiff <- diffGOStats(testRes)
 noiseCleanDiff$class <- useGOSizeClass
 noiseCleanDiff$frac <- goFracNoise$frac[1:length(useGOSizeClass)]
 noiseCleanDiff$class <- factor(noiseCleanDiff$class, levels=c("low", "med", "hi"), ordered=TRUE)
-ggplot(noiseCleanDiff, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x") + ggtitle("Difference of Differences, 100 Gene Samples")
+ggplot(noiseCleanDiff, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x") + ggtitle("Difference of Differences, 100 Gene Samples") + useTheme + xlab("Fraction") + ylab("Diff noise / noNoise")
 ```
 
 Here we see that the noisy case also tends to generate higher differences in p-values between **set** and **list** than the clean case.
