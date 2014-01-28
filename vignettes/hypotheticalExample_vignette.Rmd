@@ -308,7 +308,7 @@ Is there any **difference** in the *difference of p-values* between **noise** vs
 ```{r diffDiffs}
 diff_pvalues <- noise_pvalues
 diff_pvalues$diff <- noise_pvalues$diff - noNoise_pvalues$diff
-ggplot(diff_pvalues, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x")
+ggplot(diff_pvalues, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x") + ggtitle("difference of differences noise vs noNoise")
 tapply(diff_pvalues$diff, diff_pvalues$sizeClass, mean)
 ```
 
