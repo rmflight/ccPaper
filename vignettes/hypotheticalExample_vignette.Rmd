@@ -92,7 +92,7 @@ names(useGOSizeClass) <- useGO
 
 ### Examine Gene-GO Distribution for Real Data
 
-Before we go and generate our samples, we should actually process some real experimental data and examine the fraction of annotated genes in the experiment compared to the total number of genes annotated. We will use the [`ALL`][http://master.bioconductor.org/packages/release/data/experiment/html/ALL.html] data set from `Bioconductor` and a [paired lung cancer dataset][http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE18842] available from GEO (available as part of this package).
+Before we go and generate our samples, we should actually process some real experimental data and examine the fraction of annotated genes in the experiment compared to the total number of genes annotated. We will use the [`ALL`](http://master.bioconductor.org/packages/release/data/experiment/html/ALL.html) data set from `Bioconductor` and a [paired lung cancer dataset](http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE18842) available from GEO (available as part of this package).
 
 #### ALL
 
