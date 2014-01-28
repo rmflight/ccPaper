@@ -34,7 +34,7 @@ savePlot <- function(plotObj, plotFile, figPath="/mlab/data/rmflight/Documents/p
 
 We will make use of three sets of GO terms from *H. sapiens*. For each set, we want differing numbers of genes annotated to them.
 
-### Num Annotations Dist
+### Number of Genes Annotated Distribution
 
 Let's first look at the distribution of number of genes annotated to the GO terms in **biological process**
 
@@ -54,7 +54,7 @@ universeGenes <- unique(unlist(hsGO))
 ```{r goCountDist}
 hsGO_count <- sapply(hsGO, length)
 hsGO_count <- data.frame(size=hsGO_count)
-p <- ggplot(hsGO_count, aes(x=size)) + geom_bar(binwidth=10) + xlim(0, 2000) + ylim(0, 500) + useTheme + ggtitle("Number of genes annotated to GO terms") + xlab('Number of Genes Annotated to Term') + ylab('Count')
+p <- ggplot(hsGO_count, aes(x=size)) + geom_bar(binwidth=10) + xlim(0, 2000) + ylim(0, 500) + useTheme + ggtitle("Number of genes annotated to GO terms") + xlab('Num. of Genes') + ylab('Count')
 p
 
 savePlot(p, "go2gene_distribution.png")
@@ -149,7 +149,7 @@ library(hgu133plus2.db)
 lung2go <- as.list(hgu133plus2GO2ALLPROBES)
 lung_sizeFrac <- trimGOFrac(lung2go, deLung)
 lung_sizeFrac$genelist <- "lung"
-ggplot(lung_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + useTheme + ggtitle("DE Lung fraction as a function of size") + xlab("Number of Genes Annotated to Term") + ylab("Fraction of Term Genes in DE Sample")
+ggplot(lung_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + useTheme + ggtitle("DE Lung fraction as a function of size") + xlab("Num. of Genes") + ylab("Fraction")
 ```
 
 
@@ -179,7 +179,7 @@ sample2_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
 
 #check our expectations
 goFractions <- calcFraction(hsGO[useGO], list(sample1=sample1_org, sample2=sample2_org))
-ggplot(goFractions, aes(x=size, y=frac, color=genelist)) + geom_point() + useTheme + ggtitle("Sample GO fractions") xlab("Number of Genes Annotated to Term") + ylab("Fraction of Term Genes in DE Sample")
+ggplot(goFractions, aes(x=size, y=frac, color=genelist)) + geom_point() + useTheme + ggtitle("Sample GO fractions") + xlab("Num. of Genes") + ylab("Fraction")
 ```
 
 ### Compare to experimental
@@ -190,7 +190,7 @@ Lets actually compare this to the distribution of fractions *vs* sizes from the 
 sampleGOFracs <- calcFraction(hsGO, list(sample1=sample1_org, sample2=sample2_org))
 ALL_sizeFrac$genelist <- "all"
 ALL_tmp <- rbind(ALL_sizeFrac, lung_sizeFrac, sampleGOFracs[,c("frac", "genelist", "size")])
-ggplot(ALL_tmp, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + facet_grid(genelist ~ .) + useTheme + ggtitle("Sample GO fractions for all") xlab("Number of Genes Annotated to Term") + ylab("Fraction of Term Genes in DE Sample")
+ggplot(ALL_tmp, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + facet_grid(genelist ~ .) + useTheme + ggtitle("Sample GO fractions for all") + xlab("Num. of Genes") + ylab("Fraction")
 ```
 
 
@@ -231,10 +231,10 @@ Now we will plot the difference in log-p-values (where we have **set** - **list*
 
 ```{r noNoisePlotStuff}
 noNoise_pvalues$sizeClass <- factor(noNoise_pvalues$sizeClass, levels=c("low", "med", "hi"), ordered=TRUE)
-p <- ggplot(noNoise_pvalues, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x") + xlab("fraction") + useTheme + ggtitle("Sample - Combined Differences")
+p <- ggplot(noNoise_pvalues, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x") + xlab("fraction") + useTheme + ggtitle("Sample - Combined Differences") + xlab("Fraction") + ylab("Diff. log p-values")
 p
 savePlot(p, "nonoise_sample_combineddiff.png")
-ggplot(noNoise_pvalues, aes(x=sizeClass, y=diff)) + geom_boxplot() + geom_point() + ggtitle("Sample - Combined Differences")
+ggplot(noNoise_pvalues, aes(x=sizeClass, y=diff)) + geom_boxplot() + geom_point() + ggtitle("Sample - Combined Differences") + xlab("Size Class") + ylab("Diff. log p-values")
 ```
 
 We can see that it appears in general that **set** has better p-values than **list**, especially in the *med* and *hi* groups. Also, both methods get pretty much the same GO terms as significant. 
@@ -289,7 +289,7 @@ noise_pvalues$frac <- goFracNoise$frac[1:length(useGOSizeClass)]
 
 ```{r plotSummarizeNoise}
 noise_pvalues$sizeClass <- factor(noise_pvalues$sizeClass, c("low", "med", "hi"), ordered=TRUE)
-ggplot(noise_pvalues, aes(x=frac, y=diff, color=sigState)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x") + useTheme + ggtitle("Sample - Combined with Noise")
+ggplot(noise_pvalues, aes(x=frac, y=diff, color=sigState)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x") + useTheme + ggtitle("Sample - Combined with Noise") + xlab("Fraction") + ylab("Diff. log p-values")
 ```
 
 ```{r summarizeCountsNoise}
