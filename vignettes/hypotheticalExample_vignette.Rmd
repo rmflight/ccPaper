@@ -38,7 +38,7 @@ We will make use of three sets of GO terms from *H. sapiens*. For each set, we w
 
 Let's first look at the distribution of number of genes annotated to the GO terms in **biological process**
 
-```{r goAnnotations}
+```{r goAnnotations, message=FALSE}
 library(org.Hs.eg.db)
 library(GO.db)
 library(ccPaperRev)
