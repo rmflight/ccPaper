@@ -16,10 +16,22 @@ To demonstrate the utility of the general `categoryCompare` approach, we will co
 
 ## GO Terms
 
-```{r nGO}
+```{r setupPlot}
 library(ggplot2)
 library(ggthemes)
-useTheme <- theme_gdocs()
+useTheme <- theme_bw() + theme(legend.key=element_blank(), legend.title = element_text(size=25), axis.title = element_text(size=25), axis.text = element_text(size=15), legend.text = element_text(size=20), strip.text.y = element_text(size=20))
+
+
+savePlot <- function(plotObj, plotFile){
+  useSaveDir <- "savedPlots"
+  savePath <- file.path(getwd(), useSaveDir)
+  if (useSaveDir %in% list.files()){
+    plotObj <- plotObj + ggtitle(NULL)
+    png(filename=file.path(savePath, plotFile), width=854, height=628)
+    print(plotObj)
+    dev.off()
+  }
+}
 ```
 
 We will make use of three sets of GO terms from *H. sapiens*. For each set, we want differing numbers of genes annotated to them.
