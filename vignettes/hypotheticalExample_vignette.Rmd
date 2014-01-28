@@ -151,7 +151,7 @@ library(hgu133plus2.db)
 lung2go <- as.list(hgu133plus2GO2ALLPROBES)
 lung_sizeFrac <- trimGOFrac(lung2go, deLung)
 lung_sizeFrac$genelist <- "lung"
-ggplot(lung_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + useTheme
+ggplot(lung_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + useTheme + ggtitle("DE Lung fraction as a function of size")
 ```
 
 
