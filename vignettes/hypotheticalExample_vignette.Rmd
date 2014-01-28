@@ -119,7 +119,7 @@ Now for all the GO terms that map to the probes in the `ALL` differentially expr
 library(hgu95av2.db)
 ALLgo <- as.list(hgu95av2GO2ALLPROBES)
 ALL_sizeFrac <- trimGOFrac(ALLgo, deALL)
-ggplot(ALL_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + useTheme + ggtitle("DE ALL fraction as a function of size")
+ggplot(ALL_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + useTheme + ggtitle("DE ALL fraction as a function of size") + xlab("Number of Genes Annotated to Term") + ylab("Fraction of Term Genes in DE Sample")
 ```
 
 
