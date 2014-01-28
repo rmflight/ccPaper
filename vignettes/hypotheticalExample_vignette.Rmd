@@ -149,7 +149,7 @@ library(hgu133plus2.db)
 lung2go <- as.list(hgu133plus2GO2ALLPROBES)
 lung_sizeFrac <- trimGOFrac(lung2go, deLung)
 lung_sizeFrac$genelist <- "lung"
-ggplot(lung_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + useTheme + ggtitle("DE Lung fraction as a function of size")
+ggplot(lung_sizeFrac, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + useTheme + ggtitle("DE Lung fraction as a function of size") + xlab("Number of Genes Annotated to Term") + ylab("Fraction of Term Genes in DE Sample")
 ```
 
 
@@ -179,7 +179,7 @@ sample2_org <- sampleTerms(useGO, hsGO, 1000, 4)[1:nGene]
 
 #check our expectations
 goFractions <- calcFraction(hsGO[useGO], list(sample1=sample1_org, sample2=sample2_org))
-ggplot(goFractions, aes(x=size, y=frac, color=genelist)) + geom_point() + useTheme + ggtitle("Sample GO fractions")
+ggplot(goFractions, aes(x=size, y=frac, color=genelist)) + geom_point() + useTheme + ggtitle("Sample GO fractions") xlab("Number of Genes Annotated to Term") + ylab("Fraction of Term Genes in DE Sample")
 ```
 
 ### Compare to experimental
@@ -190,7 +190,7 @@ Lets actually compare this to the distribution of fractions *vs* sizes from the 
 sampleGOFracs <- calcFraction(hsGO, list(sample1=sample1_org, sample2=sample2_org))
 ALL_sizeFrac$genelist <- "all"
 ALL_tmp <- rbind(ALL_sizeFrac, lung_sizeFrac, sampleGOFracs[,c("frac", "genelist", "size")])
-ggplot(ALL_tmp, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + facet_grid(genelist ~ .) + useTheme + ggtitle("Sample GO fractions for all")
+ggplot(ALL_tmp, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + facet_grid(genelist ~ .) + useTheme + ggtitle("Sample GO fractions for all") xlab("Number of Genes Annotated to Term") + ylab("Fraction of Term Genes in DE Sample")
 ```
 
 
