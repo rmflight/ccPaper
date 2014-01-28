@@ -233,8 +233,10 @@ Now we will plot the difference in log-p-values (where we have **set** - **list*
 
 ```{r noNoisePlotStuff}
 noNoise_pvalues$sizeClass <- factor(noNoise_pvalues$sizeClass, levels=c("low", "med", "hi"), ordered=TRUE)
-ggplot(noNoise_pvalues, aes(x=frac, y=diff, color=sigState)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x") + xlab("fraction") + useTheme + ggtitle("Sample - Combined Differences")
-ggplot(noNoise_pvalues, aes(x=sizeClass, y=diff)) + geom_boxplot() + geom_point()
+p <- ggplot(noNoise_pvalues, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass, scales="free_x") + xlab("fraction") + useTheme + ggtitle("Sample - Combined Differences")
+p
+savePlot(p, "nonoise_sample_combineddiff.png")
+ggplot(noNoise_pvalues, aes(x=sizeClass, y=diff)) + geom_boxplot() + geom_point() + ggtitle("Sample - Combined Differences")
 ```
 
 We can see that it appears in general that **set** has better p-values than **list**, especially in the *med* and *hi* groups. Also, both methods get pretty much the same GO terms as significant. 
