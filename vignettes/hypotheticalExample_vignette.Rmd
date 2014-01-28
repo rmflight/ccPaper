@@ -648,11 +648,11 @@ Check that we did what we thought. If done right, all of the **sample** genes sh
 ```{r checkValues}
 tmpDat <- data.frame(x=gseaTValues[[1]], type="all", stringsAsFactors=FALSE)
 tmpDat$type[(universeGenes %in% gseaSamples[[1]])] <- "sample"
-ggplot(tmpDat, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity")
+ggplot(tmpDat, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity") + ggtitle("location of samples")
 
 tmpComb <- data.frame(x=gseaTValues[["comb"]], type="all", stringsAsFactors=FALSE)
 tmpComb$type[(universeGenes %in% gseaSamples[[1]])] <- "sample"
-ggplot(tmpComb, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity")
+ggplot(tmpComb, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity") + ggitle("location of samples")
 ```
 
 Now lets actually do some calculations.
@@ -672,7 +672,7 @@ cleanDiff$sizeClass <- useGOSizeClass
 cleanDiff$sizeClass <- factor(cleanDiff$sizeClass, c("low", "med", "hi"), ordered=TRUE)
 cleanDiff$frac <- gseaGOFracS1$frac
 
-ggplot(cleanDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass)
+ggplot(cleanDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass) + ggtitle("Sample - List for GSEA, using GO")
 ```
 
 So this appears to be a different trend than for the hypergeometric case, in that a **meta** sample (achieved by averaging the t-statistics) actually does no worse, and in many cases much better than the worst p-value. This effect is less-pronounced as the number of genes in a class become larger, and as the fraction covered increases.
@@ -691,7 +691,7 @@ gseaTValues_noise <- sampletValueGenGSEA(gseaNoise, universeGenes, tValues)
 
 tmpDat <- data.frame(x=gseaTValues_noise[[1]], type="all", stringsAsFactors=FALSE)
 tmpDat$type[(universeGenes %in% gseaSamples[[1]])] <- "sample"
-ggplot(tmpDat, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity", alpha=0.75)
+ggplot(tmpDat, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity", alpha=0.75) + ggtitle("Sample - List GSEA GO, adding noise genes")
 ```
 
 ```{r runGSEANoise}
@@ -706,10 +706,10 @@ noiseDiff$sizeClass <- useGOSizeClass
 noiseDiff$sizeClass <- factor(noiseDiff$sizeClass, c("low", "med", "hi"), ordered=TRUE)
 noiseDiff$frac <- gseaGOFracS1$frac
 
-ggplot(noiseDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass)
+ggplot(noiseDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass) + ggtitle("Sample - List, GSEA GO with Noise")
 
 diffDiff <- data.frame(diff=(noiseDiff$diff - cleanDiff$diff), sizeClass=noiseDiff$sizeClass, frac=noiseDiff$frac)
-ggplot(diffDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass)
+ggplot(diffDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass) + ggtitle("Difference of Differences, GSEA GO")
 
 ```
 
@@ -730,7 +730,7 @@ gseaMap <- list(t1=sample(seq(1, nGene/2), 100))
 
 tmpDat <- data.frame(tVal=indepTValues, status="all", stringsAsFactors=F)
 tmpDat$status[gseaMap[["t1"]]] <- "sample"
-ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.1, position="identity")
+ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.1, position="identity") + ggtitle("Check independent distribution, 100%")
 
 geneSetTest(gseaMap$t1, indepTValues, alternative="down", ranks.only=FALSE)
 
@@ -741,7 +741,7 @@ geneSetTest(gseaMap80$t1, indepTValues, alternative="down", ranks.only=FALSE)
 
 tmpDat <- data.frame(tVal=indepTValues, status="all", stringsAsFactors=F)
 tmpDat$status[gseaMap80[["t1"]]] <- "sample"
-ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.1, position="identity")
+ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.1, position="identity") + ggtitle("check independent distribution, 80%")
 
 
 gseaMap50 <- list(t1 = c(sample(seq(1, nGene/2), 50),
