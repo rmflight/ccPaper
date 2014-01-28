@@ -510,7 +510,7 @@ go_noNoise$noise <- "none"
 
 go_all <- rbind(go_noise, go_noNoise)
 rownames(go_all) <- NULL
-ggplot(go_all, aes(x = frac, y = diff, fill = noise)) + geom_violin(trim=TRUE, alpha=0.5, position="identity") + facet_grid(. ~ class, scales="free_x")
+ggplot(go_all, aes(x = frac, y = diff, fill = noise)) + geom_violin(trim=TRUE, alpha=0.5, position="identity") + facet_grid(. ~ class, scales="free_x") + ggtitle("Difference of Differences, 100 GO Samples")
 ```
 
 
@@ -518,11 +518,11 @@ What if we aggregate things into bins first, based on their class and fraction?
 
 ```{r aggregate}
 go_diff$frac10 <- round(go_diff$frac * 10) / 10
-ggplot(go_diff, aes(x = factor(frac10), y = diff)) + geom_boxplot() + facet_grid(. ~ class, scales="free_x") 
+ggplot(go_diff, aes(x = factor(frac10), y = diff)) + geom_boxplot() + facet_grid(. ~ class, scales="free_x") + ggtitle("Difference of Differences, 100 GO Samples")
 
 probPoint <- is.infinite(go_diff$diff) | is.na(go_diff$diff) | is.nan(go_diff$diff)
 go_diff <- go_diff[!probPoint, ]
-ggplot(go_diff, aes(x=frac, y=diff)) + stat_smooth() + facet_grid(. ~ class, scales="free_x")
+ggplot(go_diff, aes(x=frac, y=diff)) + stat_smooth() + facet_grid(. ~ class, scales="free_x") + ggtitle("Difference of Differences, 100 GO Samples")
 ```
 
 Although the improvement of noise over clean data dips below 0 at medium fractions, it does tend to improve rather significantly as the fraction of genes annotated to a GO term increases.
