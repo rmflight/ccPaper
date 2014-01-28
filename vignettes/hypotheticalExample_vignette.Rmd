@@ -377,7 +377,9 @@ testStats_clean <- sameGOStats(cleanRes)
 testStats_clean$class <- useGOSizeClass
 testStats_clean$frac <- goFractions$frac[1:length(useGOSizeClass)]
 testStats_clean$class <- factor(testStats_clean$class, levels=c("low", "med", "hi"), ordered=TRUE)
-ggplot(testStats_clean, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x") + useTheme
+p <- ggplot(testStats_clean, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() + geom_errorbar() + facet_grid(. ~ class, scales="free_x") + useTheme + ggtitle("Sample - List Differences, 100 Gene Samples")
+p
+savePlot(p, "genesamples100_sampleListDiffs.png")
 ```
 
 ```{r noiseStats}
