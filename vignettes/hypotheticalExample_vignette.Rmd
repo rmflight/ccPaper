@@ -22,12 +22,10 @@ library(ggthemes)
 useTheme <- theme_bw() + theme(legend.key=element_blank(), legend.title = element_text(size=25), axis.title = element_text(size=25), axis.text = element_text(size=15), legend.text = element_text(size=20), strip.text.y = element_text(size=20))
 
 
-savePlot <- function(plotObj, plotFile){
-  useSaveDir <- "savedPlots"
-  savePath <- file.path(getwd(), useSaveDir)
-  if (useSaveDir %in% list.files()){
+savePlot <- function(plotObj, plotFile, figPath="/mlab/data/rmflight/Documents/projects/work/categoryComparePaperRev/savedPlots"){
+  if (file.exists(figPath)){
     plotObj <- plotObj + ggtitle(NULL)
-    png(filename=file.path(savePath, plotFile), width=854, height=628)
+    png(filename=file.path(figPath, plotFile), width=854, height=628)
     print(plotObj)
     dev.off()
   }
