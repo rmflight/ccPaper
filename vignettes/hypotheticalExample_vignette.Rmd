@@ -54,7 +54,7 @@ universeGenes <- unique(unlist(hsGO))
 ```{r goCountDist}
 hsGO_count <- sapply(hsGO, length)
 hsGO_count <- data.frame(size=hsGO_count)
-p <- ggplot(hsGO_count, aes(x=size)) + geom_bar(binwidth=10) + xlim(0, 2000) + ylim(0, 500) + useTheme + ggtitle("Number of genes annotated to GO terms")
+p <- ggplot(hsGO_count, aes(x=size)) + geom_bar(binwidth=10) + xlim(0, 2000) + ylim(0, 500) + useTheme + ggtitle("Number of genes annotated to GO terms") + xlab('Number of Genes Annotated to Term') + ylab('Count')
 p
 
 savePlot(p, "go2gene_distribution.png")
