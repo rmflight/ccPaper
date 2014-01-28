@@ -1,7 +1,7 @@
-Package: ccPaperRevHypo
+Package: ccPaperRev
 Type: Package
 Title: work for categoryCompare paper revisions
-Version: 0.0.2
+Version: 0.0.3
 Author: Robert M Flight <rflight79@gmail.com>
 Maintainer: Robert M Flight <rflight79@gmail.com>
 Depends:
@@ -22,3 +22,4 @@ License: CC0
 VignetteBuilder: knitr
 Collate:
     'hypotheticalDataGeneration.R'
+    'datasets.R'
