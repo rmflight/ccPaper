@@ -607,7 +607,9 @@ ggplot(outMedians, aes(x=size, y=low, color=shared)) + geom_point() + useTheme +
 outMedians2 <- data.frame(diff=c(outMedians$low, outMedians$med, outMedians$hi), class=c(rep("low", nrow(outMedians)), rep("med", nrow(outMedians)), rep("hi", nrow(outMedians))), size=rep(outMedians$size, 3), shared=rep(outMedians$shared, 3))
 outMedians2$class <- factor(outMedians2$class, c("low", "med", "hi"), ordered=TRUE)
 
-ggplot(outMedians2, aes(x=size, y=diff, color=shared)) + geom_point() + useTheme + facet_grid(class ~ ., scales="free_y") + ggtitle("Sample - Combined as a function of size and shared fraction")
+p <- ggplot(outMedians2, aes(x=size, y=diff, color=shared)) + geom_point() + useTheme + facet_grid(class ~ ., scales="free_y") + ggtitle("Sample - Combined as a function of size and shared fraction")
+p
+savePlot(p, "samplecombined_functionSizeFraction.png")
 ```
 
 
