@@ -475,7 +475,7 @@ go_noNoise <- lapply(testGORes, grab_noNoise)
 go_noNoise <- do.call(rbind, go_noNoise)
 go_noNoise$class <- factor(go_noNoise$class, levels=c("low", "med", "hi"), ordered=TRUE) 
 go_noNoiseT <- go_noNoise[(!is.nan(go_noNoise$diff)),]
-p <- ggplot(go_noNoiseT, aes(x = frac, y = diff)) + geom_point() + facet_grid(. ~ class, scales="free_x") + useTheme + stat_density2d(aes(fill = ..level..), geom="polygon") + ggtitle("Sample - List Differences, 100 GO Samples, noNoise")
+p <- ggplot(go_noNoiseT, aes(x = frac, y = diff)) + geom_point() + facet_grid(. ~ class, scales="free_x") + useTheme + stat_density2d(aes(fill = ..level..), geom="polygon") + ggtitle("Sample - List Differences, 100 GO Samples, noNoise") + xlab("Fraction") + ylab("Diff. log p-values")
 p
 savePlot(p, "gosamples100_samplelistDiff.png")
 
