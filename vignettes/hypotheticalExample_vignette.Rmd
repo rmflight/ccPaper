@@ -485,7 +485,7 @@ grab_noise <- function(x){
 go_noise <- lapply(testGORes, grab_noise)
 go_noise <- do.call(rbind, go_noise)
 go_noise$class <- factor(go_noise$class, levels=c("low", "med", "hi"), ordered=TRUE)
-ggplot(go_noise, aes(x = frac, y = diff)) + geom_point() + facet_grid(. ~ class, scales="free_x") + ggtitle("Sample - List Differences, 100 GO Samples, Noise")
+ggplot(go_noise, aes(x = frac, y = diff)) + geom_point() + facet_grid(. ~ class, scales="free_x") + ggtitle("Sample - List Differences, 100 GO Samples, Noise") + xlab("Fraction") + ylab("Diff. log p-values")
 
 grab_noiseDiff <- function(x){
   outRes <- x$clean[, c("diff", "class", "frac")]
@@ -496,7 +496,7 @@ go_diff <- lapply(testGORes, grab_noiseDiff)
 go_diff <- do.call(rbind, go_diff)
 go_diff$class <- factor(go_diff$class, levels=c("low", "med", "hi"), ordered=TRUE)
 ggplot(go_diff, aes(x = frac, y = diff)) + geom_point() + facet_grid(. ~ class, scales="free_x") + ggtitle("Difference of Differences, 100 GO Samples")
-ggplot(go_diff, aes(x = frac, y = diff, fill=class)) + geom_boxplot(position="identity", alpha=0.4) + ggtitle("Difference of Differences, 100 GO Samples")
+ggplot(go_diff, aes(x = frac, y = diff, fill=class)) + geom_boxplot(position="identity", alpha=0.4) + ggtitle("Difference of Differences, 100 GO Samples") + xlab("Fraction") + ylab("Diff. noise / noNoise")
 ```
 
 
