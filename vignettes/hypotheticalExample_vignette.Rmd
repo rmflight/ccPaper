@@ -336,7 +336,7 @@ save(useGO, testSamples, universeGenes, useGOSizeClass, file="inst/data/100GeneS
 ```
 
 ```{r runSamples, eval=FALSE}
-data(100GeneSamples)
+data("100GeneSamples")
 library(snowfall)
 # load("inst/data/100GeneSamples.RData")
 testFun <- function(x){
