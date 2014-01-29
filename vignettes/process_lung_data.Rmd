@@ -4,6 +4,11 @@
 %\VignetteDepends{GEOquery}
 -->
 
+```{r customCSS, include=FALSE}
+cssFile <- system.file("extdata", "style.css", package="ccPaperRev")
+options(markdown.HTML.stylesheet = cssFile)
+```
+
 # Lung Data
 
 One of the experimental data sets we use is from [GEO][http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE18842]. This documents the actual processing.

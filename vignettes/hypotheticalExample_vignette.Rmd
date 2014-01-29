@@ -1,9 +1,14 @@
 <!--
   %\VignetteEngine{knitr}
   %\VignetteIndexEntry{hypothetical example}
-  %\VignetteDepends{categoryComparePaperRev, ggplot2, ALL, GO.db, hgu95av.db, hgu133plus2.db, limma, ggthemes}
+  %\VignetteDepends{categoryComparePaperRev, ggplot2, ALL, GO.db, hgu95av.db, hgu133plus2.db, limma}
 -->
   
+```{r customCSS, include=FALSE}
+cssFile <- system.file("extdata", "style.css", package="ccPaperRev")
+options(markdown.HTML.stylesheet = cssFile)
+```
+
 # Hypothetical Example
   
 To demonstrate the utility of the general `categoryCompare` approach, we will construct an artificial data set based on the Gene Ontology. We will attempt to demonstrate that differences in the **set** or **list** based comparisons are also dependent on the number of items annotated to a particular term.

@@ -4,6 +4,11 @@
   %\VignetteDepends{RCytoscape}
 -->
 
+```{r customCSS, include=FALSE}
+cssFile <- system.file("extdata", "style.css", package="ccPaperRev")
+options(markdown.HTML.stylesheet = cssFile)
+```
+
 # RCy Pie Nodes
 
 If we want to create pie nodes in `RCy` using custom graphics, what do we need to do, and how hard will it be?
