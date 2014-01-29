@@ -727,7 +727,7 @@ gseaMap <- list(t1=sample(seq(1, nGene/2), 100))
 
 tmpDat <- data.frame(tVal=indepTValues, status="all", stringsAsFactors=F)
 tmpDat$status[gseaMap[["t1"]]] <- "sample"
-ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.1, position="identity") + ggtitle("Check independent distribution, 100%")
+ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.1, position="identity") + ggtitle("Check independent distribution, 100%") + useTheme + xlab("t-statistic")
 
 geneSetTest(gseaMap$t1, indepTValues, alternative="down", ranks.only=FALSE)
 
@@ -738,7 +738,7 @@ geneSetTest(gseaMap80$t1, indepTValues, alternative="down", ranks.only=FALSE)
 
 tmpDat <- data.frame(tVal=indepTValues, status="all", stringsAsFactors=F)
 tmpDat$status[gseaMap80[["t1"]]] <- "sample"
-ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.1, position="identity") + ggtitle("check independent distribution, 80%")
+ggplot(tmpDat, aes(x=tVal, fill=status)) + geom_histogram(binwidt=0.1, position="identity") + ggtitle("check independent distribution, 80%") + useTheme + xlab("t-statistic")
 
 
 gseaMap50 <- list(t1 = c(sample(seq(1, nGene/2), 50),
@@ -827,7 +827,7 @@ outP2 <- -1 * log(outP2)
 tmpP <- data.frame(set=apply(outP2[, c("s1", "s2")], 1, min), list=outP2[,"comb"])
 tmpP$diff <- tmpP$set - tmpP$list
 tmpP$frac <- useSig
-p <- ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + useTheme + ggtitle("Sample - Combined average t-statistics")
+p <- ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + useTheme + ggtitle("Sample - Combined average t-statistics") + xlab("Fraction") + ylab("Diff. log p-values")
 p
 savePlot(p, "samplecombined_tstatistics.png")
 ```
