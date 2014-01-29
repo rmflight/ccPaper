@@ -1026,7 +1026,7 @@ outP2Rank <- -1 * log(outP2Rank)
 tmpP <- data.frame(set=apply(outP2Rank[, c("s1", "s2")], 1, min), list=outP2Rank[,"comb"])
 tmpP$diff <- tmpP$set - tmpP$list
 tmpP$frac <- useSig
-ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + ggtitle("Sample - Combined Fishers Ranks")
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + ggtitle("Sample - Combined Fishers Ranks") + useTheme + xlab("Fraction") + ylab("Diff. log p-values")
 ```
 
 #### Maximum p-value
