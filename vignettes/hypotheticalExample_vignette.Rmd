@@ -593,11 +593,11 @@ outMedians <- lapply(noiseSweepRes, function(inRes){
 outMedians <- do.call(rbind, outMedians)
 outMedians <- cbind(outMedians, noiseFrac)
 
-ggplot(outMedians, aes(x=size, y=hi, color=shared)) + geom_point() + useTheme + ggtitle("Hi Median Difference")
+ggplot(outMedians, aes(x=size, y=hi, color=shared)) + geom_point() + useTheme + ggtitle("Hi Median Difference") + xlab("Noise Added") + ylab("Median Diff.")
 
-ggplot(outMedians, aes(x=size, y=med, color=shared)) + geom_point() + useTheme + ggtitle("Medium Median Difference")
+ggplot(outMedians, aes(x=size, y=med, color=shared)) + geom_point() + useTheme + ggtitle("Medium Median Difference") + xlab("Noise Added") + ylab("Median Diff.")
 
-ggplot(outMedians, aes(x=size, y=low, color=shared)) + geom_point() + useTheme + ggtitle("Low Median Difference")
+ggplot(outMedians, aes(x=size, y=low, color=shared)) + geom_point() + useTheme + ggtitle("Low Median Difference") + xlab("Noise Added") + ylab("Median Diff.")
 ```
 
 
