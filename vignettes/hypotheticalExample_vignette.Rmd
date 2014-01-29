@@ -1008,7 +1008,7 @@ outP2 <- -1 * log(outP2)
 tmpP <- data.frame(set=apply(outP2[, c("s1", "s2")], 1, min), list=outP2[,"comb"])
 tmpP$diff <- tmpP$set - tmpP$list
 tmpP$frac <- useSig
-ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + ggtitle("Sample - Combined Fishers")
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + ggtitle("Sample - Combined Fishers") + useTheme + xlab("Fraction") + ylab("Diff. log p-values")
 
 # try also using ranks only
 outPRank <- lapply(testStats, function(inStat){
