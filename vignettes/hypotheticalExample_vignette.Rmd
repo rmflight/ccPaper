@@ -475,7 +475,7 @@ go_noNoise <- lapply(testGORes, grab_noNoise)
 go_noNoise <- do.call(rbind, go_noNoise)
 go_noNoise$class <- factor(go_noNoise$class, levels=c("low", "med", "hi"), ordered=TRUE) 
 go_noNoiseT <- go_noNoise[(!is.nan(go_noNoise$diff)),]
-p <- ggplot(go_noNoiseT, aes(x = frac, y = diff)) + geom_point() + facet_grid(. ~ class, scales="free_x") + useTheme + stat_density2d(aes(fill = ..level..), geom="polygon") + ggtitle("Sample - List Differences, 100 GO Samples, noNoise") + xlab("Fraction") + ylab("Diff. log p-values")
+p <- ggplot(go_noNoiseT, aes(x = frac, y = diff)) + geom_point() + facet_grid(. ~ class, scales="free_x") + useTheme + stat_density2d(aes(fill = ..level..), geom="polygon") + ggtitle("Sample - List Differences, 100 GO Samples, noNoise") + xlab("Fraction") + ylab("Diff. log p-values") + labs(fill="density")
 p
 savePlot(p, "gosamples100_samplelistDiff.png")
 
@@ -646,11 +646,11 @@ Check that we did what we thought. If done right, all of the **sample** genes sh
 ```{r checkValues}
 tmpDat <- data.frame(x=gseaTValues[[1]], type="all", stringsAsFactors=FALSE)
 tmpDat$type[(universeGenes %in% gseaSamples[[1]])] <- "sample"
-ggplot(tmpDat, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity") + ggtitle("location of samples")
+ggplot(tmpDat, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity") + ggtitle("location of samples") + useTheme
 
 tmpComb <- data.frame(x=gseaTValues[["comb"]], type="all", stringsAsFactors=FALSE)
 tmpComb$type[(universeGenes %in% gseaSamples[[1]])] <- "sample"
-ggplot(tmpComb, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity") + ggitle("location of samples")
+ggplot(tmpComb, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity") + ggtitle("location of samples") + useTheme
 ```
 
 Now lets actually do some calculations.
@@ -670,7 +670,7 @@ cleanDiff$sizeClass <- useGOSizeClass
 cleanDiff$sizeClass <- factor(cleanDiff$sizeClass, c("low", "med", "hi"), ordered=TRUE)
 cleanDiff$frac <- gseaGOFracS1$frac
 
-ggplot(cleanDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass) + ggtitle("Sample - List for GSEA, using GO")
+ggplot(cleanDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass) + ggtitle("Sample - List for GSEA, using GO") + useTheme + xlab("Fraction") + ylab("Diff. log p-values")
 ```
 
 So this appears to be a different trend than for the hypergeometric case, in that a **meta** sample (achieved by averaging the t-statistics) actually does no worse, and in many cases much better than the worst p-value. This effect is less-pronounced as the number of genes in a class become larger, and as the fraction covered increases.
@@ -689,7 +689,7 @@ gseaTValues_noise <- sampletValueGenGSEA(gseaNoise, universeGenes, tValues)
 
 tmpDat <- data.frame(x=gseaTValues_noise[[1]], type="all", stringsAsFactors=FALSE)
 tmpDat$type[(universeGenes %in% gseaSamples[[1]])] <- "sample"
-ggplot(tmpDat, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity", alpha=0.75) + ggtitle("Sample - List GSEA GO, adding noise genes")
+ggplot(tmpDat, aes(x=x, fill=type)) + geom_histogram(binwidth=0.1, position="identity", alpha=0.75) + ggtitle("Sample - List GSEA GO, adding noise genes") + useTheme
 ```
 
 ```{r runGSEANoise}
@@ -704,11 +704,10 @@ noiseDiff$sizeClass <- useGOSizeClass
 noiseDiff$sizeClass <- factor(noiseDiff$sizeClass, c("low", "med", "hi"), ordered=TRUE)
 noiseDiff$frac <- gseaGOFracS1$frac
 
-ggplot(noiseDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass) + ggtitle("Sample - List, GSEA GO with Noise")
+ggplot(noiseDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass) + ggtitle("Sample - List, GSEA GO with Noise") + useTheme + xlab("Fraction") + ylab("Diff. log p-values")
 
 diffDiff <- data.frame(diff=(noiseDiff$diff - cleanDiff$diff), sizeClass=noiseDiff$sizeClass, frac=noiseDiff$frac)
-ggplot(diffDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass) + ggtitle("Difference of Differences, GSEA GO")
-
+ggplot(diffDiff, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ sizeClass) + ggtitle("Difference of Differences, GSEA GO") + useTheme + xlab("Fraction") + ylab("Diff. noise / noNoise")
 ```
 
 So, it appears that having a uniform distribution does not make things behave the way we might expect. What if it is more an issue of independence, that GO is a bad fit for GSEA type analysis because of the issue that many of the terms are heavily overlapped. 
