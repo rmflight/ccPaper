@@ -1,6 +1,7 @@
 <!--
 %\VignetteEngine{knitr}
 %\VignetteIndexEntry{Skin vs Muscle}
+%\VignetteDepends{ccPaperRev, affy, GEOquery, limma, rat2302.db, org.Rn.eg.db, mouse4302.db, org.Mm.eg.db, GO.db}
 -->
 
 ```{r customCSS, include=FALSE}
