@@ -1,7 +1,7 @@
 <!--
   %\VignetteEngine{knitr}
   %\VignetteIndexEntry{pie nodes in Cytoscape}
-  %\VignetteDepends{RCytoscape}
+  %\VignetteDepends{RCytoscape, colorspace, categoryComparePaperRev}
 -->
 
 ```{r customCSS, include=FALSE}
