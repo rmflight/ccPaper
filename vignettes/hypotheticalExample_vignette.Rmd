@@ -1121,7 +1121,7 @@ tmpP$class <- gseaSizeClass
 tmpP$class <- factor(tmpP$class, c("low", "med", "hi"), ordered=TRUE)
 ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ class) + useTheme
 
-p <- ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + useTheme + ggtitle("Sample - Combined Max-P")
+p <- ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + useTheme + ggtitle("Sample - Combined Max-P") + xlab("Fraction") + ylab("Diff. log p-values")
 p
 savePlot(p, "samplecombined_maxp.png")
 ```
@@ -1148,29 +1148,7 @@ tmpPRank$diff <- tmpPRank$set - tmpPRank$list
 tmpPRank$frac <- gseaFrac
 tmpPRank$class <- gseaSizeClass
 tmpPRank$class <- factor(tmpPRank$class, c("low", "med", "hi"), ordered=TRUE)
-ggplot(tmpPRank, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ class) + ggtitle("Sample - Combined Max-P Ranks")
+ggplot(tmpPRank, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ class) + ggtitle("Sample - Combined Max-P Ranks") + xlab("Fraction") + ylab("Diff. log p-values")
 ```
 
 No, it doesn't because the `ranks.only=TRUE` will only check for **mixed** values, not at one end or the other.
-
-Now we could ask the question, is the difference in the **proportion** between **set** and **list** related to the difference in **p-values**?
-
-```{r diffProp}
-calcRank <- lapply(testStats, function(inStat){
-  
-  apply(inStat$stats, 2, function(inCol){
-    
-  })
-  
-})
-
-calcRank <- do.call(rbind, calcRank)
-
-minRankSample <- rowMin(calcRank[, c("s1", "s2")])
-
-tmpP$diffRank <- minRankSample / calcRank[, "comb"]
-
-ggplot(tmpP, aes(x=diffRank, y=diff)) + geom_point() + facet_grid(. ~ class) + ggtitle("Sample - Combined as Difference of Rank")
-```
-
-Nope, that doesn't seem to be the cause, at least not directly. 
