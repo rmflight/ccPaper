@@ -532,7 +532,7 @@ For a given set of genes and GO terms, lets now keep adding more and more noise 
 
 As in the previous examples, we will generate the samples first, and then run the calculations on them. This is because it is easier to test sample generation and enrichment separately.
 
-```{r sweepNoise}
+```{r sweepNoise, eval=FALSE}
 noiseGenes <- possibleNoise(hsGO, useGO)
 sizeNoise <- seq(0, 1000, 10)
 fracShared <- seq(0, 1, 0.01)
