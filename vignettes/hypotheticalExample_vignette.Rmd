@@ -1082,7 +1082,7 @@ outP2 <- -1 * log(outP2)
 tmpP <- data.frame(set=apply(outP2[, c("s1", "s2")], 1, min), list=outP2[,"comb"])
 tmpP$diff <- tmpP$set - tmpP$list
 tmpP$frac <- useSig
-ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + ggtitle("Sample - Combined Max-P")
+ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + ggtitle("Sample - Combined Max-P") + useTheme + xlab("Fraction") + ylab("Diff. log p-values")
 ```
 
 And wow! It appears to work!
