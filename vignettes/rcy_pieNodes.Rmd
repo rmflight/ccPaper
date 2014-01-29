@@ -52,7 +52,7 @@ plotPie(pieData[["C"]])
 
 Sweet, little pie graphs. Next up, saving the graphics and letting Cytoscape know about them.
 
-```{r savePie}
+```{r savePie, eval=FALSE}
 saveDir <- file.path(getwd(), "vignettes/")
 
 outFiles <- sapply(names(pieData), function(pieName){
