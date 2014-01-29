@@ -200,7 +200,7 @@ ggplot(ALL_tmp, aes(x=size, y=frac)) + geom_point() + xlim(0, 1500) + facet_grid
 
 
 ```{r cleanupData}
-keepItems <- c("goFractions", "sample1_org", "sample2_org", "hsGO", "useGO", "useGOSizeClass", "GO_hi", "GO_low", "GO_med", "grpHi", "grpLow", "grpMed", "minGO", "nGO", "nGene", "universeGenes", "savePlot", "useTheme")
+keepItems <- c("goFractions", "sample1_org", "sample2_org", "hsGO", "useGO", "useGOSizeClass", "GO_hi", "GO_low", "GO_med", "grpHi", "grpLow", "grpMed", "minGO", "nGO", "nGene", "universeGenes", "savePlot", "useTheme", "fitALL2")
 allItems <- ls()
 delItems <- allItems[!(allItems %in% keepItems)]
 rm(list=delItems)
