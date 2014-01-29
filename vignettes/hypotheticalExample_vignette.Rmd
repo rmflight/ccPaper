@@ -516,7 +516,7 @@ What if we aggregate things into bins first, based on their class and fraction?
 
 ```{r aggregate}
 go_diff$frac10 <- round(go_diff$frac * 10) / 10
-ggplot(go_diff, aes(x = factor(frac10), y = diff)) + geom_boxplot() + facet_grid(. ~ class, scales="free_x") + ggtitle("Difference of Differences, 100 GO Samples")
+ggplot(go_diff, aes(x = factor(frac10), y = diff)) + geom_boxplot() + facet_grid(. ~ class, scales="free_x") + ggtitle("Difference of Differences, 100 GO Samples") + xlab("Fraction") + ylab("Diff. log p-values") + useTheme
 
 probPoint <- is.infinite(go_diff$diff) | is.na(go_diff$diff) | is.nan(go_diff$diff)
 go_diff <- go_diff[!probPoint, ]
