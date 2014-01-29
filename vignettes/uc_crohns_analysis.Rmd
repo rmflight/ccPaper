@@ -1,6 +1,7 @@
 <!--
 %\VignetteEngine{knitr}
 %\VignetteIndexEntry{UC vs Crohn's}
+%\VignetteDepends{ccPaperRev, GEOquery, limma, hgu133plus2.db, GO.db, org.Hs.eg.db}
 -->
 
 ```{r customCSS, include=FALSE}
