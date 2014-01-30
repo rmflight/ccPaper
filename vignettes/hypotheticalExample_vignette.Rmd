@@ -23,7 +23,6 @@ To demonstrate the utility of the general `categoryCompare` approach, we will co
 
 ```{r setupPlot}
 library(ggplot2)
-library(ggthemes)
 useTheme <- theme_bw() + theme(legend.key=element_blank(), legend.title = element_text(size=25), axis.title = element_text(size=25), axis.text = element_text(size=15), legend.text = element_text(size=20), strip.text.y = element_text(size=20), strip.text.x = element_text(size=20))
 
 
