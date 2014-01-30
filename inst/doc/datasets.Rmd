@@ -1,0 +1,25 @@
+# ReAnalysis based on reviewer comments
+
+Because we have re-worked the publication as a paper about the tool, we have decided to do a re-analysis of the original data presented in the original manuscript based on the reviewer comments, as well as include other data sets. 
+
+# Muscle VS Skin Denervation
+
+The original data consisted of muscle denervation data from GSE4411, and skin denervation data from Dr. Jeffrey Petruska.
+
+# UC VS Crohn's
+
+From GEO there is a ulcerative colitis vs crohn's disease data set available, GSE36807. This would be a nice one to try, as there is already a publication on it.
+
+# Metabolomics VS Transcriptomics
+
+The NCI 60 database has both metabolomics and transcriptomics data available. Unfortunately, there is no **control** data set.
+
+Metabolomics File: 
+
+  * File Format: SAMPLENAME, TITLE, PANELNBR, CELLNBR, pname, cellname, VALUE
+  
+Ideas for analysis: slow vs fast growing, sensitive to compound vs insensitive to compound
+
+Transcriptomics File:
+
+  * File Format: MOLTID (NCI pattern #), ACC, Gene, TITLE, MOLTNBR (NCI exp. id #), PANELNBR, CELLNBR, pname, cellname, CHIP, FEATURE_ID, UniGene, GeneID, VALUE Gene assignments are based on Unigene Build #U225 (August 2010)
