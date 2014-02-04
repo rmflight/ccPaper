@@ -209,3 +209,11 @@ cucNodeGroups <- cytOutNodes("protein N-linked glycosylation - UC.Up", cucRomerC
 save(cucRomerCW, cucNodeGroups, compareCUCRomer, cucRomerOpts, .sessionInfo, .timeDate, file="inst/data/cucCCOutput.RData")
 ```
 
+
+We can then write out the results into a nice table.
+
+```{r writeTableResults}
+data(cucCCOutput)
+nodeData <- lapply()
+```
+
