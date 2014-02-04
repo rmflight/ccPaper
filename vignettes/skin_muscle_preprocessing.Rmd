@@ -269,6 +269,13 @@ cwSM <- ccOutCyt(compareSMRomer, allRomerOpts, postText="GSEAGO", rpcPort=9001)
 ```
 
 
+```{r saveCytResults, eval=FALSE}
+.sessionInfo <- sessionInfo()
+.timeDate <- Sys.time()
+save(cwSM, compareSMRomer, allRomerOpts, .sessionInfo, .timeDate, file="inst/data/skinMuscleCompareOutput.RData")
+```
+
+
 Run using `geneSetTest`
 
 ```{r runGeneSetTestMuscle, eval=FALSE}
