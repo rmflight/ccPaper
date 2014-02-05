@@ -421,6 +421,34 @@ Print out the table.
 print(xtable(descMembershipTable), type = 'html', html.table.attributes = 'style="border-spacing:20px 5px;"', include.rownames=FALSE)
 ```
 
+We also want the set of GO terms, their descriptions, and list memberships so that the inquisitive mind can see how we generated the groups.
+
+```{r detailTable, echo=FALSE, result='asis'}
+smNodes <- smNodes[newOrder]
+
+for (iNode in seq(1:length(smNodes))){
+  nodeSet <- smNodes[[iNode]]
+  cat("####", nodeSet$descStr, sep=" ")
+  cat("\n")
+  
+  nGO <- length(nodeSet$nodes)
+  outMatrix <- matrix("", nrow=nGO, ncol=8)
+  colnames(outMatrix) <- c("GOID", "Description", "T7.Down", "T7.Up", "T14.Down", "T14.Up", "muscle.Down", "muscle.Up")
+  rownames(outMatrix) <- nodeSet$nodes
+  outMatrix[,"GOID"] <- nodeSet$nodes
+  
+  for (useGO in nodeSet$nodes){
+    outMatrix[useGO, "Description"] <- nodeSet$nodeData[[useGO]]$Desc
+    listMems <- strsplit(nodeSet$nodeData[[useGO]]$listMembership, ",")[[1]]
+    listMems <- listMems[(nchar(listMems) > 0)]
+    outMatrix[useGO, listMems] <- "X"
+  }
+  allMems <- sapply(nodeSet$nodeData, function(x){x$listMembership})
+  reOrder <- order(allMems, decreasing=TRUE)
+  outMatrix <- outMatrix[reOrder,]
+  print(xtable(outMatrix), type = 'html', html.table.attributes = 'style="border-spacing:20px 5px;"', include.rownames=FALSE)
+}
+```
 
 
 
