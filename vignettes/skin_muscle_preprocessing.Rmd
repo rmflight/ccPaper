@@ -413,12 +413,16 @@ newOrder <- unlist(lapply(orderBy, function(x){
 
 descMembershipTable <- descMembershipTable[newOrder,]
 require(xtable)
+
+# add an html link to each entry in the table
+useLink <- paste('<a href="#loc', seq(1, nrow(descMembershipTable)), '">', descMembershipTable[,"Description"], '</a>', sep="")
+descMembershipTable[, "Description"] <- useLink
 ```
 
 Print out the table.
 
 ```{r printTable, echo=FALSE, results='asis'}
-print(xtable(descMembershipTable), type = 'html', html.table.attributes = 'style="border-spacing:20px 5px;"', include.rownames=FALSE)
+print(xtable(descMembershipTable), type = 'html', html.table.attributes = 'style="border-spacing:20px 5px;"', include.rownames=FALSE, sanitize.text.function=function(x){x})
 ```
 
 We also want the set of GO terms, their descriptions, and list memberships so that the inquisitive mind can see how we generated the groups.
@@ -428,7 +432,8 @@ smNodes <- smNodes[newOrder]
 
 for (iNode in seq(1:length(smNodes))){
   nodeSet <- smNodes[[iNode]]
-  cat("####", nodeSet$descStr, sep=" ")
+  toLink <- paste('<a name="loc', iNode, '"></a>', sep="")
+  cat("####", nodeSet$descStr, toLink, sep=" ")
   cat("\n")
   
   nGO <- length(nodeSet$nodes)
