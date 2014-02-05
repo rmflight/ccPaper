@@ -422,6 +422,7 @@ descMembershipTable[, "Description"] <- useLink
 Print out the table.
 
 ```{r printTable, echo=FALSE, results='asis'}
+cat('<a name="tableLink"></a>\n') # a link back to the table
 print(xtable(descMembershipTable), type = 'html', html.table.attributes = 'style="border-spacing:20px 5px;"', include.rownames=FALSE, sanitize.text.function=function(x){x})
 ```
 
@@ -433,7 +434,8 @@ smNodes <- smNodes[newOrder]
 for (iNode in seq(1:length(smNodes))){
   nodeSet <- smNodes[[iNode]]
   toLink <- paste('<a name="loc', iNode, '"></a>', sep="")
-  cat("####", nodeSet$descStr, toLink, sep=" ")
+  cat(toLink, "\n")
+  cat("####", nodeSet$descStr, sep=" ")
   cat("\n")
   
   nGO <- length(nodeSet$nodes)
@@ -452,7 +454,7 @@ for (iNode in seq(1:length(smNodes))){
   reOrder <- order(allMems, decreasing=TRUE)
   outMatrix <- outMatrix[reOrder,]
   print(xtable(outMatrix), type = 'html', html.table.attributes = 'style="border-spacing:20px 5px;"', include.rownames=FALSE)
-  cat("\n\n")
+  cat('\n<a href="#tableLink">back</a>\n')
 }
 ```
 
