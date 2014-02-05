@@ -360,7 +360,68 @@ smNodes <- cytOutNodes("lipopolysaccharid biosynthesis - Skin.T7.Up", cwSM, smNo
 smNodes <- cytOutNodes("aminoglycan metabolism - Skin.T7.Up", cwSM, smNodes)
 smNodes <- cytOutNodes("epithelial to mesenchymal transition, endocardial cushion formation - Skin.T7.Up", cwSM, smNodes)
 smNodes <- cytOutNodes("pulmonary valve dev. and morphogenesis - Skin.T7.Up", cwSM, smNodes)
+save(smNodes, cwSM, allCCRomer, allRomerOpts, compareSMRomer, file="inst/data/skinMuscleCCOutput.RData")
 ```
+
+Lets generate a couple of different tables for output.
+
+```{r genTableOutput}
+data(skinMuscleCCOutput)
+
+allDescStrings <- sapply(smNodes, function(x){x$descStr})
+string2List <- strsplit(allDescStrings, " - ", fixed=TRUE)
+justDesc <- sapply(string2List, function(x){x[1]})
+listMem <- sapply(string2List, function(x){x[2]})
+listMem[1] <- "Skin.T7.Up" # fix an error in the initial setup
+listMemSplit <- strsplit(listMem, ",", fixed=TRUE)
+
+descMembershipTable <- matrix("", nrow=length(allDescStrings), ncol=7)
+colnames(descMembershipTable) <- c("Description", "Skin.T7.Down", "Skin.T7.Up", "Skin.T14.Down", "Skin.T14.Up", "Muscle.Down", "Muscle.Up")
+
+descMembershipTable[,"Description"] <- justDesc
+
+for (inRow in seq(1, nrow(descMembershipTable))){
+  useSplit <- listMemSplit[[inRow]]
+  trimSplit <- gsub(" ", "", useSplit)
+  descMembershipTable[inRow, trimSplit] <- "X"
+}
+
+orderBy <- c("Skin.T7.Down,Skin.T14.Down,Muscle.Down",
+             "Skin.T7.Down,Skin.T14.Down,Muscle.Up",
+             "Skin.T7.Down,Skin.T14.Down",
+             "Skin.T7.Down,Skin.T14.Up,Muscle.Up",
+             "Skin.T7.Down,Skin.T14.Up",
+             "Skin.T7.Down,Muscle.Up",
+             "Skin.T7.Down,Muscle.Down",
+             "Skin.T7.Down",
+             "Skin.T7.Up,Skin.T14.Down",
+             "Skin.T7.Up,Skin.T14.Up",
+             "Skin.T7.Up,Muscle.Up",
+             "Skin.T7.Up",
+             "Skin.T14.Down,Muscle.Down",
+             "Skin.T14.Down",
+             "Skin.T14.Up,Muscle.Down",
+             "Skin.T14.Up,Muscle.Up",
+             "Skin.T14.Up",
+             "Muscle.Down",
+             "Muscle.Up")
+
+listMem <- gsub(" ", "", listMem)
+newOrder <- unlist(lapply(orderBy, function(x){
+  which(listMem %in% x)
+}))
+
+descMembershipTable <- descMembershipTable[newOrder,]
+require(xtable)
+```
+
+Print out the table.
+
+```{r printTable, echo=FALSE, results='asis'}
+print(xtable(descMembershipTable), type = 'html', html.table.attributes = 'style="border-spacing:20px 5px;"', include.rownames=FALSE)
+```
+
+
 
 
 
