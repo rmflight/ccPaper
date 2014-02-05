@@ -423,7 +423,7 @@ print(xtable(descMembershipTable), type = 'html', html.table.attributes = 'style
 
 We also want the set of GO terms, their descriptions, and list memberships so that the inquisitive mind can see how we generated the groups.
 
-```{r detailTable, echo=FALSE, result='asis'}
+```{r detailTable, echo=FALSE, results='asis'}
 smNodes <- smNodes[newOrder]
 
 for (iNode in seq(1:length(smNodes))){
