@@ -447,6 +447,7 @@ for (iNode in seq(1:length(smNodes))){
   reOrder <- order(allMems, decreasing=TRUE)
   outMatrix <- outMatrix[reOrder,]
   print(xtable(outMatrix), type = 'html', html.table.attributes = 'style="border-spacing:20px 5px;"', include.rownames=FALSE)
+  cat("\n\n")
 }
 ```
 
