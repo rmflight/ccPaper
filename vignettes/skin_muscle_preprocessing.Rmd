@@ -275,6 +275,191 @@ cwSM <- ccOutCyt(compareSMRomer, allRomerOpts, postText="GSEAGO", rpcPort=9001)
 save(cwSM, compareSMRomer, allRomerOpts, .sessionInfo, .timeDate, file="inst/data/skinMuscleCompareOutput.RData")
 ```
 
+Get out the groups of related GO terms:
+
+```{r outGOTerms, eval=FALSE}
+smNodes <- cytOutNodes("typeII hypersensitivity - T7.Up", cwSM)
+smNodes <- cytOutNodes("pH and lysosome regulation - Skin.T7.Down,Skin.T14.Up,Muscle.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("Neurotransmitter secretion and transport - Skin.T7.Down,Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("entry into host and movement - Skin.T7.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("steriod biosynthesis - Skin.T7.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("microtubule organization - Skin.T7.Up,Skin.T14.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("cellular respiration - Skin.T14.Down,Muscle.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("epithelial tube branching - Skin.T7.Down,Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("rRNA processing - Muscle.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("digestion - Skin.T14.Up", cwWM, smNodes)
+smNodes <- cytOutNodes("digestion - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("response to virus - Skin.T7.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("purine metabolism - Muscle.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("protein localization in mitochondrion - Skin.T14.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("synapse assembly and nervous system development - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("folic acid compound metabolism - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("retinoic acid biosynthesis - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("mitotic spindle assembly - Skin.T7.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("regulation of phospholipase C - Muscle.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("acetyl CoA biosynthesis - Skin.T14.Down,Muscle.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("response to glucose - Skin.T7.Down, Muscle.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("response to VEGF - Muscle.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("mitotic cell cycle checkpoint - Skin.T7.Down,Skin.T14.Down,Muscle.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("urea cycle - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("response to prostaglandin - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("keratinocyte migration - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("atp biosynthesis - Skin.T7.Down,Skin.T14.Down,Muscle.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("membrane repolarization - Muscle.Down", cwSM, smNodes)
+smNOdes <- cytOutNodes("muscle contraction and development - Skin.T7.Down,Skin.T14.Down,Muscle.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("muscle contraction and development - Skin.T7.Down,Skin.T14.Down,Muscle.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("muscle contraction and development - Skin.T7.Down,Skin.T14.Down,Muscle.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("blood vessel endothelial cell differentiation - Skin.T7.Up,Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("endocrine regulation of blood pressure - Skin.T7.Down,Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("tube development - Skin.T7.Down,Muscle.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("amino acid transport - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("cation channel activity - Skin.T14.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("interferon gamma response - Skin.T14.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("lung cell differentiation - Skin.T7.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("neg regulation of astrocyte diff. - Skin.T7.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("fear response - Skin.T7.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("N acetylglucosamine metabolism - Skin.T7.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("proteoglycan biosynthesis - Skin.T7.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("carbohydrate catabolism - Muscle.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("response to muscle activity - Skin.T14.Down,Muscle.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("response to indole 3 methanol - Muscle.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("negative regulation of response to granulocyte / myeloid cell diff. - Skin.T7.Up,Muscle.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("vitamin metabolism - Skin.T14.Up,Muscle.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("DNA break repair - Muscle.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("calcineurin NFAT signaling cascade - Skin.T14.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("histone demethylation - Skin.T14.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("negative regulation of Ras signal transduction - Skin.T14.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("positive regulation of metalloenzyme activity - Skin.T14.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("glucocorticoid receptor signaling pathway - Skin.T14.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("mesenchymal cell diff in kidney / renal system dev. - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("axon extension - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("lung lobe dev. and morphogenesis - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("embryonic digestive tract dev. and morphogenesis - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("negative regulation of protein transport - Skin.T7.Up,Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("phosphate ion transport - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("fluid transport - Skin.T7.Down,Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("fluid secretion - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("interleukin 13 production - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("glia guided migration - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("central nervous system maturation - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("bile acid transport - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("positive regulation of muscle cell apoptosis - Skin.T14.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("atrioventricular valve dev. and morphogenesis - Skin.T14.Up,Muscle.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("dopamine transport - Skin.T7.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("collateral sprouting - Skin.T7.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("response to osmotic stress - Skin.T7.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("positive regulation of epidermal growth factor signaling - Skin.T7.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("response to leptin - Skin.T7.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("catecholamin biosynthesis - Skin.T7.Down", cwSM, smNodes)
+smNodes <- cytOutNodes("negative regulation of cell junction assembly - Skin.T7.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("endocardial cell differentiation - Skin.T7.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("sequestering of actin monomers - Skin.T7.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("beta amyloid formation - Skin.T7.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("response to platelet derived growth factor stimulus - Skin.T7.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("lipopolysaccharid biosynthesis - Skin.T7.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("aminoglycan metabolism - Skin.T7.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("epithelial to mesenchymal transition, endocardial cushion formation - Skin.T7.Up", cwSM, smNodes)
+smNodes <- cytOutNodes("pulmonary valve dev. and morphogenesis - Skin.T7.Up", cwSM, smNodes)
+save(smNodes, cwSM, allCCRomer, allRomerOpts, compareSMRomer, file="inst/data/skinMuscleCCOutput.RData")
+```
+
+Lets generate a couple of different tables for output.
+
+```{r genTableOutput}
+data(skinMuscleCCOutput)
+
+allDescStrings <- sapply(smNodes, function(x){x$descStr})
+string2List <- strsplit(allDescStrings, " - ", fixed=TRUE)
+justDesc <- sapply(string2List, function(x){x[1]})
+listMem <- sapply(string2List, function(x){x[2]})
+listMem[1] <- "Skin.T7.Up" # fix an error in the initial setup
+listMemSplit <- strsplit(listMem, ",", fixed=TRUE)
+
+descMembershipTable <- matrix("", nrow=length(allDescStrings), ncol=7)
+colnames(descMembershipTable) <- c("Description", "Skin.T7.Down", "Skin.T7.Up", "Skin.T14.Down", "Skin.T14.Up", "Muscle.Down", "Muscle.Up")
+
+descMembershipTable[,"Description"] <- justDesc
+
+for (inRow in seq(1, nrow(descMembershipTable))){
+  useSplit <- listMemSplit[[inRow]]
+  trimSplit <- gsub(" ", "", useSplit)
+  descMembershipTable[inRow, trimSplit] <- "X"
+}
+
+orderBy <- c("Skin.T7.Down,Skin.T14.Down,Muscle.Down",
+             "Skin.T7.Down,Skin.T14.Down,Muscle.Up",
+             "Skin.T7.Down,Skin.T14.Down",
+             "Skin.T7.Down,Skin.T14.Up,Muscle.Up",
+             "Skin.T7.Down,Skin.T14.Up",
+             "Skin.T7.Down,Muscle.Up",
+             "Skin.T7.Down,Muscle.Down",
+             "Skin.T7.Down",
+             "Skin.T7.Up,Skin.T14.Down",
+             "Skin.T7.Up,Skin.T14.Up",
+             "Skin.T7.Up,Muscle.Up",
+             "Skin.T7.Up",
+             "Skin.T14.Down,Muscle.Down",
+             "Skin.T14.Down",
+             "Skin.T14.Up,Muscle.Down",
+             "Skin.T14.Up,Muscle.Up",
+             "Skin.T14.Up",
+             "Muscle.Down",
+             "Muscle.Up")
+
+listMem <- gsub(" ", "", listMem)
+newOrder <- unlist(lapply(orderBy, function(x){
+  which(listMem %in% x)
+}))
+
+descMembershipTable <- descMembershipTable[newOrder,]
+require(xtable)
+
+# add an html link to each entry in the table
+useLink <- paste('<a href="#loc', seq(1, nrow(descMembershipTable)), '">', descMembershipTable[,"Description"], '</a>', sep="")
+descMembershipTable[, "Description"] <- useLink
+```
+
+Print out the table.
+
+```{r printTable, echo=FALSE, results='asis'}
+cat('<a name="tableLink"></a>\n') # a link back to the table
+print(xtable(descMembershipTable), type = 'html', html.table.attributes = 'style="border-spacing:20px 5px;"', include.rownames=FALSE, sanitize.text.function=function(x){x})
+```
+
+We also want the set of GO terms, their descriptions, and list memberships so that the inquisitive mind can see how we generated the groups.
+
+```{r detailTable, echo=FALSE, results='asis'}
+smNodes <- smNodes[newOrder]
+
+for (iNode in seq(1:length(smNodes))){
+  nodeSet <- smNodes[[iNode]]
+  toLink <- paste('<a name="loc', iNode, '"></a>', sep="")
+  cat(toLink, "\n")
+  cat("####", nodeSet$descStr, sep=" ")
+  cat("\n")
+  
+  nGO <- length(nodeSet$nodes)
+  outMatrix <- matrix("", nrow=nGO, ncol=8)
+  colnames(outMatrix) <- c("GOID", "Description", "T7.Down", "T7.Up", "T14.Down", "T14.Up", "muscle.Down", "muscle.Up")
+  rownames(outMatrix) <- nodeSet$nodes
+  outMatrix[,"GOID"] <- nodeSet$nodes
+  
+  for (useGO in nodeSet$nodes){
+    outMatrix[useGO, "Description"] <- nodeSet$nodeData[[useGO]]$Desc
+    listMems <- strsplit(nodeSet$nodeData[[useGO]]$listMembership, ",")[[1]]
+    listMems <- listMems[(nchar(listMems) > 0)]
+    outMatrix[useGO, listMems] <- "X"
+  }
+  allMems <- sapply(nodeSet$nodeData, function(x){x$listMembership})
+  reOrder <- order(allMems, decreasing=TRUE)
+  outMatrix <- outMatrix[reOrder,]
+  print(xtable(outMatrix), type = 'html', html.table.attributes = 'style="border-spacing:20px 5px;"', include.rownames=FALSE)
+  cat('\n<a href="#tableLink">back</a>\n')
+}
+```
+
+
+
 
 Run using `geneSetTest`
 
