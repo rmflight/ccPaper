@@ -1,16 +1,16 @@
 <!--
 %\VignetteEngine{knitr}
 %\VignetteIndexEntry{Skin vs Muscle}
-%\VignetteDepends{ccPaperRev, affy, GEOquery, limma, rat2302.db, org.Rn.eg.db, mouse4302.db, org.Mm.eg.db, GO.db}
+%\VignetteDepends{ccPaper, affy, GEOquery, limma, rat2302.db, org.Rn.eg.db, mouse4302.db, org.Mm.eg.db, GO.db}
 -->
 
 ```{r customCSS, include=FALSE}
-cssFile <- system.file("extdata", "style.css", package="ccPaperRev")
+cssFile <- system.file("extdata", "style.css", package="ccPaper")
 options(markdown.HTML.stylesheet = cssFile)
 ```
 
 ```{r loadLibrary, message=FALSE}
-library(ccPaperRev)
+library(ccPaper)
 ```
 
 

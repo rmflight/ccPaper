@@ -1,17 +1,17 @@
 <!--
 %\VignetteEngine{knitr}
 %\VignetteIndexEntry{UC vs Crohn's}
-%\VignetteDepends{ccPaperRev, GEOquery, limma, hgu133plus2.db, GO.db, org.Hs.eg.db}
+%\VignetteDepends{ccPaper, GEOquery, limma, hgu133plus2.db, GO.db, org.Hs.eg.db}
 -->
 
 ```{r customCSS, include=FALSE}
-cssFile <- system.file("extdata", "style.css", package="ccPaperRev")
+cssFile <- system.file("extdata", "style.css", package="ccPaper")
 options(markdown.HTML.stylesheet = cssFile)
 ```
 
 
 ```{r loadLibrary, message=FALSE}
-library(ccPaperRev)
+library(ccPaper)
 ```
 
 

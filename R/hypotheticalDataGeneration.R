@@ -117,8 +117,8 @@ calcFraction <- function(go2gene, geneList){
 #' @param universe \code{character} vector of the background (assumed to be common across all)
 #' @param ontology which GO ontology to use (default is "BP")
 #' @param annotation what is the source of annotation (default is "org.Hs.eg.db")
-#' @importClassesFrom categoryComparePaperRev GOHyperGParamsCC
-#' @importFrom categoryComparePaperRev hyperGTestCC
+#' @importClassesFrom categoryComparePaper GOHyperGParamsCC
+#' @importFrom categoryComparePaper hyperGTestCC
 #' @return \code{list}, see Details
 #' @details the object returned will have an object for each sample list, as well as the one generated from the intersection
 #' @export
