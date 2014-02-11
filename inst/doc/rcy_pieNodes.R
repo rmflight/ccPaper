@@ -1,6 +1,6 @@
 
 ## ----customCSS, include=FALSE--------------------------------------------
-cssFile <- system.file("extdata", "style.css", package="ccPaperRev")
+cssFile <- system.file("extdata", "style.css", package="ccPaper")
 options(markdown.HTML.stylesheet = cssFile)
 
 
@@ -88,7 +88,7 @@ pie(c(0.5, 0.5), col=twoColors)
 
 
 ## ----genMultiplePies-----------------------------------------------------
-library(categoryComparePaperRev)
+library(categoryComparePaper)
 
 ccOpts <- new("ccOptions", listNames=c("T10_UP", "T10_DN", "T48_UP", "T48_DN", "T1_X", "T1_Y"), colorType="pie")
 

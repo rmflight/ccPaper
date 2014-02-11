@@ -13,19 +13,21 @@
    }
 
    pre .literal {
-     color: rgb(88, 72, 246)
+     color: #990073
    }
 
    pre .number {
-     color: rgb(0, 0, 205);
+     color: #099;
    }
 
    pre .comment {
-     color: rgb(76, 136, 107);
+     color: #998;
+     font-style: italic
    }
 
    pre .keyword {
-     color: rgb(0, 0, 255);
+     color: #900;
+     font-weight: bold
    }
 
    pre .identifier {
@@ -33,7 +35,7 @@
    }
 
    pre .string {
-     color: rgb(3, 106, 7);
+     color: #d14;
    }
 </style>
 
@@ -44,12 +46,156 @@ hljs.initHighlightingOnLoad();
 </script>
 
 <!-- MathJax scripts -->
-<script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+<script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 
 <style type="text/css">
+body {
+	box-sizing: border-box;
+	font-size: 16px;
+	font-family: 'Myriad Pro', Calibri, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+	width:800px;
+	margin: auto;
+}
 
+h1, h2, h3, h4, h5, h6 {
+	margin: 10px 0;
+	font-weight: 700;
+	color:#222222;
+		font-family: 'Lucida Grande', 'Calibri', Helvetica, Arial, sans-serif;
+	letter-spacing: -1px;
+}
+
+h1 {
+	font-size: 36px;
+	font-weight: 700;
+}
+
+h2 {
+	padding-bottom: 10px;
+	font-size: 32px;
+	background: url('../images/bg_hr.png') repeat-x bottom;
+}
+
+h3 {
+	font-size: 24px;
+}
+
+h4 {
+	font-size: 21px;
+}
+
+h5 {
+	font-size: 18px;
+}
+
+h6 {
+	font-size: 16px;
+}
+
+p {
+	margin: 10px 0 15px 0;
+	text-align: justify;
+}
+
+tt, code, pre {
+	font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+
+
+a:visited {
+	color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+	margin-top: 0;
+	max-width: 95%;
+	border: 1px solid #ccc;
+}
+
+pre code {
+	display: block; padding: 0.5em;
+}
+
+code.r {
+	background-color: #F8F8F8;
+}
+
+table, td, th {
+	border: none;
+	border-spacing:20px; 5px;
+}
+
+blockquote {
+	color:#666666;
+		margin:0;
+	padding-left: 1em;
+	border-left: 0.5em #EEE solid;
+}
+
+hr {
+	height: 0px;
+	border-bottom: none;
+	border-top-width: thin;
+	border-top-style: dotted;
+	border-top-color: #999999;
+}
+
+@media print {
+	* { 
+		background: transparent !important; 
+		color: black !important; 
+		filter:none !important; 
+		-ms-filter: none !important; 
+	}
+	
+	body { 
+		font-size:12pt; 
+		max-width:100%; 
+	}
+	
+	a, a:visited { 
+		text-decoration: underline; 
+	}
+	
+	hr { 
+		visibility: hidden;
+		page-break-before: always;
+	}
+	
+	pre, blockquote { 
+		padding-right: 1em; 
+		page-break-inside: avoid; 
+	}
+	
+	tr, img { 
+		page-break-inside: avoid; 
+	}
+	
+	img { 
+		max-width: 100% !important; 
+	}
+	
+	@page :left { 
+		margin: 15mm 20mm 15mm 10mm; 
+	}
+	
+	@page :right { 
+		margin: 15mm 10mm 15mm 20mm; 
+	}
+	
+	p, h2, h3 { 
+		orphans: 3; widows: 3; 
+	}
+	
+	h2, h3 { 
+		page-break-after: avoid; 
+	}
+}
 </style>
 
 
@@ -60,10 +206,10 @@ hljs.initHighlightingOnLoad();
 <!--
 %\VignetteEngine{knitr}
 %\VignetteIndexEntry{UC vs Crohn's}
-%\VignetteDepends{ccPaperRev, GEOquery, limma, hgu133plus2.db, GO.db, org.Hs.eg.db}
+%\VignetteDepends{ccPaper, GEOquery, limma, hgu133plus2.db, GO.db, org.Hs.eg.db}
 -->
 
-<pre><code class="r">library(ccPaperRev)
+<pre><code class="r">library(ccPaper)
 </code></pre>
 
 <h1>Crohn&#39;s VS Ulcerative Colitis</h1>
@@ -280,6 +426,748 @@ compareCUCRomer
 cucRomerCW &lt;- ccOutCyt(compareCUCRomer, cucRomerOpts, postText = &quot;romer&quot;, rpcPort = 9001)
 generateLegend(cucRomerOpts)
 </code></pre>
+
+<p>Now we will save groups so that they can be queried and examined later.</p>
+
+<pre><code class="r">cucNodeGroups &lt;- cytOutNodes(&quot;response to lipopolysaccharide and bacterial - UC.Up&quot;, 
+    cucRomerCW)
+cucNodeGroups &lt;- cytOutNodes(&quot;regulation of inflammatory response - UC.Up&quot;, 
+    cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;hydrogen peroxide metabolism - UC.Up,CROHNS.Up&quot;, 
+    cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;regulation of cell cycle and DNA damage response - UC.Up&quot;, 
+    cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;regulation of ubiquitination and ligase activity - UC.Up&quot;, 
+    cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;nucleotide and nucleoside metabolism - UC.Up,CROHNS.Up&quot;, 
+    cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;amine metabolism - UC.Up,CROHNS.Up&quot;, cucRomerCW, 
+    cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;glandular cell differentiation - UC.Down&quot;, cucRomerCW, 
+    cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;oligodendrocyte differentiation - UC.Down,CROHNS.Down&quot;, 
+    cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;cellular pattern specification - UC.Down,CROHNS.Down&quot;, 
+    cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;NAD biosynthesis - CROHNS.Up&quot;, cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;hormone metabolism - CROHNS.Up&quot;, cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;extrinsic signal transduction - UC.Up,CROHNS.Up&quot;, 
+    cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;regulation of nitric-oxide synthase - UC.Up,CROHNS.Up&quot;, 
+    cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;fatty-acyl-CoA biosynthesis - UC.Up,CROHNS.Up&quot;, 
+    cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;response to growth hormone - CROHNS.Up&quot;, cucRomerCW, 
+    cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;melanin metabolism - CROHNS.Up&quot;, cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;protein dephosphorylation - CROHNS.Up&quot;, cucRomerCW, 
+    cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;chemokine and cytokine production - UC.Up,CROHNS.Up&quot;, 
+    cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;membrane biogenesis and assembly - UC.Down&quot;, cucRomerCW, 
+    cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;activin receptor signaling - UC.Down&quot;, cucRomerCW, 
+    cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;nik/nk-kappab cascade - UC.Up&quot;, cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;er unfolded protein response - UC.Up, CROHNS.Up&quot;, 
+    cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;regulation of ras/rac/rho gtpase activity - UC.Up&quot;, 
+    cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;antigen processing and presentation - UC.UP,CROHNS.Up&quot;, 
+    cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;COPII vesicle coating and targeting - UC.Up&quot;, 
+    cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;negative regulation of peptidase activity - UC.Up&quot;, 
+    cucRomerCW, cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;response to type 1 interferon - UC.Up&quot;, cucRomerCW, 
+    cucNodeGroups)
+cucNodeGroups &lt;- cytOutNodes(&quot;protein N-linked glycosylation - UC.Up&quot;, cucRomerCW, 
+    cucNodeGroups)
+.sessionInfo &lt;- sessionInfo()
+.timeDate &lt;- Sys.time()
+save(cucRomerCW, cucNodeGroups, compareCUCRomer, cucRomerOpts, .sessionInfo, 
+    .timeDate, file = &quot;inst/data/cucCCOutput.RData&quot;)
+</code></pre>
+
+<p>We can then write out the results into a nice table.</p>
+
+<pre><code class="r">data(cucCCOutput)
+allDescStrings &lt;- sapply(cucNodeGroups, function(x) {
+    x$descStr
+})
+string2List &lt;- strsplit(allDescStrings, &quot; - &quot;, fixed = TRUE)
+justDesc &lt;- sapply(string2List, function(x) {
+    x[1]
+})
+listMem &lt;- sapply(string2List, function(x) {
+    x[2]
+})
+listMemSplit &lt;- strsplit(listMem, &quot;,&quot;, fixed = TRUE)
+
+descMembershipTable &lt;- matrix(&quot;&quot;, nrow = length(allDescStrings), ncol = 5)
+colnames(descMembershipTable) &lt;- c(&quot;Description&quot;, &quot;UC.Down&quot;, &quot;UC.Up&quot;, &quot;CROHNS.Down&quot;, 
+    &quot;CROHNS.Up&quot;)
+
+descMembershipTable[, &quot;Description&quot;] &lt;- justDesc
+
+for (inRow in seq(1, nrow(descMembershipTable))) {
+    useSplit &lt;- listMemSplit[[inRow]]
+    trimSplit &lt;- gsub(&quot; &quot;, &quot;&quot;, useSplit)
+    useLocs &lt;- sapply(trimSplit, grep, colnames(descMembershipTable), ignore.case = TRUE)
+    descMembershipTable[inRow, useLocs] &lt;- &quot;X&quot;
+}
+
+orderBy &lt;- c(&quot;UC.Up,CROHNS.Up&quot;, &quot;UC.UP,CROHNS.Up&quot;, &quot;UC.Up&quot;, &quot;UC.Down&quot;, &quot;UC.Down,CROHNS.Down&quot;, 
+    &quot;CROHNS.Up&quot;, &quot;CROHNS.Down&quot;)
+
+listMem &lt;- gsub(&quot; &quot;, &quot;&quot;, listMem)
+newOrder &lt;- unlist(lapply(orderBy, function(x) {
+    which(listMem %in% x)
+}))
+
+descMembershipTable &lt;- descMembershipTable[newOrder, ]
+require(xtable)
+
+# add an html link to each entry in the table
+useLink &lt;- paste(&quot;&lt;a href=\&quot;#loc&quot;, seq(1, nrow(descMembershipTable)), &quot;\&quot;&gt;&quot;, 
+    descMembershipTable[, &quot;Description&quot;], &quot;&lt;/a&gt;&quot;, sep = &quot;&quot;)
+descMembershipTable[, &quot;Description&quot;] &lt;- useLink
+</code></pre>
+
+<p>Print out the table.</p>
+
+<p><a name="tableLink"></a></p>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:13 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> <a href="#loc1">hydrogen peroxide metabolism</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc2">nucleotide and nucleoside metabolism</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc3">amine metabolism</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc4">extrinsic signal transduction</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc5">regulation of nitric-oxide synthase</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc6">fatty-acyl-CoA biosynthesis</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc7">chemokine and cytokine production</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc8">er unfolded protein response</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc9">antigen processing and presentation</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc10">response to lipopolysaccharide and bacterial</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc11">regulation of inflammatory response</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc12">regulation of cell cycle and DNA damage response</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc13">regulation of ubiquitination and ligase activity</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc14">nik/nk-kappab cascade</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc15">regulation of ras/rac/rho gtpase activity</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc16">COPII vesicle coating and targeting</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc17">negative regulation of peptidase activity</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc18">response to type 1 interferon</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc19">protein N-linked glycosylation</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc20">glandular cell differentiation</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc21">membrane biogenesis and assembly</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc22">activin receptor signaling</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc23">oligodendrocyte differentiation</a> </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc24">cellular pattern specification</a> </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc25">NAD biosynthesis</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc26">hormone metabolism</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc27">response to growth hormone</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc28">melanin metabolism</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc29">protein dephosphorylation</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p>We also want the set of GO terms, their descriptions, and list memberships so that the inquisitive mind can see how we generated the groups.</p>
+
+<p><a name="loc1"></a> </p>
+
+<h4>hydrogen peroxide metabolism - UC.Up,CROHNS.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:13 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:2000377 </TD> <TD> regulation of reactive oxygen species metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0042554 </TD> <TD> superoxide anion generation </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0072593 </TD> <TD> reactive oxygen species metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0032928 </TD> <TD> regulation of superoxide anion generation </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0042743 </TD> <TD> hydrogen peroxide metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:2000379 </TD> <TD> positive regulation of reactive oxygen species metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc2"></a> </p>
+
+<h4>nucleotide and nucleoside metabolism - UC.Up,CROHNS.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:13 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0043094 </TD> <TD> cellular metabolic compound salvage </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0043174 </TD> <TD> nucleoside salvage </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0072529 </TD> <TD> pyrimidine-containing compound catabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0009112 </TD> <TD> nucleobase metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0072527 </TD> <TD> pyrimidine-containing compound metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009113 </TD> <TD> purine nucleobase biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006213 </TD> <TD> pyrimidine nucleoside metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0043173 </TD> <TD> nucleotide salvage </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0008655 </TD> <TD> pyrimidine-containing compound salvage </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc3"></a> </p>
+
+<h4>amine metabolism - UC.Up,CROHNS.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:13 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0006596 </TD> <TD> polyamine biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0033238 </TD> <TD> regulation of cellular amine metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0009308 </TD> <TD> amine metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0009309 </TD> <TD> amine biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0006521 </TD> <TD> regulation of cellular amino acid metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0042401 </TD> <TD> cellular biogenic amine biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0044106 </TD> <TD> cellular amine metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0033240 </TD> <TD> positive regulation of cellular amine metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc4"></a> </p>
+
+<h4>extrinsic signal transduction - UC.Up,CROHNS.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:13 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:2001240 </TD> <TD> negative regulation of extrinsic apoptotic signaling pathway in absence of ligand </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:1901099 </TD> <TD> negative regulation of signal transduction in absence of ligand </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:2001239 </TD> <TD> regulation of extrinsic apoptotic signaling pathway in absence of ligand </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0038034 </TD> <TD> signal transduction in absence of ligand </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0097192 </TD> <TD> extrinsic apoptotic signaling pathway in absence of ligand </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc5"></a> </p>
+
+<h4>regulation of nitric-oxide synthase - UC.Up,CROHNS.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:13 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0032770 </TD> <TD> positive regulation of monooxygenase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0051000 </TD> <TD> positive regulation of nitric-oxide synthase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0032768 </TD> <TD> regulation of monooxygenase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0050999 </TD> <TD> regulation of nitric-oxide synthase activity </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc6"></a> </p>
+
+<h4>fatty-acyl-CoA biosynthesis - UC.Up,CROHNS.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:13 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0035336 </TD> <TD> long-chain fatty-acyl-CoA metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0046949 </TD> <TD> fatty-acyl-CoA biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0035338 </TD> <TD> long-chain fatty-acyl-CoA biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0035337 </TD> <TD> fatty-acyl-CoA metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc7"></a> </p>
+
+<h4>chemokine and cytokine production - UC.Up,CROHNS.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0032602 </TD> <TD> chemokine production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0009306 </TD> <TD> protein secretion </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0050704 </TD> <TD> regulation of interleukin-1 secretion </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0050707 </TD> <TD> regulation of cytokine secretion </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0050718 </TD> <TD> positive regulation of interleukin-1 beta secretion </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032635 </TD> <TD> interleukin-6 production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0050706 </TD> <TD> regulation of interleukin-1 beta secretion </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032680 </TD> <TD> regulation of tumor necrosis factor production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0050714 </TD> <TD> positive regulation of protein secretion </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0050715 </TD> <TD> positive regulation of cytokine secretion </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0050663 </TD> <TD> cytokine secretion </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0042092 </TD> <TD> type 2 immune response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0001818 </TD> <TD> negative regulation of cytokine production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032732 </TD> <TD> positive regulation of interleukin-1 production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0050708 </TD> <TD> regulation of protein secretion </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032651 </TD> <TD> regulation of interleukin-1 beta production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032755 </TD> <TD> positive regulation of interleukin-6 production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032760 </TD> <TD> positive regulation of tumor necrosis factor production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0001817 </TD> <TD> regulation of cytokine production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0002643 </TD> <TD> regulation of tolerance induction </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032652 </TD> <TD> regulation of interleukin-1 production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032640 </TD> <TD> tumor necrosis factor production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032757 </TD> <TD> positive regulation of interleukin-8 production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032715 </TD> <TD> negative regulation of interleukin-6 production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032675 </TD> <TD> regulation of interleukin-6 production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0071706 </TD> <TD> tumor necrosis factor superfamily cytokine production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032642 </TD> <TD> regulation of chemokine production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032722 </TD> <TD> positive regulation of chemokine production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0050716 </TD> <TD> positive regulation of interleukin-1 secretion </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032731 </TD> <TD> positive regulation of interleukin-1 beta production </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0042033 </TD> <TD> chemokine biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0050755 </TD> <TD> chemokine metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0045408 </TD> <TD> regulation of interleukin-6 biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc8"></a> </p>
+
+<h4>er unfolded protein response - UC.Up, CROHNS.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0070059 </TD> <TD> intrinsic apoptotic signaling pathway in response to endoplasmic reticulum stress </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0035966 </TD> <TD> response to topologically incorrect protein </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0035967 </TD> <TD> cellular response to topologically incorrect protein </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0034620 </TD> <TD> cellular response to unfolded protein </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032075 </TD> <TD> positive regulation of nuclease activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006986 </TD> <TD> response to unfolded protein </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032069 </TD> <TD> regulation of nuclease activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006987 </TD> <TD> activation of signaling protein activity involved in unfolded protein response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0034976 </TD> <TD> response to endoplasmic reticulum stress </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0030968 </TD> <TD> endoplasmic reticulum unfolded protein response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006984 </TD> <TD> ER-nucleus signaling pathway </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc9"></a> </p>
+
+<h4>antigen processing and presentation - UC.UP,CROHNS.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0002474 </TD> <TD> antigen processing and presentation of peptide antigen via MHC class I </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0042590 </TD> <TD> antigen processing and presentation of exogenous peptide antigen via MHC class I </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0002479 </TD> <TD> antigen processing and presentation of exogenous peptide antigen via MHC class I, TAP-dependent </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0019882 </TD> <TD> antigen processing and presentation </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048002 </TD> <TD> antigen processing and presentation of peptide antigen </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0019884 </TD> <TD> antigen processing and presentation of exogenous antigen </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0002478 </TD> <TD> antigen processing and presentation of exogenous peptide antigen </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc10"></a> </p>
+
+<h4>response to lipopolysaccharide and bacterial - UC.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0009617 </TD> <TD> response to bacterium </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0071222 </TD> <TD> cellular response to lipopolysaccharide </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0042742 </TD> <TD> defense response to bacterium </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0031663 </TD> <TD> lipopolysaccharide-mediated signaling pathway </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0071219 </TD> <TD> cellular response to molecule of bacterial origin </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032496 </TD> <TD> response to lipopolysaccharide </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0071216 </TD> <TD> cellular response to biotic stimulus </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009595 </TD> <TD> detection of biotic stimulus </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0016045 </TD> <TD> detection of bacterium </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0002237 </TD> <TD> response to molecule of bacterial origin </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc11"></a> </p>
+
+<h4>regulation of inflammatory response - UC.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0002697 </TD> <TD> regulation of immune effector process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0050688 </TD> <TD> regulation of defense response to virus </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0002699 </TD> <TD> positive regulation of immune effector process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0050690 </TD> <TD> regulation of defense response to virus by virus </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0045191 </TD> <TD> regulation of isotype switching </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0002228 </TD> <TD> natural killer cell mediated immunity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0002831 </TD> <TD> regulation of response to biotic stimulus </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0031348 </TD> <TD> negative regulation of defense response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0031347 </TD> <TD> regulation of defense response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0002703 </TD> <TD> regulation of leukocyte mediated immunity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0002443 </TD> <TD> leukocyte mediated immunity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0001906 </TD> <TD> cell killing </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009615 </TD> <TD> response to virus </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0050727 </TD> <TD> regulation of inflammatory response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0001909 </TD> <TD> leukocyte mediated cytotoxicity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0002449 </TD> <TD> lymphocyte mediated immunity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051607 </TD> <TD> defense response to virus </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0016064 </TD> <TD> immunoglobulin mediated immune response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0050728 </TD> <TD> negative regulation of inflammatory response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc12"></a> </p>
+
+<h4>regulation of cell cycle and DNA damage response - UC.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0030330 </TD> <TD> DNA damage response, signal transduction by p53 class mediator </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0000077 </TD> <TD> DNA damage checkpoint </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0071156 </TD> <TD> regulation of cell cycle arrest </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0031570 </TD> <TD> DNA integrity checkpoint </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0044774 </TD> <TD> mitotic DNA integrity checkpoint </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0042770 </TD> <TD> signal transduction in response to DNA damage </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0071158 </TD> <TD> positive regulation of cell cycle arrest </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0072401 </TD> <TD> signal transduction involved in DNA integrity checkpoint </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0072431 </TD> <TD> signal transduction involved in mitotic G1 DNA damage checkpoint </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:2000045 </TD> <TD> regulation of G1/S transition of mitotic cell cycle </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0044783 </TD> <TD> G1 DNA damage checkpoint </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:2000134 </TD> <TD> negative regulation of G1/S transition of mitotic cell cycle </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0072422 </TD> <TD> signal transduction involved in DNA damage checkpoint </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006977 </TD> <TD> DNA damage response, signal transduction by p53 class mediator resulting in cell cycle arrest </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0031571 </TD> <TD> mitotic G1 DNA damage checkpoint </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0072413 </TD> <TD> signal transduction involved in mitotic cell cycle checkpoint </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0044773 </TD> <TD> mitotic DNA damage checkpoint </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0031572 </TD> <TD> G2 DNA damage checkpoint </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0072395 </TD> <TD> signal transduction involved in cell cycle checkpoint </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc13"></a> </p>
+
+<h4>regulation of ubiquitination and ligase activity - UC.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0051352 </TD> <TD> negative regulation of ligase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051439 </TD> <TD> regulation of ubiquitin-protein ligase activity involved in mitotic cell cycle </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0031398 </TD> <TD> positive regulation of protein ubiquitination </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051443 </TD> <TD> positive regulation of ubiquitin-protein ligase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051437 </TD> <TD> positive regulation of ubiquitin-protein ligase activity involved in mitotic cell cycle </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0031145 </TD> <TD> anaphase-promoting complex-dependent proteasomal ubiquitin-dependent protein catabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051340 </TD> <TD> regulation of ligase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051438 </TD> <TD> regulation of ubiquitin-protein ligase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051444 </TD> <TD> negative regulation of ubiquitin-protein ligase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051351 </TD> <TD> positive regulation of ligase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051436 </TD> <TD> negative regulation of ubiquitin-protein ligase activity involved in mitotic cell cycle </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc14"></a> </p>
+
+<h4>nik/nk-kappab cascade - UC.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:1901222 </TD> <TD> regulation of NIK/NF-kappaB cascade </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0045860 </TD> <TD> positive regulation of protein kinase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051347 </TD> <TD> positive regulation of transferase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0033674 </TD> <TD> positive regulation of kinase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0007250 </TD> <TD> activation of NF-kappaB-inducing kinase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0038061 </TD> <TD> NIK/NF-kappaB cascade </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc15"></a> </p>
+
+<h4>regulation of ras/rac/rho gtpase activity - UC.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0051345 </TD> <TD> positive regulation of hydrolase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032855 </TD> <TD> positive regulation of Rac GTPase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032318 </TD> <TD> regulation of Ras GTPase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032320 </TD> <TD> positive regulation of Ras GTPase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032862 </TD> <TD> activation of Rho GTPase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032321 </TD> <TD> positive regulation of Rho GTPase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032319 </TD> <TD> regulation of Rho GTPase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc16"></a> </p>
+
+<h4>COPII vesicle coating and targeting - UC.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0048208 </TD> <TD> COPII vesicle coating </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048207 </TD> <TD> vesicle targeting, rough ER to cis-Golgi </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048199 </TD> <TD> vesicle targeting, to, from or within Golgi </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0090114 </TD> <TD> COPII-coated vesicle budding </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc17"></a> </p>
+
+<h4>negative regulation of peptidase activity - UC.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0052547 </TD> <TD> regulation of peptidase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0010466 </TD> <TD> negative regulation of peptidase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0010951 </TD> <TD> negative regulation of endopeptidase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052548 </TD> <TD> regulation of endopeptidase activity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc18"></a> </p>
+
+<h4>response to type 1 interferon - UC.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0071357 </TD> <TD> cellular response to type I interferon </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0034340 </TD> <TD> response to type I interferon </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0060337 </TD> <TD> type I interferon-mediated signaling pathway </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc19"></a> </p>
+
+<h4>protein N-linked glycosylation - UC.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0018196 </TD> <TD> peptidyl-asparagine modification </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0018279 </TD> <TD> protein N-linked glycosylation via asparagine </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006487 </TD> <TD> protein N-linked glycosylation </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc20"></a> </p>
+
+<h4>glandular cell differentiation - UC.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0002068 </TD> <TD> glandular epithelial cell development </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0002067 </TD> <TD> glandular epithelial cell differentiation </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0003309 </TD> <TD> type B pancreatic cell differentiation </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0003323 </TD> <TD> type B pancreatic cell development </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0002066 </TD> <TD> columnar/cuboidal epithelial cell development </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0035883 </TD> <TD> enteroendocrine cell differentiation </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0002065 </TD> <TD> columnar/cuboidal epithelial cell differentiation </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc21"></a> </p>
+
+<h4>membrane biogenesis and assembly - UC.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0071709 </TD> <TD> membrane assembly </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0044091 </TD> <TD> membrane biogenesis </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc22"></a> </p>
+
+<h4>activin receptor signaling - UC.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0032925 </TD> <TD> regulation of activin receptor signaling pathway </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032924 </TD> <TD> activin receptor signaling pathway </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc23"></a> </p>
+
+<h4>oligodendrocyte differentiation - UC.Down,CROHNS.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0048715 </TD> <TD> negative regulation of oligodendrocyte differentiation </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0045686 </TD> <TD> negative regulation of glial cell differentiation </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048713 </TD> <TD> regulation of oligodendrocyte differentiation </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0014014 </TD> <TD> negative regulation of gliogenesis </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048709 </TD> <TD> oligodendrocyte differentiation </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc24"></a> </p>
+
+<h4>cellular pattern specification - UC.Down,CROHNS.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0009953 </TD> <TD> dorsal/ventral pattern formation </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009952 </TD> <TD> anterior/posterior pattern specification </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0007389 </TD> <TD> pattern specification process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0003002 </TD> <TD> regionalization </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0007379 </TD> <TD> segment specification </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0001840 </TD> <TD> neural plate development </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc25"></a> </p>
+
+<h4>NAD biosynthesis - CROHNS.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0072525 </TD> <TD> pyridine-containing compound biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0009435 </TD> <TD> NAD biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0019363 </TD> <TD> pyridine nucleotide biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0072524 </TD> <TD> pyridine-containing compound metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0019359 </TD> <TD> nicotinamide nucleotide biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc26"></a> </p>
+
+<h4>hormone metabolism - CROHNS.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0016114 </TD> <TD> terpenoid biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0042573 </TD> <TD> retinoic acid metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0008299 </TD> <TD> isoprenoid biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0042448 </TD> <TD> progesterone metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0034754 </TD> <TD> cellular hormone metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc27"></a> </p>
+
+<h4>response to growth hormone - CROHNS.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0071378 </TD> <TD> cellular response to growth hormone stimulus </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0060416 </TD> <TD> response to growth hormone stimulus </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0060396 </TD> <TD> growth hormone receptor signaling pathway </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc28"></a> </p>
+
+<h4>melanin metabolism - CROHNS.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0006582 </TD> <TD> melanin metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0019748 </TD> <TD> secondary metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0042438 </TD> <TD> melanin biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc29"></a> </p>
+
+<h4>protein dephosphorylation - CROHNS.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Tue Feb 11 09:58:14 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> UC.Down </TH> <TH> UC.Up </TH> <TH> CROHNS.Down </TH> <TH> CROHNS.Up </TH>  </TR>
+  <TR> <TD> GO:0035304 </TD> <TD> regulation of protein dephosphorylation </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0035307 </TD> <TD> positive regulation of protein dephosphorylation </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0035306 </TD> <TD> positive regulation of dephosphorylation </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a></p>
 
 </body>
 

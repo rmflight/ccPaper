@@ -1,17 +1,17 @@
 <!--
 %\VignetteEngine{knitr}
 %\VignetteIndexEntry{UC vs Crohn's}
-%\VignetteDepends{ccPaperRev, GEOquery, limma, hgu133plus2.db, GO.db, org.Hs.eg.db}
+%\VignetteDepends{ccPaper, GEOquery, limma, hgu133plus2.db, GO.db, org.Hs.eg.db}
 -->
 
 ```{r customCSS, include=FALSE}
-cssFile <- system.file("extdata", "style.css", package="ccPaperRev")
+cssFile <- system.file("extdata", "style.css", package="ccPaper")
 options(markdown.HTML.stylesheet = cssFile)
 ```
 
 
 ```{r loadLibrary, message=FALSE}
-library(ccPaperRev)
+library(ccPaper)
 ```
 
 
@@ -170,4 +170,124 @@ compareCUCRomer
 compareCUCRomer <- breakEdges(compareCUCRomer, 0.8)
 cucRomerCW <- ccOutCyt(compareCUCRomer, cucRomerOpts, postText="romer", rpcPort=9001)
 generateLegend(cucRomerOpts)
+```
+
+Now we will save groups so that they can be queried and examined later.
+
+```{r saveNodeGroups, eval=FALSE}
+cucNodeGroups <- cytOutNodes("response to lipopolysaccharide and bacterial - UC.Up", cucRomerCW)
+cucNodeGroups <- cytOutNodes("regulation of inflammatory response - UC.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("hydrogen peroxide metabolism - UC.Up,CROHNS.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("regulation of cell cycle and DNA damage response - UC.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("regulation of ubiquitination and ligase activity - UC.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("nucleotide and nucleoside metabolism - UC.Up,CROHNS.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("amine metabolism - UC.Up,CROHNS.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("glandular cell differentiation - UC.Down", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("oligodendrocyte differentiation - UC.Down,CROHNS.Down", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("cellular pattern specification - UC.Down,CROHNS.Down", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("NAD biosynthesis - CROHNS.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("hormone metabolism - CROHNS.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("extrinsic signal transduction - UC.Up,CROHNS.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("regulation of nitric-oxide synthase - UC.Up,CROHNS.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("fatty-acyl-CoA biosynthesis - UC.Up,CROHNS.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("response to growth hormone - CROHNS.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("melanin metabolism - CROHNS.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("protein dephosphorylation - CROHNS.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("chemokine and cytokine production - UC.Up,CROHNS.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("membrane biogenesis and assembly - UC.Down", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("activin receptor signaling - UC.Down", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("nik/nk-kappab cascade - UC.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("er unfolded protein response - UC.Up, CROHNS.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("regulation of ras/rac/rho gtpase activity - UC.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("antigen processing and presentation - UC.UP,CROHNS.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("COPII vesicle coating and targeting - UC.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("negative regulation of peptidase activity - UC.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("response to type 1 interferon - UC.Up", cucRomerCW, cucNodeGroups)
+cucNodeGroups <- cytOutNodes("protein N-linked glycosylation - UC.Up", cucRomerCW, cucNodeGroups)
+.sessionInfo <- sessionInfo()
+.timeDate <- Sys.time()
+save(cucRomerCW, cucNodeGroups, compareCUCRomer, cucRomerOpts, .sessionInfo, .timeDate, file="inst/data/cucCCOutput.RData")
+```
+
+
+We can then write out the results into a nice table.
+
+```{r writeTableResults}
+data(cucCCOutput)
+allDescStrings <- sapply(cucNodeGroups, function(x){x$descStr})
+string2List <- strsplit(allDescStrings, " - ", fixed=TRUE)
+justDesc <- sapply(string2List, function(x){x[1]})
+listMem <- sapply(string2List, function(x){x[2]})
+listMemSplit <- strsplit(listMem, ",", fixed=TRUE)
+
+descMembershipTable <- matrix("", nrow=length(allDescStrings), ncol=5)
+colnames(descMembershipTable) <- c("Description", "UC.Down", "UC.Up", "CROHNS.Down", "CROHNS.Up")
+
+descMembershipTable[,"Description"] <- justDesc
+
+for (inRow in seq(1, nrow(descMembershipTable))){
+  useSplit <- listMemSplit[[inRow]]
+  trimSplit <- gsub(" ", "", useSplit)
+  useLocs <- sapply(trimSplit, grep, colnames(descMembershipTable), ignore.case=TRUE)
+  descMembershipTable[inRow, useLocs] <- "X"
+}
+
+orderBy <- c("UC.Up,CROHNS.Up",
+             "UC.UP,CROHNS.Up",
+             "UC.Up",
+             "UC.Down",
+             "UC.Down,CROHNS.Down",
+             "CROHNS.Up",
+             "CROHNS.Down")
+
+listMem <- gsub(" ", "", listMem)
+newOrder <- unlist(lapply(orderBy, function(x){
+  which(listMem %in% x)
+}))
+
+descMembershipTable <- descMembershipTable[newOrder,]
+require(xtable)
+
+# add an html link to each entry in the table
+useLink <- paste('<a href="#loc', seq(1, nrow(descMembershipTable)), '">', descMembershipTable[,"Description"], '</a>', sep="")
+descMembershipTable[, "Description"] <- useLink
+```
+
+Print out the table.
+
+```{r printTable, echo=FALSE, results='asis'}
+cat('<a name="tableLink"></a>\n') # a link back to the table
+print(xtable(descMembershipTable), type = 'html', html.table.attributes = 'style="border-spacing:20px 5px;"', include.rownames=FALSE, sanitize.text.function=function(x){x})
+```
+
+We also want the set of GO terms, their descriptions, and list memberships so that the inquisitive mind can see how we generated the groups.
+
+```{r detailTable, echo=FALSE, results='asis'}
+cucNodeGroups <- cucNodeGroups[newOrder]
+
+for (iNode in seq(1:length(cucNodeGroups))){
+  nodeSet <- cucNodeGroups[[iNode]]
+  toLink <- paste('<a name="loc', iNode, '"></a>', sep="")
+  cat(toLink, "\n")
+  cat("####", nodeSet$descStr, sep=" ")
+  cat("\n")
+  
+  nGO <- length(nodeSet$nodes)
+  outMatrix <- matrix("", nrow=nGO, ncol=6)
+  colnames(outMatrix) <- c("GOID", "Description", "UC.Down", "UC.Up", "CROHNS.Down", "CROHNS.Up")
+  rownames(outMatrix) <- nodeSet$nodes
+  outMatrix[,"GOID"] <- nodeSet$nodes
+  
+  for (useGO in nodeSet$nodes){
+    outMatrix[useGO, "Description"] <- nodeSet$nodeData[[useGO]]$Desc
+    listMems <- strsplit(nodeSet$nodeData[[useGO]]$listMembership, ",")[[1]]
+    listMems <- listMems[(nchar(listMems) > 0)]
+    outMatrix[useGO, listMems] <- "X"
+  }
+  allMems <- sapply(nodeSet$nodeData, function(x){x$listMembership})
+  reOrder <- order(allMems, decreasing=TRUE)
+  outMatrix <- outMatrix[reOrder,]
+  print(xtable(outMatrix), type = 'html', html.table.attributes = 'style="border-spacing:20px 5px;"', include.rownames=FALSE)
+  cat('\n<a href="#tableLink">back</a>\n')
+}
 ```

@@ -149,3 +149,54 @@ Hypothetical situation, theoretical data set: Start with the GO-Terms, have 2000
 Test data set: 60 GO Terms from BP, 20 with large number of genes, 20 with medium, 20 with low (>= 10 genes annotated), and choose large fraction from each. 
 
 Set 1500 diff expressed genes from the genes annotated with GO Terms chosen above, and apply the two methods, and see how they are different.
+
+
+# Major Things to Address after Round #2
+
+## Reviewer #1 is happy
+
+pending GEO submission and revised discussion. Yay! Note: we still need to write a kick-ass discussion.
+
+* GEO submission - Jeff and Ben are working on it
+* Discussion - Eric and I are working on it
+
+
+## Reviewer #3 still seems to feel that the major contribution is the visualization, and is rather confused by the simulation. This needs to be addressed in some detail.
+
+Doesn't want so much emphasis that categoryCompare is better, but that the methods may be complementary.
+  * This is actually borne out by the simulations: In some cases feature combining worked better, in other cases annotation combining worked better. So it is probably not a bad idea to use both, as was advocated by Shen and Tseng.
+
+Currently our major contribution is showing using simulations *why* you might want to combine datasets using annotations instead of features, and implementing a method that is rather generic in `R`. 
+
+### Specific Points:
+
+(316) "Traditional methods for comparing high-throughput data sets depend on finding shared features between significant feature lists for each data set and then performing some form of enrichment analysis on the overlapping feature sets to determine biological themes among the shared features"; (329) "Figure 1 illustrates this contrast. As a simple example, consider two feature or annotation lists from two different data sets (“Start”, middle box of Figure 1). In the “Traditional Analysis”, the intersection and set-difference of the features are determined, and biological interpretation provided by annotation enrichment of each of the resulting lists."
+
+* It is also common to test the genomic features from the experiments independently, and then compare the results in a table or heat map, without extra visualization support for the similarity relations among annotations. You should probably state this explicitly, and extend figure 1.
+
+(321) "However, there are many different scenarios that complicate this analysis, including cases when
+different types of features are measured (i.e. two studies using different microarray platforms), or
+comparing studies that examine different types of features that may share the same annotations
+(transcriptomics vs. metabolomics for example)."
+
+* Typically, two studies using different microarray platforms measure the same *type* of features, but the actual feature instances may be only partially (or not) overlapping. Also: if different types of features do not share any annotation, it is not possible to compare them anyway.
+
+(339) "When no feature-annotation relationships are available, the network considers the lists themselves as nodes, with edges to annotations that were derived from that list."
+
+* not sure this functionality is helpful at all: if there are no relation, a graph offers no visualization support to offer relations in a more intuitive / intelligible form
+
+Regarding Results and Methods:
+
+These are major additions.
+
+I understand the simulations were added to demonstrate that considering all annotations significant in at least one condition, rather than annotations significant only for the overlapping genomic features, does not inflate the number of noisy annotations. This is a legitimate concern, but as presented now it look as the main point of the paper. This should be addressed in a subsection of the results, and part of the details should be put in the methods section; the figure should also be modified to convey this message more clearly and concisely.
+
+That said, I am skeptical about proving the superiority of categorycompare mainly by simulations. This is a visualization method, the performance must be measured by how it helps a researcher to productively interpret data. This cannot be measured by simulation.
+
+Right now, I find the results partially overwhelming, confusing and unconvincing. I would like to see two or three examples where a multi-condition publicly-available data-set is presented, the biological question is concisely explained, and what can be gleaned by the "traditional analysis" as well as "category compare" are presented, with corresponding graphics. If a researcher reads this, he should agree the method is useful for his research. Mind the two approaches may as well be complementary, showing different aspects of the data; this conclusion would not weaken at all this article. Conclusions from simulations could be discussed, but, in the current form, the amount of work done on simulations and details presented in the result section does not translate to a sufficiently convincing message about the method's performance.
+
+I encourage the authors to do some more work to address these concerns as they fell appropriate.
+
+Ability to import GSEA type results:
+
+I think what I suggested is very easy to implement: a user should just export his enrichment results in a simple and standardized format and then upload in categorycompare.

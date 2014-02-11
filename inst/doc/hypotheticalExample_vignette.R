@@ -1,16 +1,15 @@
 
 ## ----customCSS, include=FALSE--------------------------------------------
-cssFile <- system.file("extdata", "style.css", package="ccPaperRev")
+cssFile <- system.file("extdata", "style.css", package="ccPaper")
 options(markdown.HTML.stylesheet = cssFile)
 
 
 ## ----setupPlot-----------------------------------------------------------
 library(ggplot2)
-library(ggthemes)
 useTheme <- theme_bw() + theme(legend.key=element_blank(), legend.title = element_text(size=25), axis.title = element_text(size=25), axis.text = element_text(size=15), legend.text = element_text(size=20), strip.text.y = element_text(size=20), strip.text.x = element_text(size=20))
 
 
-savePlot <- function(plotObj, plotFile, figPath="/mlab/data/rmflight/Documents/projects/work/categoryComparePaperRev/savedPlots"){
+savePlot <- function(plotObj, plotFile, figPath="/mlab/data/rmflight/Documents/projects/work/ccPaper/savedPlots"){
   if (file.exists(figPath)){
     plotObj <- plotObj + ggtitle(NULL)
     png(filename=file.path(figPath, plotFile), width=854, height=628)
@@ -23,7 +22,7 @@ savePlot <- function(plotObj, plotFile, figPath="/mlab/data/rmflight/Documents/p
 ## ----goAnnotations, message=FALSE----------------------------------------
 library(org.Hs.eg.db)
 library(GO.db)
-library(ccPaperRev)
+library(ccPaper)
 hsGO <- as.list(org.Hs.egGO2ALLEGS)
 
 goOntology <- Ontology(names(hsGO))
@@ -247,7 +246,7 @@ tapply(diff_pvalues$diff, diff_pvalues$sizeClass, mean)
 ## }
 ## sfInit(parallel=TRUE, cpus=10)
 ## sfExport("useGOSizeClass", "universeGenes", "useGO")
-## sfLibrary(ccPaperRev)
+## sfLibrary(ccPaper)
 ## sfLibrary(GO.db)
 ## sfLibrary(org.Hs.eg.db)
 ## testRes <- sfLapply(testSamples, testFun)
@@ -290,7 +289,7 @@ ggplot(noiseCleanDiff, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() +
 ## nSample <- 100
 ## 
 ## sfInit(parallel=TRUE, cpus=10)
-## sfLibrary(ccPaperRev)
+## sfLibrary(ccPaper)
 ## sfExport("hsGO", "nGO", "goLimits")
 ## 
 ## testGOSample <- sfLapply(seq(1, nSample), function(x){
@@ -325,7 +324,7 @@ ggplot(noiseCleanDiff, aes(x=frac, y=mean, ymax=max, ymin=min)) + geom_point() +
 ## 
 ## library(snowfall)
 ## sfInit(parallel=TRUE, cpus=10)
-## sfLibrary(ccPaperRev)
+## sfLibrary(ccPaper)
 ## sfLibrary(org.Hs.eg.db)
 ## sfLibrary(GO.db)
 ## sfExport("universeGenes")
@@ -423,7 +422,7 @@ ggplot(go_diff, aes(x=frac, y=diff)) + stat_smooth() + facet_grid(. ~ class, sca
 ## 
 ## library(snowfall)
 ## sfInit(parallel=TRUE, cpus=10)
-## sfLibrary(ccPaperRev)
+## sfLibrary(ccPaper)
 ## sfLibrary(org.Hs.eg.db)
 ## sfLibrary(GO.db)
 ## sfExport("universeGenes", "useGO", "useGOSizeClass", "cleanSample")

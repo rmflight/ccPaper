@@ -1,11 +1,11 @@
 
 ## ----customCSS, include=FALSE--------------------------------------------
-cssFile <- system.file("extdata", "style.css", package="ccPaperRev")
+cssFile <- system.file("extdata", "style.css", package="ccPaper")
 options(markdown.HTML.stylesheet = cssFile)
 
 
 ## ----downloadData, eval=FALSE--------------------------------------------
-## download.file("ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE18nnn/GSE18842/matrix/GSE18842_series_matrix.txt.gz", "/mlab/data/rmflight/Documents/projects/work/categoryComparePaperRev/otherData/GSE18842_series_matrix.txt.gz")
+## download.file("ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE18nnn/GSE18842/matrix/GSE18842_series_matrix.txt.gz", "/mlab/data/rmflight/Documents/projects/work/ccPaper/otherData/GSE18842_series_matrix.txt.gz")
 
 
 ## ----loadResave, eval=FALSE----------------------------------------------

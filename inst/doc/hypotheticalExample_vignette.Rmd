@@ -1,13 +1,15 @@
 <!--
   %\VignetteEngine{knitr}
   %\VignetteIndexEntry{hypothetical example}
-  %\VignetteDepends{categoryComparePaperRev, ggplot2, ALL, GO.db, hgu95av.db, hgu133plus2.db, limma}
+  %\VignetteDepends{categoryComparePaper, ggplot2, ALL, GO.db, hgu95av.db, hgu133plus2.db, limma}
 -->
   
 ```{r customCSS, include=FALSE}
-cssFile <- system.file("extdata", "style.css", package="ccPaperRev")
+cssFile <- system.file("extdata", "style.css", package="ccPaper")
 options(markdown.HTML.stylesheet = cssFile)
 ```
+
+Note that running this analysis will require at least 4 GB of RAM unless objects are deleted when they are no longer required.
 
 # Hypothetical Example
   
@@ -23,11 +25,10 @@ To demonstrate the utility of the general `categoryCompare` approach, we will co
 
 ```{r setupPlot}
 library(ggplot2)
-library(ggthemes)
 useTheme <- theme_bw() + theme(legend.key=element_blank(), legend.title = element_text(size=25), axis.title = element_text(size=25), axis.text = element_text(size=15), legend.text = element_text(size=20), strip.text.y = element_text(size=20), strip.text.x = element_text(size=20))
 
 
-savePlot <- function(plotObj, plotFile, figPath="/mlab/data/rmflight/Documents/projects/work/categoryComparePaperRev/savedPlots"){
+savePlot <- function(plotObj, plotFile, figPath="/mlab/data/rmflight/Documents/projects/work/ccPaper/savedPlots"){
   if (file.exists(figPath)){
     plotObj <- plotObj + ggtitle(NULL)
     png(filename=file.path(figPath, plotFile), width=854, height=628)
@@ -46,7 +47,7 @@ Let's first look at the distribution of number of genes annotated to the GO term
 ```{r goAnnotations, message=FALSE}
 library(org.Hs.eg.db)
 library(GO.db)
-library(ccPaperRev)
+library(ccPaper)
 hsGO <- as.list(org.Hs.egGO2ALLEGS)
 
 goOntology <- Ontology(names(hsGO))
@@ -361,7 +362,7 @@ testFun <- function(x){
 }
 sfInit(parallel=TRUE, cpus=10)
 sfExport("useGOSizeClass", "universeGenes", "useGO")
-sfLibrary(ccPaperRev)
+sfLibrary(ccPaper)
 sfLibrary(GO.db)
 sfLibrary(org.Hs.eg.db)
 testRes <- sfLapply(testSamples, testFun)
@@ -422,7 +423,7 @@ goLimits <- list(low = c(10, 100), med = c(250, 500), hi = c(500, 1500))
 nSample <- 100
 
 sfInit(parallel=TRUE, cpus=10)
-sfLibrary(ccPaperRev)
+sfLibrary(ccPaper)
 sfExport("hsGO", "nGO", "goLimits")
 
 testGOSample <- sfLapply(seq(1, nSample), function(x){
@@ -459,7 +460,7 @@ runGOSamples <- function(x){
 
 library(snowfall)
 sfInit(parallel=TRUE, cpus=10)
-sfLibrary(ccPaperRev)
+sfLibrary(ccPaper)
 sfLibrary(org.Hs.eg.db)
 sfLibrary(GO.db)
 sfExport("universeGenes")
@@ -572,7 +573,7 @@ runSweepNoise <- function(noiseGenes){
 
 library(snowfall)
 sfInit(parallel=TRUE, cpus=10)
-sfLibrary(ccPaperRev)
+sfLibrary(ccPaper)
 sfLibrary(org.Hs.eg.db)
 sfLibrary(GO.db)
 sfExport("universeGenes", "useGO", "useGOSizeClass", "cleanSample")
