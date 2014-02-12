@@ -291,3 +291,43 @@ for (iNode in seq(1:length(cucNodeGroups))){
   cat('\n<a href="#tableLink">back</a>\n')
 }
 ```
+
+
+### Demonstration of why graph representation is useful
+
+Is the graph representation actually important for our method, or is it just useful over all?
+
+```{r getAllData}
+library(graph)
+data(cucRomer)
+data(cucCCOutput)
+
+getTable <- function(inName){
+  tmpDat <- cucRomer[[inName]]
+  colnames(tmpDat) <- paste(inName, colnames(tmpDat), sep=".")
+  tmpDat
+}
+
+cucTables <- lapply(names(cucRomer), getTable)
+all.equal(rownames(cucTables[[1]]), rownames(cucTables[[2]]))
+
+cucTables <- do.call(cbind, cucTables)
+cucTables <- as.data.frame(cucTables, stringsAsFactors=FALSE)
+cucTables$ID <- rownames(cucTables)
+
+sigNodes <- nodes(compareCUCRomer@mainGraph)
+nodeMembership <- nodeData(compareCUCRomer@mainGraph, sigNodes, "listMembership")
+
+cucTables <- cucTables[sigNodes,]
+cucTables$membership <- nodeMembership
+cucTables$description <- nodeData(compareCUCRomer@mainGraph, sigNodes, "Desc")
+
+groupLabel <- "nucleotide and nucleoside metabolism - UC.Up,CROHNS.Up"
+allLabel <- sapply(cucNodeGroups, function(x){x$descStr})
+whichLabel <- which(allLabel %in% groupLabel)
+groupNodes <- cucNodeGroups[[whichLabel]]$nodes
+cucTables[groupNodes,]
+```
+
+OK, so given the full table of 281 results, where do these terms end up falling in the list? i.e. if I had to scroll through the list, how likely would I be to actually determine that nucleoside - nucleotide metabolism comes from both **UC.Up** and **CROHNS.Up**?
+
