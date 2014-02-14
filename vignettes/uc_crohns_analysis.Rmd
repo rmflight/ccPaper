@@ -329,7 +329,7 @@ groupNodes <- cucNodeGroups[[whichLabel]]$nodes
 cucTables[groupNodes,]
 ```
 
-OK, so given the full table of 281 results, where do these terms end up falling in the list? i.e. if I had to scroll through the list, how likely would I be to actually determine that nucleoside - nucleotide metabolism comes from both **UC.Up** and **CROHNS.Up**?
+OK, so given the full table of `r nrow(cucTables)` results, where do these terms end up falling in the list? i.e. if I had to scroll through the list, how likely would I be to actually determine that nucleoside - nucleotide metabolism comes from both **UC.Up** and **CROHNS.Up**?
 
 ```{r checkRanks}
 newOrder <- order(cucTables[, 'UC.Up'], cucTables[, 'CROHNS.Up'], cucTables[, 'membership'])
