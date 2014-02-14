@@ -1,7 +1,7 @@
 Package: ccPaper
 Type: Package
 Title: work for categoryCompare paper revisions
-Version: 0.0.13
+Version: 0.0.14
 Author: Robert M Flight <rflight79@gmail.com>
 Maintainer: Robert M Flight <rflight79@gmail.com>
 Depends: categoryComparePaper, limma, ggplot2
