@@ -13,6 +13,7 @@ options(markdown.HTML.stylesheet = cssFile)
 library(ccPaper)
 ```
 
+This vignette was built: `r Sys.time()`
 
 # Muscle Skin Data processing
 
