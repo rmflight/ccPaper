@@ -11,8 +11,6 @@ options(markdown.HTML.stylesheet = cssFile)
 
 Note that running this analysis will require at least 4 GB of RAM unless objects are deleted when they are no longer required.
 
-This vignette was built: `r Sys.time()`
-
 # Hypothetical Example
   
 To demonstrate the utility of the general `categoryCompare` approach, we will construct an artificial data set based on the Gene Ontology. We will attempt to demonstrate that differences in the **set** or **list** based comparisons are also dependent on the number of items annotated to a particular term.
@@ -1160,3 +1158,12 @@ ggplot(tmpPRank, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ class) + g
 ```
 
 No, it doesn't because the `ranks.only=TRUE` will only check for **mixed** values, not at one end or the other.
+
+
+### Date and System information
+
+```{r}
+Sys.time()
+sessionInfo()
+```
+

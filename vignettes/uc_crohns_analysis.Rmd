@@ -14,8 +14,6 @@ options(markdown.HTML.stylesheet = cssFile)
 library(ccPaper)
 ```
 
-This vignette was built: `r Sys.time()`
-
 # Crohn's VS Ulcerative Colitis
 
 GEO dataset **GSE36807** has crohn's, uc, and normal samples. 
@@ -338,3 +336,10 @@ cucTables <- cucTables[newOrder,]
 which(cucTables$ID %in% groupNodes)
 ```
 
+
+### Date and System information
+
+```{r}
+Sys.time()
+sessionInfo()
+```
