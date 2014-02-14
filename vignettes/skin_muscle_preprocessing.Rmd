@@ -19,7 +19,7 @@ library(ccPaper)
 How do we process the data for muscle and skin to something we can start running through `categoryCompare`?
 
 ```{r loadLibraries}
-options(stringsAsFactors=TRUE)
+options(stringsAsFactors=FALSE)
 library(affy)
 ```
 
@@ -360,6 +360,8 @@ smNodes <- cytOutNodes("lipopolysaccharid biosynthesis - Skin.T7.Up", cwSM, smNo
 smNodes <- cytOutNodes("aminoglycan metabolism - Skin.T7.Up", cwSM, smNodes)
 smNodes <- cytOutNodes("epithelial to mesenchymal transition, endocardial cushion formation - Skin.T7.Up", cwSM, smNodes)
 smNodes <- cytOutNodes("pulmonary valve dev. and morphogenesis - Skin.T7.Up", cwSM, smNodes)
+.sessionInfo <- sessionInfo()
+.timeDate <- Sys.time()
 save(smNodes, cwSM, allCCRomer, allRomerOpts, compareSMRomer, file="inst/data/skinMuscleCCOutput.RData")
 ```
 
