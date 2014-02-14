@@ -1039,7 +1039,7 @@ ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + ggtitle("Sample - Combined Fi
 
 Finally, we note that [Shen & Tseng from 2010](http://dx.doi.org/10.1093/bioinformatics/btq148) combined independent experiments by taking the **maximum** p-value between samples. 
 
-```{r gseaProportionMax}
+```{r gseaProportionMax, eval=FALSE}
 ?gseaProportionMax
 ```
 
