@@ -427,3 +427,8 @@ for (iNode in seq(1:length(smNodes))){
 ## save(muscleGeneSetTest, t1, t2, file="inst/data/muscleGeneSetTest.RData")
 
 
+## ------------------------------------------------------------------------
+Sys.time()
+sessionInfo()
+
+

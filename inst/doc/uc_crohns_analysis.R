@@ -288,3 +288,8 @@ cucTables <- cucTables[newOrder,]
 which(cucTables$ID %in% groupNodes)
 
 
+## ------------------------------------------------------------------------
+Sys.time()
+sessionInfo()
+
+
