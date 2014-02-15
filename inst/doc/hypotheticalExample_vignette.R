@@ -811,8 +811,8 @@ tmpP$frac <- useSig
 ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + ggtitle("Sample - Combined Fishers Ranks") + useTheme + xlab("Fraction") + ylab("Diff. log p-values")
 
 
-## ----gseaProportionMax---------------------------------------------------
-?gseaProportionMax
+## ----gseaProportionMax, eval=FALSE---------------------------------------
+## ?gseaProportionMax
 
 
 ## ----checkGSEAMax--------------------------------------------------------
@@ -919,5 +919,10 @@ tmpPRank$frac <- gseaFrac
 tmpPRank$class <- gseaSizeClass
 tmpPRank$class <- factor(tmpPRank$class, c("low", "med", "hi"), ordered=TRUE)
 ggplot(tmpPRank, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ class) + ggtitle("Sample - Combined Max-P Ranks") + xlab("Fraction") + ylab("Diff. log p-values")
+
+
+## ------------------------------------------------------------------------
+Sys.time()
+sessionInfo()
 
 

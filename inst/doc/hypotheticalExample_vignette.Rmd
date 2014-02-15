@@ -1039,7 +1039,7 @@ ggplot(tmpP, aes(x=frac, y=diff)) + geom_point() + ggtitle("Sample - Combined Fi
 
 Finally, we note that [Shen & Tseng from 2010](http://dx.doi.org/10.1093/bioinformatics/btq148) combined independent experiments by taking the **maximum** p-value between samples. 
 
-```{r gseaProportionMax}
+```{r gseaProportionMax, eval=FALSE}
 ?gseaProportionMax
 ```
 
@@ -1158,3 +1158,12 @@ ggplot(tmpPRank, aes(x=frac, y=diff)) + geom_point() + facet_grid(. ~ class) + g
 ```
 
 No, it doesn't because the `ranks.only=TRUE` will only check for **mixed** values, not at one end or the other.
+
+
+### Date and System information
+
+```{r}
+Sys.time()
+sessionInfo()
+```
+

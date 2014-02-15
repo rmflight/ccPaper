@@ -216,7 +216,7 @@ hr {
 
 <p>How do we process the data for muscle and skin to something we can start running through <code>categoryCompare</code>?</p>
 
-<pre><code class="r">options(stringsAsFactors = TRUE)
+<pre><code class="r">options(stringsAsFactors = FALSE)
 library(affy)
 </code></pre>
 
@@ -603,6 +603,8 @@ smNodes &lt;- cytOutNodes(&quot;epithelial to mesenchymal transition, endocardia
     cwSM, smNodes)
 smNodes &lt;- cytOutNodes(&quot;pulmonary valve dev. and morphogenesis - Skin.T7.Up&quot;, 
     cwSM, smNodes)
+.sessionInfo &lt;- sessionInfo()
+.timeDate &lt;- Sys.time()
 save(smNodes, cwSM, allCCRomer, allRomerOpts, compareSMRomer, file = &quot;inst/data/skinMuscleCCOutput.RData&quot;)
 </code></pre>
 
@@ -667,7 +669,7 @@ descMembershipTable[, &quot;Description&quot;] &lt;- useLink
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:35 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> Description </TH> <TH> Skin.T7.Down </TH> <TH> Skin.T7.Up </TH> <TH> Skin.T14.Down </TH> <TH> Skin.T14.Up </TH> <TH> Muscle.Down </TH> <TH> Muscle.Up </TH>  </TR>
@@ -761,7 +763,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:35 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -817,7 +819,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:35 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -871,7 +873,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:35 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -887,7 +889,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:35 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -911,7 +913,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:35 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -941,7 +943,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:35 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -962,7 +964,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:35 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -982,7 +984,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:35 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -997,7 +999,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:35 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1015,7 +1017,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:35 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1031,7 +1033,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:35 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1064,7 +1066,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:35 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1080,7 +1082,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:35 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1096,7 +1098,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1112,7 +1114,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1127,7 +1129,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1142,7 +1144,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1157,7 +1159,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1172,7 +1174,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1187,7 +1189,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1202,7 +1204,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1222,7 +1224,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1244,7 +1246,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1259,7 +1261,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1274,7 +1276,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1296,7 +1298,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1339,7 +1341,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1357,7 +1359,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1374,7 +1376,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1390,7 +1392,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1406,7 +1408,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1421,7 +1423,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1436,7 +1438,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1451,7 +1453,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1466,7 +1468,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1481,7 +1483,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1496,7 +1498,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1511,7 +1513,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1526,7 +1528,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1541,7 +1543,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1561,7 +1563,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1577,7 +1579,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1592,7 +1594,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1609,7 +1611,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1625,7 +1627,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1641,7 +1643,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1656,7 +1658,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:53 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1671,7 +1673,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1686,7 +1688,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1701,7 +1703,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1716,7 +1718,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1731,7 +1733,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1746,7 +1748,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1764,7 +1766,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1781,7 +1783,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1798,7 +1800,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1815,7 +1817,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1831,7 +1833,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1847,7 +1849,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1863,7 +1865,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1880,7 +1882,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1895,7 +1897,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1910,7 +1912,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1925,7 +1927,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1940,7 +1942,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1955,7 +1957,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1970,7 +1972,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -1985,7 +1987,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -2000,7 +2002,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -2015,7 +2017,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -2030,7 +2032,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -2045,7 +2047,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -2062,7 +2064,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -2078,7 +2080,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -2094,7 +2096,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -2112,7 +2114,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -2127,7 +2129,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -2145,7 +2147,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
@@ -2160,7 +2162,7 @@ transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD
 
 <!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
 
-<!-- Tue Feb 11 09:50:36 2014 -->
+<!-- Fri Feb 14 14:17:54 2014 -->
 
 <TABLE style="border-spacing:20px 5px;">
 <TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>

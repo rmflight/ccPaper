@@ -250,3 +250,41 @@ for (iNode in seq(1:length(cucNodeGroups))){
 }
 
 
+## ----getAllData----------------------------------------------------------
+library(graph)
+data(cucRomer)
+data(cucCCOutput)
+
+getTable <- function(inName){
+  tmpDat <- cucRomer[[inName]]
+  colnames(tmpDat) <- paste(inName, colnames(tmpDat), sep=".")
+  tmpDat
+}
+
+cucTables <- lapply(names(cucRomer), getTable)
+all.equal(rownames(cucTables[[1]]), rownames(cucTables[[2]]))
+
+cucTables <- do.call(cbind, cucTables)
+cucTables <- as.data.frame(cucTables, stringsAsFactors=FALSE)
+cucTables$ID <- rownames(cucTables)
+
+sigNodes <- nodes(compareCUCRomer@mainGraph)
+nodeMembership <- unlist(nodeData(compareCUCRomer@mainGraph, sigNodes, "listMembership"))
+
+cucTables <- cucTables[sigNodes,]
+cucTables$membership <- nodeMembership
+cucTables$description <- unlist(nodeData(compareCUCRomer@mainGraph, sigNodes, "Desc"))
+
+groupLabel <- "nucleotide and nucleoside metabolism - UC.Up,CROHNS.Up"
+allLabel <- sapply(cucNodeGroups, function(x){x$descStr})
+whichLabel <- which(allLabel %in% groupLabel)
+groupNodes <- cucNodeGroups[[whichLabel]]$nodes
+cucTables[groupNodes,]
+
+
+## ----checkRanks----------------------------------------------------------
+newOrder <- order(cucTables[, 'UC.Up'], cucTables[, 'CROHNS.Up'], cucTables[, 'membership'])
+cucTables <- cucTables[newOrder,]
+which(cucTables$ID %in% groupNodes)
+
+

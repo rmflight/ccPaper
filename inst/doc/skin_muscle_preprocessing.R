@@ -9,7 +9,7 @@ library(ccPaper)
 
 
 ## ----loadLibraries-------------------------------------------------------
-options(stringsAsFactors=TRUE)
+options(stringsAsFactors=FALSE)
 library(affy)
 
 
@@ -320,6 +320,8 @@ compareSMRomer
 ## smNodes <- cytOutNodes("aminoglycan metabolism - Skin.T7.Up", cwSM, smNodes)
 ## smNodes <- cytOutNodes("epithelial to mesenchymal transition, endocardial cushion formation - Skin.T7.Up", cwSM, smNodes)
 ## smNodes <- cytOutNodes("pulmonary valve dev. and morphogenesis - Skin.T7.Up", cwSM, smNodes)
+## .sessionInfo <- sessionInfo()
+## .timeDate <- Sys.time()
 ## save(smNodes, cwSM, allCCRomer, allRomerOpts, compareSMRomer, file="inst/data/skinMuscleCCOutput.RData")
 
 
