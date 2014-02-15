@@ -1,0 +1,2249 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Muscle Skin Data processing</title>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+<!-- MathJax scripts -->
+<script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<style type="text/css">
+body {
+	box-sizing: border-box;
+	font-size: 16px;
+	font-family: 'Myriad Pro', Calibri, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+	width:800px;
+	margin: auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 10px 0;
+	font-weight: 700;
+	color:#222222;
+		font-family: 'Lucida Grande', 'Calibri', Helvetica, Arial, sans-serif;
+	letter-spacing: -1px;
+}
+
+h1 {
+	font-size: 36px;
+	font-weight: 700;
+}
+
+h2 {
+	padding-bottom: 10px;
+	font-size: 32px;
+	background: url('../images/bg_hr.png') repeat-x bottom;
+}
+
+h3 {
+	font-size: 24px;
+}
+
+h4 {
+	font-size: 21px;
+}
+
+h5 {
+	font-size: 18px;
+}
+
+h6 {
+	font-size: 16px;
+}
+
+p {
+	margin: 10px 0 15px 0;
+	text-align: justify;
+}
+
+tt, code, pre {
+	font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+
+
+a:visited {
+	color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+	margin-top: 0;
+	max-width: 95%;
+	border: 1px solid #ccc;
+}
+
+pre code {
+	display: block; padding: 0.5em;
+}
+
+code.r {
+	background-color: #F8F8F8;
+}
+
+table, td, th {
+	border: none;
+	border-spacing:20px; 5px;
+}
+
+blockquote {
+	color:#666666;
+		margin:0;
+	padding-left: 1em;
+	border-left: 0.5em #EEE solid;
+}
+
+hr {
+	height: 0px;
+	border-bottom: none;
+	border-top-width: thin;
+	border-top-style: dotted;
+	border-top-color: #999999;
+}
+
+@media print {
+	* { 
+		background: transparent !important; 
+		color: black !important; 
+		filter:none !important; 
+		-ms-filter: none !important; 
+	}
+	
+	body { 
+		font-size:12pt; 
+		max-width:100%; 
+	}
+	
+	a, a:visited { 
+		text-decoration: underline; 
+	}
+	
+	hr { 
+		visibility: hidden;
+		page-break-before: always;
+	}
+	
+	pre, blockquote { 
+		padding-right: 1em; 
+		page-break-inside: avoid; 
+	}
+	
+	tr, img { 
+		page-break-inside: avoid; 
+	}
+	
+	img { 
+		max-width: 100% !important; 
+	}
+	
+	@page :left { 
+		margin: 15mm 20mm 15mm 10mm; 
+	}
+	
+	@page :right { 
+		margin: 15mm 10mm 15mm 20mm; 
+	}
+	
+	p, h2, h3 { 
+		orphans: 3; widows: 3; 
+	}
+	
+	h2, h3 { 
+		page-break-after: avoid; 
+	}
+}
+</style>
+
+
+
+</head>
+
+<body>
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{Skin vs Muscle}
+%\VignetteDepends{ccPaper, affy, GEOquery, limma, rat2302.db, org.Rn.eg.db, mouse4302.db, org.Mm.eg.db, GO.db}
+-->
+
+<pre><code class="r">library(ccPaper)
+</code></pre>
+
+<h1>Muscle Skin Data processing</h1>
+
+<p>How do we process the data for muscle and skin to something we can start running through <code>categoryCompare</code>?</p>
+
+<pre><code class="r">options(stringsAsFactors = FALSE)
+library(affy)
+</code></pre>
+
+<h2>Skin</h2>
+
+<p>Get the raw data in (this should actually be on GEO, but doesn&#39;t seem to be there yet)</p>
+
+<pre><code class="r">currLoc &lt;- getwd()
+dataLoc &lt;- &quot;/mlab/data/rmflight/Documents/projects/work/Petruska/drg_sc_skin_denervation/Skin/&quot;
+setwd(dataLoc)
+
+attFile &lt;- &quot;Sample information file.txt&quot;
+dataAttributes &lt;- read.table(attFile, sep = &quot;\t&quot;, header = T)
+dataAttributes$timePoint &lt;- 0
+dataAttributes$timePoint[(dataAttributes$Time == &quot;7 day&quot;)] &lt;- 7
+dataAttributes$timePoint[(dataAttributes$Time == &quot;14 day&quot;)] &lt;- 14
+
+celData &lt;- ReadAffy(phenoData = dataAttributes)
+skinData &lt;- rma(celData)
+
+setwd(currLoc)
+.sessionInfo &lt;- sessionInfo()
+.timeDate &lt;- Sys.time()
+save(skinData, .sessionInfo, .timeDate, file = &quot;inst/data/skin_rma_data.RData&quot;)
+</code></pre>
+
+<h2>Muscle</h2>
+
+<pre><code class="r">library(GEOquery)
+muscleData &lt;- getGEO(GEO = &quot;GSE4411&quot;)[[1]]
+
+controlSamples &lt;- grep(&quot;Control&quot;, pData(muscleData)$title)
+muscleData &lt;- muscleData[, controlSamples]
+
+tmpP &lt;- pData(muscleData)
+tmpP$innervation &lt;- &quot;innervated&quot;
+denLoc &lt;- grep(&quot;Denervated&quot;, tmpP$title)
+tmpP$innervation[denLoc] &lt;- &quot;denervated&quot;
+pData(muscleData) &lt;- tmpP
+.sessionInfo &lt;- sessionInfo()
+.timeDate &lt;- Sys.time()
+save(muscleData, .sessionInfo, .timeDate, file = &quot;inst/data/muscle_data.RData&quot;)
+</code></pre>
+
+<h1>Gene Lists</h1>
+
+<p>For both the skin and muscle data sets, we will calculate the p-values using <code>limma</code>. We will probably attempt to do both hypergeometric enrichment and GSEA.</p>
+
+<p>Do not forget that these are from different organisms. <strong>Skin</strong>: rat, <strong>muscle</strong>: mouse.</p>
+
+<h2>Skin Gene Lists and Enrichment</h2>
+
+<pre><code class="r">library(limma)
+library(rat2302.db)
+</code></pre>
+
+<pre><code>## Loading required package: org.Rn.eg.db
+</code></pre>
+
+<pre><code class="r">data(skin_rma_data)
+
+skinComps &lt;- c(&quot;T7 - T0&quot;, &quot;T14 - T0&quot;)
+geneID &lt;- unlist(mget(featureNames(skinData), rat2302ENTREZID))
+
+skinExpr &lt;- exprs(skinData)
+skinCollapse &lt;- collapseProbes(skinExpr, geneID)  # collapse to single genes using median of expression
+skinCharacter &lt;- pData(skinData)
+skinCharacter$timePoint2 &lt;- paste(&quot;T&quot;, skinCharacter$timePoint, sep = &quot;&quot;)
+
+skinFC &lt;- rankGenes(skinCollapse, skinCharacter$timePoint2, skinComps, doAggregation = FALSE, 
+    aggregateIndex = NA)
+names(skinFC) &lt;- c(&quot;T7&quot;, &quot;T14&quot;)
+
+skinDiff &lt;- lapply(skinFC, getDiffGenes, id = &quot;id&quot;)
+</code></pre>
+
+<pre><code class="r">library(GO.db)
+library(org.Rn.eg.db)
+library(limma)
+rnGO &lt;- as.list(org.Rn.egGO2ALLEGS)
+rnGO &lt;- rnGO[(Ontology(names(rnGO)) == &quot;BP&quot;)]
+rnGO &lt;- lapply(rnGO, unique)
+
+skinSet &lt;- symbols2indices(rnGO, rownames(skinCollapse))
+</code></pre>
+
+<pre><code class="r">skinStatus &lt;- skinCharacter$timePoint2
+f &lt;- factor(skinStatus)
+skinDesign &lt;- model.matrix(~0 + f)
+colnames(skinDesign) &lt;- levels(f)
+
+skinContrast &lt;- makeContrasts(contrasts = skinComps, levels = skinDesign)
+
+save(list = ls(), file = &quot;runSkinRomer.RData&quot;)
+</code></pre>
+
+<pre><code class="r">load(&quot;runSkinRomer.RData&quot;)
+options(mc.cores = 12)  # at least if we are on hera
+t1 &lt;- Sys.time()
+skinRomer &lt;- multicontrastRomer(skinSet, skinCollapse, skinDesign, skinContrast, 
+    nrot = 10000)
+names(skinRomer) &lt;- c(&quot;T7&quot;, &quot;T14&quot;)
+save(skinRomer, file = &quot;inst/data/skinRomer.RData&quot;)
+t2 &lt;- Sys.time()
+difftime(t2, t1)
+</code></pre>
+
+<p>Run using <code>geneSetTest</code></p>
+
+<pre><code class="r">load(&quot;runSkinRomer.RData&quot;)
+options(mc.cores = 12)  # at least if we are on hera
+t1 &lt;- Sys.time()
+skinGeneSetTest &lt;- lapply(skinFC, function(x) {
+    mmGeneSetTest(skinSet, x$t)
+})
+
+t2 &lt;- Sys.time()
+difftime(t2, t1)
+save(skinGeneSetTest, t1, t2, file = &quot;inst/data/skinGeneSetTest.RData&quot;)
+</code></pre>
+
+<h2>Muscle Gene Lists and Enrichment</h2>
+
+<pre><code class="r">library(limma)
+library(mouse4302.db)
+</code></pre>
+
+<pre><code>## Loading required package: org.Mm.eg.db
+</code></pre>
+
+<pre><code class="r">data(muscle_data)
+
+muscleComps &lt;- c(&quot;denervated - innervated&quot;)
+geneID &lt;- unlist(mget(featureNames(muscleData), mouse4302ENTREZID))
+
+muscleExpr &lt;- exprs(muscleData)
+muscleCollapse &lt;- collapseProbes(muscleExpr, geneID)  # collapse to single genes using median of expression
+muscleCharacter &lt;- pData(muscleData)
+
+muscleFC &lt;- rankGenes(muscleCollapse, muscleCharacter$innervation, muscleComps, 
+    doAggregation = FALSE, aggregateIndex = NA)
+names(muscleFC) &lt;- &quot;denervation&quot;
+
+muscleDiff &lt;- lapply(muscleFC, getDiffGenes, id = &quot;id&quot;)
+</code></pre>
+
+<pre><code class="r">library(GO.db)
+library(org.Mm.eg.db)
+library(limma)
+mmGO &lt;- as.list(org.Mm.egGO2ALLEGS)
+mmGO &lt;- mmGO[(Ontology(names(mmGO)) == &quot;BP&quot;)]
+mmGO &lt;- lapply(mmGO, unique)
+
+muscleSet &lt;- symbols2indices(mmGO, rownames(muscleCollapse))
+</code></pre>
+
+<pre><code class="r">muscleStatus &lt;- muscleCharacter$innervation
+f &lt;- factor(muscleStatus)
+muscleDesign &lt;- model.matrix(~0 + f)
+colnames(muscleDesign) &lt;- levels(f)
+
+muscleContrast &lt;- makeContrasts(contrasts = muscleComps, levels = muscleDesign)
+
+save(muscleSet, muscleCollapse, muscleDesign, muscleContrast, mmGO, muscleFC, 
+    file = &quot;runMuscleRomer.RData&quot;)
+</code></pre>
+
+<pre><code class="r">load(&quot;runMuscleRomer.RData&quot;)
+options(mc.cores = 12)  # at least if we are on hera
+t1 &lt;- Sys.time()
+muscleRomer &lt;- multicontrastRomer(muscleSet, muscleCollapse, muscleDesign, muscleContrast, 
+    nrot = 10000)
+names(muscleRomer) &lt;- &quot;denervation&quot;
+save(muscleRomer, file = &quot;inst/data/muscleRomer.RData&quot;)
+t2 &lt;- Sys.time()
+difftime(t2, t1)
+</code></pre>
+
+<h2>Compare Skin and Muscle</h2>
+
+<pre><code class="r">data(muscleRomer)
+data(skinRomer)
+
+bothGO &lt;- union(names(rnGO), names(mmGO))
+combMapping &lt;- lapply(bothGO, function(inName) {
+    isMM &lt;- inName %in% names(mmGO)
+    isRN &lt;- inName %in% names(rnGO)
+
+    tmpGene &lt;- character(0)
+
+    if (isMM) {
+        tmpGene &lt;- c(tmpGene, mmGO[[inName]])
+    }
+    if (isRN) {
+        tmpGene &lt;- c(tmpGene, rnGO[[inName]])
+    }
+    tmpGene &lt;- unique(tmpGene)
+    return(tmpGene)
+})
+
+names(combMapping) &lt;- bothGO
+
+geneAnnMapping &lt;- new(&quot;namedList&quot;, .Data = combMapping, names = names(combMapping))
+
+
+getSigID &lt;- function(inRomer, pCut = 0.05, whichCol = c(&quot;Up&quot;, &quot;Down&quot;)) {
+    sigID &lt;- lapply(whichCol, function(inCol) {
+        rownames(inRomer[(inRomer[, inCol] &lt;= pCut), ])
+    })
+    names(sigID) &lt;- whichCol
+    return(sigID)
+}
+
+muscleSigRomer &lt;- lapply(muscleRomer, getSigID, pCut = 0.01)
+muscleSigRomer &lt;- unlist(muscleSigRomer, recursive = FALSE)
+names(muscleSigRomer) &lt;- c(&quot;muscle.Up&quot;, &quot;muscle.Down&quot;)
+
+skinSigRomer &lt;- lapply(skinRomer, getSigID, pCut = 0.01)
+skinSigRomer &lt;- unlist(skinSigRomer, recursive = FALSE)
+
+allSigRomer &lt;- c(skinSigRomer, muscleSigRomer)
+
+genCCSigList &lt;- function(inSig) {
+    tmp &lt;- new(&quot;ccSigList&quot;, sigID = inSig)
+}
+
+allCCSig &lt;- lapply(allSigRomer, genCCSigList)
+
+allCCRomer &lt;- new(&quot;GENccEnrichResult&quot;, allCCSig, categoryName = &quot;GSEAGO&quot;, geneAnnMapping = geneAnnMapping, 
+    overlapType = &quot;overlap&quot;, annDescription = Term(names(geneAnnMapping)))
+
+allRomerOpts &lt;- new(&quot;ccOptions&quot;, listNames = names(allCCRomer), colorType = &quot;pie&quot;)
+compareSMRomer &lt;- ccCompare(allCCRomer, allRomerOpts)
+</code></pre>
+
+<pre><code>## Warning:
+## &#39;/mlab/data/rmflight/Documents/projects/work/ccPaper/vignettes/pieGraphs&#39;
+## already exists
+</code></pre>
+
+<pre><code class="r">compareSMRomer
+</code></pre>
+
+<pre><code>## Annotation category:  GSEAGO    
+## Main graph: A graphNEL graph with directed edges
+## Number of Nodes = 563 
+## Number of Edges = 22155
+</code></pre>
+
+<pre><code class="r">save(compareSMRomer, allRomerOpts, file = &quot;skinMuscleCompare.RData&quot;)
+</code></pre>
+
+<pre><code class="r">compareSMRomer &lt;- breakEdges(compareSMRomer, 0.8)
+cwSM &lt;- ccOutCyt(compareSMRomer, allRomerOpts, postText = &quot;GSEAGO&quot;, rpcPort = 9001)
+</code></pre>
+
+<pre><code class="r">.sessionInfo &lt;- sessionInfo()
+.timeDate &lt;- Sys.time()
+save(cwSM, compareSMRomer, allRomerOpts, .sessionInfo, .timeDate, file = &quot;inst/data/skinMuscleCompareOutput.RData&quot;)
+</code></pre>
+
+<p>Get out the groups of related GO terms:</p>
+
+<pre><code class="r">smNodes &lt;- cytOutNodes(&quot;typeII hypersensitivity - T7.Up&quot;, cwSM)
+smNodes &lt;- cytOutNodes(&quot;pH and lysosome regulation - Skin.T7.Down,Skin.T14.Up,Muscle.Up&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;Neurotransmitter secretion and transport - Skin.T7.Down,Skin.T14.Up&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;entry into host and movement - Skin.T7.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;steriod biosynthesis - Skin.T7.Down&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;microtubule organization - Skin.T7.Up,Skin.T14.Down&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;cellular respiration - Skin.T14.Down,Muscle.Down&quot;, cwSM, 
+    smNodes)
+smNodes &lt;- cytOutNodes(&quot;epithelial tube branching - Skin.T7.Down,Skin.T14.Up&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;rRNA processing - Muscle.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;digestion - Skin.T14.Up&quot;, cwWM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;digestion - Skin.T14.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;response to virus - Skin.T7.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;purine metabolism - Muscle.Down&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;protein localization in mitochondrion - Skin.T14.Down&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;synapse assembly and nervous system development - Skin.T14.Up&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;folic acid compound metabolism - Skin.T14.Up&quot;, cwSM, 
+    smNodes)
+smNodes &lt;- cytOutNodes(&quot;retinoic acid biosynthesis - Skin.T14.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;mitotic spindle assembly - Skin.T7.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;regulation of phospholipase C - Muscle.Down&quot;, cwSM, 
+    smNodes)
+smNodes &lt;- cytOutNodes(&quot;acetyl CoA biosynthesis - Skin.T14.Down,Muscle.Down&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;response to glucose - Skin.T7.Down, Muscle.Down&quot;, cwSM, 
+    smNodes)
+smNodes &lt;- cytOutNodes(&quot;response to VEGF - Muscle.Down&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;mitotic cell cycle checkpoint - Skin.T7.Down,Skin.T14.Down,Muscle.Up&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;urea cycle - Skin.T14.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;response to prostaglandin - Skin.T14.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;keratinocyte migration - Skin.T14.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;atp biosynthesis - Skin.T7.Down,Skin.T14.Down,Muscle.Down&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;membrane repolarization - Muscle.Down&quot;, cwSM, smNodes)
+smNOdes &lt;- cytOutNodes(&quot;muscle contraction and development - Skin.T7.Down,Skin.T14.Down,Muscle.Down&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;muscle contraction and development - Skin.T7.Down,Skin.T14.Down,Muscle.Down&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;muscle contraction and development - Skin.T7.Down,Skin.T14.Down,Muscle.Down&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;blood vessel endothelial cell differentiation - Skin.T7.Up,Skin.T14.Up&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;endocrine regulation of blood pressure - Skin.T7.Down,Skin.T14.Up&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;tube development - Skin.T7.Down,Muscle.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;amino acid transport - Skin.T14.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;cation channel activity - Skin.T14.Down&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;interferon gamma response - Skin.T14.Down&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;lung cell differentiation - Skin.T7.Down&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;neg regulation of astrocyte diff. - Skin.T7.Down&quot;, cwSM, 
+    smNodes)
+smNodes &lt;- cytOutNodes(&quot;fear response - Skin.T7.Down&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;N acetylglucosamine metabolism - Skin.T7.Up&quot;, cwSM, 
+    smNodes)
+smNodes &lt;- cytOutNodes(&quot;proteoglycan biosynthesis - Skin.T7.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;carbohydrate catabolism - Muscle.Down&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;response to muscle activity - Skin.T14.Down,Muscle.Down&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;response to indole 3 methanol - Muscle.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;negative regulation of response to granulocyte / myeloid cell diff. - Skin.T7.Up,Muscle.Up&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;vitamin metabolism - Skin.T14.Up,Muscle.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;DNA break repair - Muscle.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;calcineurin NFAT signaling cascade - Skin.T14.Down&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;histone demethylation - Skin.T14.Down&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;negative regulation of Ras signal transduction - Skin.T14.Down&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;positive regulation of metalloenzyme activity - Skin.T14.Down&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;glucocorticoid receptor signaling pathway - Skin.T14.Down&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;mesenchymal cell diff in kidney / renal system dev. - Skin.T14.Up&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;axon extension - Skin.T14.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;lung lobe dev. and morphogenesis - Skin.T14.Up&quot;, cwSM, 
+    smNodes)
+smNodes &lt;- cytOutNodes(&quot;embryonic digestive tract dev. and morphogenesis - Skin.T14.Up&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;negative regulation of protein transport - Skin.T7.Up,Skin.T14.Up&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;phosphate ion transport - Skin.T14.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;fluid transport - Skin.T7.Down,Skin.T14.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;fluid secretion - Skin.T14.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;interleukin 13 production - Skin.T14.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;glia guided migration - Skin.T14.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;central nervous system maturation - Skin.T14.Up&quot;, cwSM, 
+    smNodes)
+smNodes &lt;- cytOutNodes(&quot;bile acid transport - Skin.T14.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;positive regulation of muscle cell apoptosis - Skin.T14.Up&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;atrioventricular valve dev. and morphogenesis - Skin.T14.Up,Muscle.Down&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;dopamine transport - Skin.T7.Down&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;collateral sprouting - Skin.T7.Down&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;response to osmotic stress - Skin.T7.Down&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;positive regulation of epidermal growth factor signaling - Skin.T7.Down&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;response to leptin - Skin.T7.Down&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;catecholamin biosynthesis - Skin.T7.Down&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;negative regulation of cell junction assembly - Skin.T7.Up&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;endocardial cell differentiation - Skin.T7.Up&quot;, cwSM, 
+    smNodes)
+smNodes &lt;- cytOutNodes(&quot;sequestering of actin monomers - Skin.T7.Up&quot;, cwSM, 
+    smNodes)
+smNodes &lt;- cytOutNodes(&quot;beta amyloid formation - Skin.T7.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;response to platelet derived growth factor stimulus - Skin.T7.Up&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;lipopolysaccharid biosynthesis - Skin.T7.Up&quot;, cwSM, 
+    smNodes)
+smNodes &lt;- cytOutNodes(&quot;aminoglycan metabolism - Skin.T7.Up&quot;, cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;epithelial to mesenchymal transition, endocardial cushion formation - Skin.T7.Up&quot;, 
+    cwSM, smNodes)
+smNodes &lt;- cytOutNodes(&quot;pulmonary valve dev. and morphogenesis - Skin.T7.Up&quot;, 
+    cwSM, smNodes)
+.sessionInfo &lt;- sessionInfo()
+.timeDate &lt;- Sys.time()
+save(smNodes, cwSM, allCCRomer, allRomerOpts, compareSMRomer, file = &quot;inst/data/skinMuscleCCOutput.RData&quot;)
+</code></pre>
+
+<p>Lets generate a couple of different tables for output.</p>
+
+<pre><code class="r">data(skinMuscleCCOutput)
+
+allDescStrings &lt;- sapply(smNodes, function(x) {
+    x$descStr
+})
+string2List &lt;- strsplit(allDescStrings, &quot; - &quot;, fixed = TRUE)
+justDesc &lt;- sapply(string2List, function(x) {
+    x[1]
+})
+listMem &lt;- sapply(string2List, function(x) {
+    x[2]
+})
+listMem[1] &lt;- &quot;Skin.T7.Up&quot;  # fix an error in the initial setup
+listMemSplit &lt;- strsplit(listMem, &quot;,&quot;, fixed = TRUE)
+
+descMembershipTable &lt;- matrix(&quot;&quot;, nrow = length(allDescStrings), ncol = 7)
+colnames(descMembershipTable) &lt;- c(&quot;Description&quot;, &quot;Skin.T7.Down&quot;, &quot;Skin.T7.Up&quot;, 
+    &quot;Skin.T14.Down&quot;, &quot;Skin.T14.Up&quot;, &quot;Muscle.Down&quot;, &quot;Muscle.Up&quot;)
+
+descMembershipTable[, &quot;Description&quot;] &lt;- justDesc
+
+for (inRow in seq(1, nrow(descMembershipTable))) {
+    useSplit &lt;- listMemSplit[[inRow]]
+    trimSplit &lt;- gsub(&quot; &quot;, &quot;&quot;, useSplit)
+    descMembershipTable[inRow, trimSplit] &lt;- &quot;X&quot;
+}
+
+orderBy &lt;- c(&quot;Skin.T7.Down,Skin.T14.Down,Muscle.Down&quot;, &quot;Skin.T7.Down,Skin.T14.Down,Muscle.Up&quot;, 
+    &quot;Skin.T7.Down,Skin.T14.Down&quot;, &quot;Skin.T7.Down,Skin.T14.Up,Muscle.Up&quot;, &quot;Skin.T7.Down,Skin.T14.Up&quot;, 
+    &quot;Skin.T7.Down,Muscle.Up&quot;, &quot;Skin.T7.Down,Muscle.Down&quot;, &quot;Skin.T7.Down&quot;, &quot;Skin.T7.Up,Skin.T14.Down&quot;, 
+    &quot;Skin.T7.Up,Skin.T14.Up&quot;, &quot;Skin.T7.Up,Muscle.Up&quot;, &quot;Skin.T7.Up&quot;, &quot;Skin.T14.Down,Muscle.Down&quot;, 
+    &quot;Skin.T14.Down&quot;, &quot;Skin.T14.Up,Muscle.Down&quot;, &quot;Skin.T14.Up,Muscle.Up&quot;, &quot;Skin.T14.Up&quot;, 
+    &quot;Muscle.Down&quot;, &quot;Muscle.Up&quot;)
+
+listMem &lt;- gsub(&quot; &quot;, &quot;&quot;, listMem)
+newOrder &lt;- unlist(lapply(orderBy, function(x) {
+    which(listMem %in% x)
+}))
+
+descMembershipTable &lt;- descMembershipTable[newOrder, ]
+require(xtable)
+</code></pre>
+
+<pre><code>## Loading required package: xtable
+</code></pre>
+
+<pre><code class="r">
+# add an html link to each entry in the table
+useLink &lt;- paste(&quot;&lt;a href=\&quot;#loc&quot;, seq(1, nrow(descMembershipTable)), &quot;\&quot;&gt;&quot;, 
+    descMembershipTable[, &quot;Description&quot;], &quot;&lt;/a&gt;&quot;, sep = &quot;&quot;)
+descMembershipTable[, &quot;Description&quot;] &lt;- useLink
+</code></pre>
+
+<p>Print out the table.</p>
+
+<p><a name="tableLink"></a></p>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> Description </TH> <TH> Skin.T7.Down </TH> <TH> Skin.T7.Up </TH> <TH> Skin.T14.Down </TH> <TH> Skin.T14.Up </TH> <TH> Muscle.Down </TH> <TH> Muscle.Up </TH>  </TR>
+  <TR> <TD> <a href="#loc1">atp biosynthesis</a> </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc2">muscle contraction and development</a> </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc3">mitotic cell cycle checkpoint</a> </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc4">pH and lysosome regulation</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc5">Neurotransmitter secretion and
+transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc6">epithelial tube branching</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc7">endocrine regulation of blood pressure</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc8">fluid transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc9">tube development</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc10">response to glucose</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc11">steriod biosynthesis</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc12">lung cell differentiation</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc13">neg regulation of astrocyte diff.</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc14">fear response</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc15">dopamine transport</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc16">collateral sprouting</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc17">response to osmotic stress</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc18">positive regulation of epidermal growth factor signaling</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc19">response to leptin</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc20">catecholamin biosynthesis</a> </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc21">microtubule organization</a> </TD> <TD>  </TD> <TD> X </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc22">blood vessel endothelial cell differentiation</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc23">negative regulation of protein transport</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc24">negative regulation of response to granulocyte / myeloid cell diff.</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc25">typeII hypersensitivity</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc26">entry into host and movement</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc27">response to virus</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc28">mitotic spindle assembly</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc29">N acetylglucosamine metabolism</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc30">proteoglycan biosynthesis</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc31">negative regulation of cell junction assembly</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc32">endocardial cell differentiation</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc33">sequestering of actin monomers</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc34">beta amyloid formation</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc35">response to platelet derived growth factor stimulus</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc36">lipopolysaccharid biosynthesis</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc37">aminoglycan metabolism</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc38">epithelial to mesenchymal transition, endocardial cushion formation</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc39">pulmonary valve dev. and morphogenesis</a> </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc40">cellular respiration</a> </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc41">acetyl CoA biosynthesis</a> </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc42">response to muscle activity</a> </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc43">protein localization in mitochondrion</a> </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc44">cation channel activity</a> </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc45">interferon gamma response</a> </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc46">calcineurin NFAT signaling cascade</a> </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc47">histone demethylation</a> </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc48">negative regulation of Ras signal transduction</a> </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc49">positive regulation of metalloenzyme activity</a> </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc50">glucocorticoid receptor signaling pathway</a> </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc51">atrioventricular valve dev. and morphogenesis</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc52">vitamin metabolism</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc53">digestion</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc54">synapse assembly and nervous system development</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc55">folic acid compound metabolism</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc56">retinoic acid biosynthesis</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc57">urea cycle</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc58">response to prostaglandin</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc59">keratinocyte migration</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc60">amino acid transport</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc61">mesenchymal cell diff in kidney / renal system dev.</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc62">axon extension</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc63">lung lobe dev. and morphogenesis</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc64">embryonic digestive tract dev. and morphogenesis</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc65">phosphate ion transport</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc66">fluid secretion</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc67">interleukin 13 production</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc68">glia guided migration</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc69">central nervous system maturation</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc70">bile acid transport</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc71">positive regulation of muscle cell apoptosis</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc72">purine metabolism</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc73">regulation of phospholipase C</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc74">response to VEGF</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc75">membrane repolarization</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc76">carbohydrate catabolism</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> <a href="#loc77">rRNA processing</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc78">response to indole 3 methanol</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> <a href="#loc79">DNA break repair</a> </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p>We also want the set of GO terms, their descriptions, and list memberships so that the inquisitive mind can see how we generated the groups.</p>
+
+<p><a name="loc1"></a> </p>
+
+<h4>atp biosynthesis - Skin.T7.Down,Skin.T14.Down,Muscle.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0009221 </TD> <TD> pyrimidine deoxyribonucleotide biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009147 </TD> <TD> pyrimidine nucleoside triphosphate metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0043101 </TD> <TD> purine-containing compound salvage </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006221 </TD> <TD> pyrimidine nucleotide biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009219 </TD> <TD> pyrimidine deoxyribonucleotide metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009200 </TD> <TD> deoxyribonucleoside triphosphate metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006183 </TD> <TD> GTP biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009263 </TD> <TD> deoxyribonucleotide biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0019692 </TD> <TD> deoxyribose phosphate metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0046131 </TD> <TD> pyrimidine ribonucleoside metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009148 </TD> <TD> pyrimidine nucleoside triphosphate biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009394 </TD> <TD> 2'-deoxyribonucleotide metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006228 </TD> <TD> UTP biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006213 </TD> <TD> pyrimidine nucleoside metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032261 </TD> <TD> purine nucleotide salvage </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009265 </TD> <TD> 2'-deoxyribonucleotide biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006220 </TD> <TD> pyrimidine nucleotide metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0072528 </TD> <TD> pyrimidine-containing compound biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009264 </TD> <TD> deoxyribonucleotide catabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0043173 </TD> <TD> nucleotide salvage </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0072527 </TD> <TD> pyrimidine-containing compound metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0046385 </TD> <TD> deoxyribose phosphate biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009262 </TD> <TD> deoxyribonucleotide metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006754 </TD> <TD> ATP biosynthetic process </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006818 </TD> <TD> hydrogen transport </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0015992 </TD> <TD> proton transport </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032415 </TD> <TD> regulation of sodium:hydrogen antiporter activity </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009206 </TD> <TD> purine ribonucleoside triphosphate biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009142 </TD> <TD> nucleoside triphosphate biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0046129 </TD> <TD> purine ribonucleoside biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0042455 </TD> <TD> ribonucleoside biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0015986 </TD> <TD> ATP synthesis coupled proton transport </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009168 </TD> <TD> purine ribonucleoside monophosphate biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:1901659 </TD> <TD> glycosyl compound biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009156 </TD> <TD> ribonucleoside monophosphate biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009124 </TD> <TD> nucleoside monophosphate biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009201 </TD> <TD> ribonucleoside triphosphate biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0042451 </TD> <TD> purine nucleoside biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009145 </TD> <TD> purine nucleoside triphosphate biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0015985 </TD> <TD> energy coupled proton transport, down electrochemical gradient </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009127 </TD> <TD> purine nucleoside monophosphate biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009163 </TD> <TD> nucleoside biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006172 </TD> <TD> ADP biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc2"></a> </p>
+
+<h4>muscle contraction and development - Skin.T7.Down,Skin.T14.Down,Muscle.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0048639 </TD> <TD> positive regulation of developmental growth </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:1901862 </TD> <TD> negative regulation of muscle tissue development </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:2001015 </TD> <TD> negative regulation of skeletal muscle cell differentiation </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0045843 </TD> <TD> negative regulation of striated muscle tissue development </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0061049 </TD> <TD> cell growth involved in cardiac muscle cell development </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0003298 </TD> <TD> physiological muscle hypertrophy </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0060421 </TD> <TD> positive regulation of heart growth </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051154 </TD> <TD> negative regulation of striated muscle cell differentiation </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0046622 </TD> <TD> positive regulation of organ growth </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0060452 </TD> <TD> positive regulation of cardiac muscle contraction </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0003301 </TD> <TD> physiological cardiac muscle hypertrophy </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:2000725 </TD> <TD> regulation of cardiac muscle cell differentiation </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0045988 </TD> <TD> negative regulation of striated muscle contraction </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0010832 </TD> <TD> negative regulation of myotube differentiation </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0014889 </TD> <TD> muscle atrophy </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:2001014 </TD> <TD> regulation of skeletal muscle cell differentiation </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0045661 </TD> <TD> regulation of myoblast differentiation </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0014874 </TD> <TD> response to stimulus involved in regulation of muscle adaptation </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048641 </TD> <TD> regulation of skeletal muscle tissue development </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:1901861 </TD> <TD> regulation of muscle tissue development </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051153 </TD> <TD> regulation of striated muscle cell differentiation </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048747 </TD> <TD> muscle fiber development </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0043501 </TD> <TD> skeletal muscle adaptation </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048634 </TD> <TD> regulation of muscle organ development </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0055002 </TD> <TD> striated muscle cell development </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051147 </TD> <TD> regulation of muscle cell differentiation </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0060297 </TD> <TD> regulation of sarcomere organization </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0055001 </TD> <TD> muscle cell development </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0014866 </TD> <TD> skeletal myofibril assembly </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0016202 </TD> <TD> regulation of striated muscle tissue development </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048642 </TD> <TD> negative regulation of skeletal muscle tissue development </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0045445 </TD> <TD> myoblast differentiation </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048742 </TD> <TD> regulation of skeletal muscle fiber development </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0010830 </TD> <TD> regulation of myotube differentiation </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0030240 </TD> <TD> skeletal muscle thin filament assembly </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048741 </TD> <TD> skeletal muscle fiber development </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048739 </TD> <TD> cardiac muscle fiber development </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0014819 </TD> <TD> regulation of skeletal muscle contraction </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0003012 </TD> <TD> muscle system process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0060048 </TD> <TD> cardiac muscle contraction </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006936 </TD> <TD> muscle contraction </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc3"></a> </p>
+
+<h4>mitotic cell cycle checkpoint - Skin.T7.Down,Skin.T14.Down,Muscle.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0007095 </TD> <TD> mitotic G2 DNA damage checkpoint </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:1901991 </TD> <TD> negative regulation of mitotic cell cycle phase transition </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0007093 </TD> <TD> mitotic cell cycle checkpoint </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc4"></a> </p>
+
+<h4>pH and lysosome regulation - Skin.T7.Down,Skin.T14.Up,Muscle.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0035751 </TD> <TD> regulation of lysosomal lumen pH </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006883 </TD> <TD> cellular sodium ion homeostasis </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051453 </TD> <TD> regulation of intracellular pH </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051452 </TD> <TD> intracellular pH reduction </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006885 </TD> <TD> regulation of pH </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0055067 </TD> <TD> monovalent inorganic cation homeostasis </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0030641 </TD> <TD> regulation of cellular pH </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0045851 </TD> <TD> pH reduction </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0007040 </TD> <TD> lysosome organization </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc5"></a> </p>
+
+<h4>Neurotransmitter secretion and</h4>
+
+<p>transport - Skin.T7.Down,Skin.T14.Up</p>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0006836 </TD> <TD> neurotransmitter transport </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0007269 </TD> <TD> neurotransmitter secretion </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0046928 </TD> <TD> regulation of neurotransmitter secretion </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0016079 </TD> <TD> synaptic vesicle exocytosis </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0001505 </TD> <TD> regulation of neurotransmitter levels </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048172 </TD> <TD> regulation of short-term neuronal synaptic plasticity </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051588 </TD> <TD> regulation of neurotransmitter transport </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0050804 </TD> <TD> regulation of synaptic transmission </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048168 </TD> <TD> regulation of neuronal synaptic plasticity </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0014056 </TD> <TD> regulation of acetylcholine secretion, neurotransmission </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032228 </TD> <TD> regulation of synaptic transmission, GABAergic </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:1901374 </TD> <TD> acetate ester transport </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051932 </TD> <TD> synaptic transmission, GABAergic </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0014055 </TD> <TD> acetylcholine secretion, neurotransmission </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0061526 </TD> <TD> acetylcholine secretion </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0015870 </TD> <TD> acetylcholine transport </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032230 </TD> <TD> positive regulation of synaptic transmission, GABAergic </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc6"></a> </p>
+
+<h4>epithelial tube branching - Skin.T7.Down,Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:2000018 </TD> <TD> regulation of male gonad development </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:1902338 </TD> <TD> negative regulation of apoptotic process involved in morphogenesis </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:2000242 </TD> <TD> negative regulation of reproductive process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0061046 </TD> <TD> regulation of branching involved in lung morphogenesis </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048754 </TD> <TD> branching morphogenesis of an epithelial tube </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0060685 </TD> <TD> regulation of prostatic bud formation </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:2000241 </TD> <TD> regulation of reproductive process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0060441 </TD> <TD> epithelial tube branching involved in lung morphogenesis </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc7"></a> </p>
+
+<h4>endocrine regulation of blood pressure - Skin.T7.Down,Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0032277 </TD> <TD> negative regulation of gonadotropin secretion </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032275 </TD> <TD> luteinizing hormone secretion </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0046888 </TD> <TD> negative regulation of hormone secretion </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032274 </TD> <TD> gonadotropin secretion </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0003081 </TD> <TD> regulation of systemic arterial blood pressure by renin-angiotensin </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0001990 </TD> <TD> regulation of systemic arterial blood pressure by hormone </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0050886 </TD> <TD> endocrine process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc8"></a> </p>
+
+<h4>fluid transport - Skin.T7.Down,Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0015840 </TD> <TD> urea transport </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0042044 </TD> <TD> fluid transport </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc9"></a> </p>
+
+<h4>tube development - Skin.T7.Down,Muscle.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0072009 </TD> <TD> nephron epithelium development </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0061326 </TD> <TD> renal tubule development </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0072080 </TD> <TD> nephron tubule development </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0072079 </TD> <TD> nephron tubule formation </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0072077 </TD> <TD> renal vesicle morphogenesis </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc10"></a> </p>
+
+<h4>response to glucose - Skin.T7.Down, Muscle.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0061178 </TD> <TD> regulation of insulin secretion involved in cellular response to glucose stimulus </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0035773 </TD> <TD> insulin secretion involved in cellular response to glucose stimulus </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0071333 </TD> <TD> cellular response to glucose stimulus </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc11"></a> </p>
+
+<h4>steriod biosynthesis - Skin.T7.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0090032 </TD> <TD> negative regulation of steroid hormone biosynthetic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006705 </TD> <TD> mineralocorticoid biosynthetic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:2000064 </TD> <TD> regulation of cortisol biosynthetic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032344 </TD> <TD> regulation of aldosterone metabolic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006704 </TD> <TD> glucocorticoid biosynthetic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0042180 </TD> <TD> cellular ketone metabolic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0034650 </TD> <TD> cortisol metabolic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0010565 </TD> <TD> regulation of cellular ketone metabolic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0042181 </TD> <TD> ketone biosynthetic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0031946 </TD> <TD> regulation of glucocorticoid biosynthetic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0031947 </TD> <TD> negative regulation of glucocorticoid biosynthetic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032341 </TD> <TD> aldosterone metabolic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032342 </TD> <TD> aldosterone biosynthetic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032347 </TD> <TD> regulation of aldosterone biosynthetic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0008212 </TD> <TD> mineralocorticoid metabolic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0034651 </TD> <TD> cortisol biosynthetic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032353 </TD> <TD> negative regulation of hormone biosynthetic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0045939 </TD> <TD> negative regulation of steroid metabolic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0031944 </TD> <TD> negative regulation of glucocorticoid metabolic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0010894 </TD> <TD> negative regulation of steroid biosynthetic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc12"></a> </p>
+
+<h4>lung cell differentiation - Skin.T7.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0060487 </TD> <TD> lung epithelial cell differentiation </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0060428 </TD> <TD> lung epithelium development </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0060479 </TD> <TD> lung cell differentiation </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc13"></a> </p>
+
+<h4>neg regulation of astrocyte diff. - Skin.T7.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0048712 </TD> <TD> negative regulation of astrocyte differentiation </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048708 </TD> <TD> astrocyte differentiation </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048710 </TD> <TD> regulation of astrocyte differentiation </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc14"></a> </p>
+
+<h4>fear response - Skin.T7.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0002209 </TD> <TD> behavioral defense response </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0042596 </TD> <TD> fear response </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0001662 </TD> <TD> behavioral fear response </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc15"></a> </p>
+
+<h4>dopamine transport - Skin.T7.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0015872 </TD> <TD> dopamine transport </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051937 </TD> <TD> catecholamine transport </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc16"></a> </p>
+
+<h4>collateral sprouting - Skin.T7.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0048668 </TD> <TD> collateral sprouting </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048670 </TD> <TD> regulation of collateral sprouting </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc17"></a> </p>
+
+<h4>response to osmotic stress - Skin.T7.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0006970 </TD> <TD> response to osmotic stress </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0047484 </TD> <TD> regulation of response to osmotic stress </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc18"></a> </p>
+
+<h4>positive regulation of epidermal growth factor signaling - Skin.T7.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0045741 </TD> <TD> positive regulation of epidermal growth factor-activated receptor activity </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0045742 </TD> <TD> positive regulation of epidermal growth factor receptor signaling pathway </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc19"></a> </p>
+
+<h4>response to leptin - Skin.T7.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0044321 </TD> <TD> response to leptin stimulus </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0044320 </TD> <TD> cellular response to leptin stimulus </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc20"></a> </p>
+
+<h4>catecholamin biosynthesis - Skin.T7.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0009713 </TD> <TD> catechol-containing compound biosynthetic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0042423 </TD> <TD> catecholamine biosynthetic process </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc21"></a> </p>
+
+<h4>microtubule organization - Skin.T7.Up,Skin.T14.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0051016 </TD> <TD> barbed-end actin filament capping </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0043242 </TD> <TD> negative regulation of protein complex disassembly </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0007026 </TD> <TD> negative regulation of microtubule depolymerization </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0043244 </TD> <TD> regulation of protein complex disassembly </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:1901880 </TD> <TD> negative regulation of protein depolymerization </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0070507 </TD> <TD> regulation of microtubule cytoskeleton organization </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0031112 </TD> <TD> positive regulation of microtubule polymerization or depolymerization </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc22"></a> </p>
+
+<h4>blood vessel endothelial cell differentiation - Skin.T7.Up,Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0060842 </TD> <TD> arterial endothelial cell differentiation </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0060837 </TD> <TD> blood vessel endothelial cell differentiation </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0001570 </TD> <TD> vasculogenesis </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0035912 </TD> <TD> dorsal aorta morphogenesis </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0061384 </TD> <TD> heart trabecula morphogenesis </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0061383 </TD> <TD> trabecula morphogenesis </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0045746 </TD> <TD> negative regulation of Notch signaling pathway </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0008593 </TD> <TD> regulation of Notch signaling pathway </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0007219 </TD> <TD> Notch signaling pathway </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc23"></a> </p>
+
+<h4>negative regulation of protein transport - Skin.T7.Up,Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:09 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0090317 </TD> <TD> negative regulation of intracellular protein transport </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0046826 </TD> <TD> negative regulation of protein export from nucleus </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc24"></a> </p>
+
+<h4>negative regulation of response to granulocyte / myeloid cell diff. - Skin.T7.Up,Muscle.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0030853 </TD> <TD> negative regulation of granulocyte differentiation </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0045638 </TD> <TD> negative regulation of myeloid cell differentiation </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc25"></a> </p>
+
+<h4>typeII hypersensitivity - T7.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0001794 </TD> <TD> type IIa hypersensitivity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0001798 </TD> <TD> positive regulation of type IIa hypersensitivity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0010324 </TD> <TD> membrane invagination </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006911 </TD> <TD> phagocytosis, engulfment </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0002894 </TD> <TD> positive regulation of type II hypersensitivity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0001796 </TD> <TD> regulation of type IIa hypersensitivity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0002892 </TD> <TD> regulation of type II hypersensitivity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0002445 </TD> <TD> type II hypersensitivity </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0045807 </TD> <TD> positive regulation of endocytosis </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc26"></a> </p>
+
+<h4>entry into host and movement - Skin.T7.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0052553 </TD> <TD> modulation by symbiont of host immune response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0016032 </TD> <TD> viral process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052167 </TD> <TD> modulation by symbiont of host innate immune response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0044409 </TD> <TD> entry into host </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052510 </TD> <TD> positive regulation by organism of defense response of other organism involved in symbiotic interaction </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052126 </TD> <TD> movement in host environment </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052033 </TD> <TD> pathogen-associated molecular pattern dependent induction by symbiont of host innate immune response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0002281 </TD> <TD> macrophage activation involved in immune response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052169 </TD> <TD> pathogen-associated molecular pattern dependent modulation by symbiont of host innate immune response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0046718 </TD> <TD> viral entry into host cell </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052031 </TD> <TD> modulation by symbiont of host defense response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052509 </TD> <TD> positive regulation by symbiont of host defense response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032490 </TD> <TD> detection of molecule of bacterial origin </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052192 </TD> <TD> movement in environment of other organism involved in symbiotic interaction </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052306 </TD> <TD> modulation by organism of innate immune response in other organism involved in symbiotic interaction </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0044764 </TD> <TD> multi-organism cellular process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0030260 </TD> <TD> entry into host cell </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052308 </TD> <TD> pathogen-associated molecular pattern dependent modulation by organism of innate immune response in other organism involved in symbiotic interaction </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0002282 </TD> <TD> microglial cell activation involved in immune response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052257 </TD> <TD> pathogen-associated molecular pattern dependent induction by organism of innate immune response of other organism involved in symbiotic interaction </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052555 </TD> <TD> positive regulation by organism of immune response of other organism involved in symbiotic interaction </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051806 </TD> <TD> entry into cell of other organism involved in symbiotic interaction </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0044419 </TD> <TD> interspecies interaction between organisms </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052255 </TD> <TD> modulation by organism of defense response of other organism involved in symbiotic interaction </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051828 </TD> <TD> entry into other organism involved in symbiotic interaction </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052556 </TD> <TD> positive regulation by symbiont of host immune response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052552 </TD> <TD> modulation by organism of immune response of other organism involved in symbiotic interaction </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0044403 </TD> <TD> symbiosis, encompassing mutualism through parasitism </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052305 </TD> <TD> positive regulation by organism of innate immune response in other organism involved in symbiotic interaction </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0052166 </TD> <TD> positive regulation by symbiont of host innate immune response </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc27"></a> </p>
+
+<h4>response to virus - Skin.T7.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0009615 </TD> <TD> response to virus </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0045351 </TD> <TD> type I interferon biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0045350 </TD> <TD> interferon-beta biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0045357 </TD> <TD> regulation of interferon-beta biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0045359 </TD> <TD> positive regulation of interferon-beta biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc28"></a> </p>
+
+<h4>mitotic spindle assembly - Skin.T7.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0090307 </TD> <TD> spindle assembly involved in mitosis </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0007051 </TD> <TD> spindle organization </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051225 </TD> <TD> spindle assembly </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0007052 </TD> <TD> mitotic spindle organization </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc29"></a> </p>
+
+<h4>N acetylglucosamine metabolism - Skin.T7.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:1901071 </TD> <TD> glucosamine-containing compound metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006044 </TD> <TD> N-acetylglucosamine metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006040 </TD> <TD> amino sugar metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc30"></a> </p>
+
+<h4>proteoglycan biosynthesis - Skin.T7.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0030201 </TD> <TD> heparan sulfate proteoglycan metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006029 </TD> <TD> proteoglycan metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0030166 </TD> <TD> proteoglycan biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc31"></a> </p>
+
+<h4>negative regulation of cell junction assembly - Skin.T7.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0051895 </TD> <TD> negative regulation of focal adhesion assembly </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:1901889 </TD> <TD> negative regulation of cell junction assembly </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc32"></a> </p>
+
+<h4>endocardial cell differentiation - Skin.T7.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0003348 </TD> <TD> cardiac endothelial cell differentiation </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0060956 </TD> <TD> endocardial cell differentiation </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc33"></a> </p>
+
+<h4>sequestering of actin monomers - Skin.T7.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0045185 </TD> <TD> maintenance of protein location </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0042989 </TD> <TD> sequestering of actin monomers </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc34"></a> </p>
+
+<h4>beta amyloid formation - Skin.T7.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0034205 </TD> <TD> beta-amyloid formation </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0042987 </TD> <TD> amyloid precursor protein catabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc35"></a> </p>
+
+<h4>response to platelet derived growth factor stimulus - Skin.T7.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0036119 </TD> <TD> response to platelet-derived growth factor stimulus </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0036120 </TD> <TD> cellular response to platelet-derived growth factor stimulus </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc36"></a> </p>
+
+<h4>lipopolysaccharid biosynthesis - Skin.T7.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0009103 </TD> <TD> lipopolysaccharide biosynthetic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0008653 </TD> <TD> lipopolysaccharide metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc37"></a> </p>
+
+<h4>aminoglycan metabolism - Skin.T7.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0006022 </TD> <TD> aminoglycan metabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006026 </TD> <TD> aminoglycan catabolic process </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc38"></a> </p>
+
+<h4>epithelial to mesenchymal transition, endocardial cushion formation - Skin.T7.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0003198 </TD> <TD> epithelial to mesenchymal transition involved in endocardial cushion formation </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0003272 </TD> <TD> endocardial cushion formation </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc39"></a> </p>
+
+<h4>pulmonary valve dev. and morphogenesis - Skin.T7.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0003184 </TD> <TD> pulmonary valve morphogenesis </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0003177 </TD> <TD> pulmonary valve development </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc40"></a> </p>
+
+<h4>cellular respiration - Skin.T14.Down,Muscle.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0006099 </TD> <TD> tricarboxylic acid cycle </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006102 </TD> <TD> isocitrate metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0045333 </TD> <TD> cellular respiration </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0015980 </TD> <TD> energy derivation by oxidation of organic compounds </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0009060 </TD> <TD> aerobic respiration </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0022900 </TD> <TD> electron transport chain </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0022904 </TD> <TD> respiratory electron transport chain </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc41"></a> </p>
+
+<h4>acetyl CoA biosynthesis - Skin.T14.Down,Muscle.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0006085 </TD> <TD> acetyl-CoA biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0035384 </TD> <TD> thioester biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0071616 </TD> <TD> acyl-CoA biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc42"></a> </p>
+
+<h4>response to muscle activity - Skin.T14.Down,Muscle.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0014850 </TD> <TD> response to muscle activity </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0014823 </TD> <TD> response to activity </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc43"></a> </p>
+
+<h4>protein localization in mitochondrion - Skin.T14.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0033108 </TD> <TD> mitochondrial respiratory chain complex assembly </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0010257 </TD> <TD> NADH dehydrogenase complex assembly </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032981 </TD> <TD> mitochondrial respiratory chain complex I assembly </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0097031 </TD> <TD> mitochondrial respiratory chain complex I biogenesis </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc44"></a> </p>
+
+<h4>cation channel activity - Skin.T14.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0032237 </TD> <TD> activation of store-operated calcium channel activity </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:1901341 </TD> <TD> positive regulation of store-operated calcium channel activity </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:2001259 </TD> <TD> positive regulation of cation channel activity </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc45"></a> </p>
+
+<h4>interferon gamma response - Skin.T14.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0060334 </TD> <TD> regulation of interferon-gamma-mediated signaling pathway </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0060333 </TD> <TD> interferon-gamma-mediated signaling pathway </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0060330 </TD> <TD> regulation of response to interferon-gamma </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc46"></a> </p>
+
+<h4>calcineurin NFAT signaling cascade - Skin.T14.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0033173 </TD> <TD> calcineurin-NFAT signaling cascade </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0070884 </TD> <TD> regulation of calcineurin-NFAT signaling cascade </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc47"></a> </p>
+
+<h4>histone demethylation - Skin.T14.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0033169 </TD> <TD> histone H3-K9 demethylation </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0070076 </TD> <TD> histone lysine demethylation </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc48"></a> </p>
+
+<h4>negative regulation of Ras signal transduction - Skin.T14.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0046580 </TD> <TD> negative regulation of Ras protein signal transduction </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051058 </TD> <TD> negative regulation of small GTPase mediated signal transduction </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc49"></a> </p>
+
+<h4>positive regulation of metalloenzyme activity - Skin.T14.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0048554 </TD> <TD> positive regulation of metalloenzyme activity </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048552 </TD> <TD> regulation of metalloenzyme activity </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc50"></a> </p>
+
+<h4>glucocorticoid receptor signaling pathway - Skin.T14.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0031958 </TD> <TD> corticosteroid receptor signaling pathway </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0042921 </TD> <TD> glucocorticoid receptor signaling pathway </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc51"></a> </p>
+
+<h4>atrioventricular valve dev. and morphogenesis - Skin.T14.Up,Muscle.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0003171 </TD> <TD> atrioventricular valve development </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0003181 </TD> <TD> atrioventricular valve morphogenesis </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc52"></a> </p>
+
+<h4>vitamin metabolism - Skin.T14.Up,Muscle.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0006766 </TD> <TD> vitamin metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0019852 </TD> <TD> L-ascorbic acid metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc53"></a> </p>
+
+<h4>digestion - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0022600 </TD> <TD> digestive system process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0046717 </TD> <TD> acid secretion </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0007586 </TD> <TD> digestion </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0001696 </TD> <TD> gastric acid secretion </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0060453 </TD> <TD> regulation of gastric acid secretion </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc54"></a> </p>
+
+<h4>synapse assembly and nervous system development - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0044089 </TD> <TD> positive regulation of cellular component biogenesis </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051962 </TD> <TD> positive regulation of nervous system development </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051965 </TD> <TD> positive regulation of synapse assembly </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0007416 </TD> <TD> synapse assembly </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc55"></a> </p>
+
+<h4>folic acid compound metabolism - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0019240 </TD> <TD> citrulline biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0042558 </TD> <TD> pteridine-containing compound metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006760 </TD> <TD> folic acid-containing compound metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006575 </TD> <TD> cellular modified amino acid metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc56"></a> </p>
+
+<h4>retinoic acid biosynthesis - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0002138 </TD> <TD> retinoic acid biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0016102 </TD> <TD> diterpenoid biosynthetic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0016101 </TD> <TD> diterpenoid metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0001523 </TD> <TD> retinoid metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc57"></a> </p>
+
+<h4>urea cycle - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0019627 </TD> <TD> urea metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0071941 </TD> <TD> nitrogen cycle metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0000050 </TD> <TD> urea cycle </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc58"></a> </p>
+
+<h4>response to prostaglandin - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0034694 </TD> <TD> response to prostaglandin stimulus </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0071379 </TD> <TD> cellular response to prostaglandin stimulus </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0071398 </TD> <TD> cellular response to fatty acid </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc59"></a> </p>
+
+<h4>keratinocyte migration - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0051546 </TD> <TD> keratinocyte migration </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051547 </TD> <TD> regulation of keratinocyte migration </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0051549 </TD> <TD> positive regulation of keratinocyte migration </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc60"></a> </p>
+
+<h4>amino acid transport - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0006865 </TD> <TD> amino acid transport </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0015809 </TD> <TD> arginine transport </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0015802 </TD> <TD> basic amino acid transport </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006835 </TD> <TD> dicarboxylic acid transport </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc61"></a> </p>
+
+<h4>mesenchymal cell diff in kidney / renal system dev. - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0072161 </TD> <TD> mesenchymal cell differentiation involved in kidney development </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:2001012 </TD> <TD> mesenchymal cell differentiation involved in renal system development </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc62"></a> </p>
+
+<h4>axon extension - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0048846 </TD> <TD> axon extension involved in axon guidance </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:1902284 </TD> <TD> neuron projection extension involved in neuron projection guidance </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc63"></a> </p>
+
+<h4>lung lobe dev. and morphogenesis - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0060463 </TD> <TD> lung lobe morphogenesis </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0060462 </TD> <TD> lung lobe development </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc64"></a> </p>
+
+<h4>embryonic digestive tract dev. and morphogenesis - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0048566 </TD> <TD> embryonic digestive tract development </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0048557 </TD> <TD> embryonic digestive tract morphogenesis </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc65"></a> </p>
+
+<h4>phosphate ion transport - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0044341 </TD> <TD> sodium-dependent phosphate transport </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0006817 </TD> <TD> phosphate ion transport </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc66"></a> </p>
+
+<h4>fluid secretion - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0032941 </TD> <TD> secretion by tissue </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0007589 </TD> <TD> body fluid secretion </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc67"></a> </p>
+
+<h4>interleukin 13 production - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0032616 </TD> <TD> interleukin-13 production </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0032656 </TD> <TD> regulation of interleukin-13 production </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc68"></a> </p>
+
+<h4>glia guided migration - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0021543 </TD> <TD> pallium development </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0021801 </TD> <TD> cerebral cortex radial glia guided migration </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc69"></a> </p>
+
+<h4>central nervous system maturation - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0021578 </TD> <TD> hindbrain maturation </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0021626 </TD> <TD> central nervous system maturation </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc70"></a> </p>
+
+<h4>bile acid transport - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0015721 </TD> <TD> bile acid and bile salt transport </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0015722 </TD> <TD> canalicular bile acid transport </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc71"></a> </p>
+
+<h4>positive regulation of muscle cell apoptosis - Skin.T14.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0010666 </TD> <TD> positive regulation of cardiac muscle cell apoptotic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0010663 </TD> <TD> positive regulation of striated muscle cell apoptotic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc72"></a> </p>
+
+<h4>purine metabolism - Muscle.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0033875 </TD> <TD> ribonucleoside bisphosphate metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0034032 </TD> <TD> purine nucleoside bisphosphate metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0033865 </TD> <TD> nucleoside bisphosphate metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0015936 </TD> <TD> coenzyme A metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc73"></a> </p>
+
+<h4>regulation of phospholipase C - Muscle.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:1900274 </TD> <TD> regulation of phospholipase C activity </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0010863 </TD> <TD> positive regulation of phospholipase C activity </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0007202 </TD> <TD> activation of phospholipase C activity </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc74"></a> </p>
+
+<h4>response to VEGF - Muscle.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0038084 </TD> <TD> vascular endothelial growth factor signaling pathway </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0035767 </TD> <TD> endothelial cell chemotaxis </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0035924 </TD> <TD> cellular response to vascular endothelial growth factor stimulus </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc75"></a> </p>
+
+<h4>membrane repolarization - Muscle.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0086011 </TD> <TD> membrane repolarization involved in regulation of action potential </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0060307 </TD> <TD> regulation of ventricular cardiac muscle cell membrane repolarization </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0060306 </TD> <TD> regulation of membrane repolarization </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0086009 </TD> <TD> membrane repolarization </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0086013 </TD> <TD> membrane repolarization involved in regulation of cardiac muscle cell action potential </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc76"></a> </p>
+
+<h4>carbohydrate catabolism - Muscle.Down</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0044275 </TD> <TD> cellular carbohydrate catabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+  <TR> <TD> GO:0016052 </TD> <TD> carbohydrate catabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> <TD>  </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc77"></a> </p>
+
+<h4>rRNA processing - Muscle.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0006364 </TD> <TD> rRNA processing </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0016072 </TD> <TD> rRNA metabolic process </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0071166 </TD> <TD> ribonucleoprotein complex localization </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0042254 </TD> <TD> ribosome biogenesis </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0034470 </TD> <TD> ncRNA processing </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc78"></a> </p>
+
+<h4>response to indole 3 methanol - Muscle.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0071680 </TD> <TD> response to indole-3-methanol </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0071681 </TD> <TD> cellular response to indole-3-methanol </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a>
+<a name="loc79"></a> </p>
+
+<h4>DNA break repair - Muscle.Up</h4>
+
+<!-- html table generated in R 3.0.1 by xtable 1.7-1 package -->
+
+<!-- Fri Feb 14 17:00:10 2014 -->
+
+<TABLE style="border-spacing:20px 5px;">
+<TR> <TH> GOID </TH> <TH> Description </TH> <TH> T7.Down </TH> <TH> T7.Up </TH> <TH> T14.Down </TH> <TH> T14.Up </TH> <TH> muscle.Down </TH> <TH> muscle.Up </TH>  </TR>
+  <TR> <TD> GO:0000725 </TD> <TD> recombinational repair </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+  <TR> <TD> GO:0000724 </TD> <TD> double-strand break repair via homologous recombination </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD>  </TD> <TD> X </TD> </TR>
+   </TABLE>
+
+<p><a href="#tableLink">back</a></p>
+
+<p>Run using <code>geneSetTest</code></p>
+
+<pre><code class="r">load(&quot;runMuscleRomer.RData&quot;)
+options(mc.cores = 12)  # at least if we are on hera
+t1 &lt;- Sys.time()
+muscleGeneSetTest &lt;- lapply(muscleFC, function(x) {
+    mmGeneSetTest(muscleSet, x$t)
+})
+
+t2 &lt;- Sys.time()
+difftime(t2, t1)
+save(muscleGeneSetTest, t1, t2, file = &quot;inst/data/muscleGeneSetTest.RData&quot;)
+</code></pre>
+
+<h3>Date and System information</h3>
+
+<pre><code class="r">Sys.time()
+</code></pre>
+
+<pre><code>## [1] &quot;2014-02-14 17:00:10 EST&quot;
+</code></pre>
+
+<pre><code class="r">sessionInfo()
+</code></pre>
+
+<pre><code>## R version 3.0.1 (2013-05-16)
+## Platform: x86_64-unknown-linux-gnu (64-bit)
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=C                 LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] parallel  stats     graphics  grDevices utils     datasets  methods  
+## [8] base     
+## 
+## other attached packages:
+##  [1] xtable_1.7-1               mouse4302.db_2.10.1       
+##  [3] org.Mm.eg.db_2.10.1        rat2302.db_2.10.1         
+##  [5] org.Rn.eg.db_2.10.1        affy_1.40.0               
+##  [7] colorspace_1.2-4           mgcv_1.7-27               
+##  [9] nlme_3.1-113               hgu133plus2.db_2.10.1     
+## [11] hgu95av2.db_2.10.1         ALL_1.4.16                
+## [13] ccPaper_0.0.12             limma_3.18.7              
+## [15] categoryComparePaper_1.6.7 GO.db_2.10.1              
+## [17] org.Hs.eg.db_2.10.1        RSQLite_0.11.4            
+## [19] DBI_0.2-7                  AnnotationDbi_1.24.0      
+## [21] Biobase_2.22.0             BiocGenerics_0.8.0        
+## [23] ggplot2_0.9.3.1            devtools_1.4.1            
+## 
+## loaded via a namespace (and not attached):
+##  [1] affyio_1.30.0         annotate_1.40.0       AnnotationForge_1.4.4
+##  [4] BiocInstaller_1.12.0  Category_2.28.0       dichromat_2.0-0      
+##  [7] digest_0.6.4          evaluate_0.5.1        formatR_0.10         
+## [10] genefilter_1.44.0     GOstats_2.28.0        graph_1.40.1         
+## [13] grid_3.0.1            GSEABase_1.24.0       gtable_0.1.2         
+## [16] httr_0.2              hwriter_1.3           IRanges_1.20.6       
+## [19] knitr_1.5             labeling_0.2          lattice_0.20-24      
+## [22] markdown_0.6.4        MASS_7.3-29           Matrix_1.1-1.1       
+## [25] memoise_0.1           munsell_0.4.2         plyr_1.8             
+## [28] preprocessCore_1.24.0 proto_0.3-10          RBGL_1.38.0          
+## [31] RColorBrewer_1.0-5    RCurl_1.95-4.1        RCytoscape_1.12.0    
+## [34] reshape2_1.2.2        scales_0.2.3          splines_3.0.1        
+## [37] stats4_3.0.1          stringr_0.6.2         survival_2.37-4      
+## [40] tools_3.0.1           whisker_0.3-2         XML_3.98-1.1         
+## [43] XMLRPC_0.3-0          zlibbioc_1.8.0
+</code></pre>
+
+</body>
+
+</html>
