@@ -414,6 +414,47 @@ for (iNode in seq(1:length(smNodes))){
 }
 
 
+## ----checkCollateralSprouting--------------------------------------------
+allDescStrings <- sapply(smNodes, function(x){x$descStr})
+isCollateral <- grep("collateral sprouting", allDescStrings, ignore.case=TRUE)
+
+collateralGO <- smNodes[[isCollateral]]$nodes
+
+skinRomer$T7[collateralGO,]
+skinRomer$T14[collateralGO,]
+
+rnGenes <- unique(unlist(rnGO[collateralGO]))
+
+rnFCGenes <- rownames(skinFC$T7)
+rnGenes <- rnGenes[(rnGenes %in% rnFCGenes)]
+rnExtra <- cbind(unlist(mget(rnGenes, org.Rn.egSYMBOL)), unlist(mget(rnGenes, org.Rn.egGENENAME)))
+
+rnData <- lapply(skinFC, function(inFC){
+  tmp <- cbind(inFC[rnGenes,], rnExtra)
+  names(tmp) <- c(names(tmp)[1:7], "Symbol", "Name")
+  return(tmp)
+})
+lapply(rnData, dim)
+
+
+## ----generateTables, echo=FALSE, results='asis'--------------------------
+for (iTable in 1:length(rnData)){
+  tmpData <- rnData[[iTable]]
+  negEntries <- which(tmpData$logFC <= 0)
+  htmlOut <- capture.output(print(xtable(tmpData), type = 'html', html.table.attributes = 'style="border-spacing:20px 5px;"', include.rownames=FALSE))
+  negEntries <- negEntries + 4
+  for (iNeg in negEntries){
+    htmlOut[iNeg] <- sub("<TR>", '<TR style="color: red;">', htmlOut[iNeg])
+  }
+  
+  cat('###', names(rnData)[iTable], sep=' ')
+  cat('\n\n')
+  cat(htmlOut, sep="\n")
+  
+  cat('\n')
+}
+
+
 ## ----runGeneSetTestMuscle, eval=FALSE------------------------------------
 ## load("runMuscleRomer.RData")
 ## options(mc.cores=12) # at least if we are on hera

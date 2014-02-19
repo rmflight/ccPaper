@@ -13,7 +13,6 @@ options(markdown.HTML.stylesheet = cssFile)
 library(ccPaper)
 ```
 
-
 # Muscle Skin Data processing
 
 How do we process the data for muscle and skin to something we can start running through `categoryCompare`?
@@ -461,6 +460,54 @@ for (iNode in seq(1:length(smNodes))){
 ```
 
 
+### Collateral Sprouting
+
+One of our groups above seems to be related to **collateral sprouting**, which is the process the skin data was actually seeking to measure, but it is in an unexpected direction. We should look at the genes involved and see what is actually going on.
+
+```{r checkCollateralSprouting}
+allDescStrings <- sapply(smNodes, function(x){x$descStr})
+isCollateral <- grep("collateral sprouting", allDescStrings, ignore.case=TRUE)
+
+collateralGO <- smNodes[[isCollateral]]$nodes
+
+skinRomer$T7[collateralGO,]
+skinRomer$T14[collateralGO,]
+
+rnGenes <- unique(unlist(rnGO[collateralGO]))
+
+rnFCGenes <- rownames(skinFC$T7)
+rnGenes <- rnGenes[(rnGenes %in% rnFCGenes)]
+rnExtra <- cbind(unlist(mget(rnGenes, org.Rn.egSYMBOL)), unlist(mget(rnGenes, org.Rn.egGENENAME)))
+
+rnData <- lapply(skinFC, function(inFC){
+  tmp <- cbind(inFC[rnGenes,], rnExtra)
+  names(tmp) <- c(names(tmp)[1:7], "Symbol", "Name")
+  return(tmp)
+})
+lapply(rnData, dim)
+```
+
+Lets actually generate tables for T7 and T14.
+
+```{r generateTables, echo=FALSE, results='asis'}
+for (iTable in 1:length(rnData)){
+  tmpData <- rnData[[iTable]]
+  negEntries <- which(tmpData$logFC <= 0)
+  htmlOut <- capture.output(print(xtable(tmpData), type = 'html', html.table.attributes = 'style="border-spacing:20px 5px;"', include.rownames=FALSE))
+  negEntries <- negEntries + 4
+  for (iNeg in negEntries){
+    htmlOut[iNeg] <- sub("<TR>", '<TR style="color: red;">', htmlOut[iNeg])
+  }
+  
+  cat('###', names(rnData)[iTable], sep=' ')
+  cat('\n\n')
+  cat(htmlOut, sep="\n")
+  
+  cat('\n')
+}
+```
+
+
 
 
 Run using `geneSetTest`
@@ -476,4 +523,12 @@ muscleGeneSetTest <- lapply(muscleFC, function(x){
 t2 <- Sys.time()
 difftime(t2, t1)
 save(muscleGeneSetTest, t1, t2, file="inst/data/muscleGeneSetTest.RData")
+```
+
+
+### Date and System information
+
+```{r}
+Sys.time()
+sessionInfo()
 ```
