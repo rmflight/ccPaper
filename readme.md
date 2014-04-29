@@ -1,6 +1,6 @@
 # ccPaper
 
-This is the work for all the analysis in the **categoryCompare** publication and make it easier to work with. To allow testing and incorporation of new features for the reviewers and readers, a specific branch of the **categoryCompare** Bioconductor package now exists in the public repository based on the most recent Bioconductor release. This can be installed using 
+This is the work for all the analysis in the **categoryCompare** [publication](http://journal.frontiersin.org/Journal/10.3389/fgene.2014.00098/full) and make it easier to work with. To allow testing and incorporation of new features for the reviewers and readers, a specific branch of the **categoryCompare** Bioconductor package now exists in the [public repository](https://github.com/rmflight/categoryCompare/tree/paper) based on the most recent Bioconductor release. 
 
 ## Supplementary Results / Data
 
